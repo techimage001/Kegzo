@@ -56,6 +56,10 @@ main{max-width:1180px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-le
 .why{display:grid;gap:10px}
 .note{display:flex;gap:10px;padding:12px 14px;border-radius:14px;background:var(--coolSoft);font-size:14px}
 .note svg{width:20px;height:20px;flex:none;color:var(--cool);margin-top:2px}
+.pwrap{position:absolute;left:50%;top:57%;transform:translate(-50%,-50%);width:104%;aspect-ratio:1448/1086;display:none;pointer-events:none;-webkit-mask-image:radial-gradient(ellipse 62% 58% at 50% 56%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 62% 58% at 50% 56%,#000 62%,transparent 100%)}
+.pwrap img{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:screen;transform-origin:50% 72%;will-change:transform,filter}
+.pglow{position:absolute;width:24%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;mix-blend-mode:screen}
+.pcore{position:absolute;width:2.2%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%}
 /* player */
 .player{display:grid;gap:14px}.left{display:grid;gap:12px}
 .stage{position:relative;border-radius:24px;overflow:hidden;background:radial-gradient(120% 95% at 50% 38%,#2D2266 0%,#17132F 62%,#100D22 100%);border:1px solid #383163;aspect-ratio:4/3;width:100%;color:#F4F1FF}
@@ -209,7 +213,7 @@ function fit(cv,C){const r=cv.getBoundingClientRect(),d=Math.min(2,window.device
 /* ================= POSITIONS ================= */
 const side=o=>Object.assign({v:'side'},o);
 const POS={
- lying:{n:'Lying down',cam:[186,232,1.75],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+ lying:{n:'Lying down',img:'pos-lying.webp',pt:[.335,.64],cam:[186,232,1.75],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat. The easiest position because gravity helps.'},
  seated:{n:'Seated',chair:1,cam:[194,200,1.4],keys:[side({p:[182,198],t:180,h:180,L:{a:[226,255],f:90,k:-1,hd:[212,196],e:1},R:{a:[230,255],f:90,k:-1,hd:[216,198],e:1}})],
   how:'Sit upright on a firm chair, feet flat, weight spread across both sit bones.'},
@@ -217,11 +221,20 @@ const POS={
   how:'Stand tall, feet hip-width apart, knees soft. Harder, because the muscle works against gravity.'},
  walking:{n:'Walking',walk:1,cam:[200,192,1.3],keys:[side({p:[200,168],t:178,h:180,L:{a:[226,255],f:90,k:-1,hd:[186,170],e:1},R:{a:[176,250],f:112,k:-1,hd:[218,166],e:1}}),side({p:[200,168],t:178,h:180,L:{a:[176,250],f:112,k:-1,hd:[218,166],e:1},R:{a:[226,255],f:90,k:-1,hd:[186,170],e:1}})],
   how:'Walk at an easy pace and hold the squeeze for a few steps. This trains the muscle for everyday life.'}};
-const PORDER=['lying','seated','standing','walking'];
+const IMG={};const PORDER=['lying','seated','standing','walking'];
 function Fig(posId){const P=POS[posId];return{P,t:0,pose:P.keys[0],
  step(dt){this.t+=dt;if(P.walk){const u=(Math.sin(this.t*Math.PI/.55)+1)/2;this.pose=lerpP(P.keys[0],P.keys[1],u);this.pose.p=[200,168-Math.abs(Math.cos(this.t*Math.PI/.55))*3]}
   else{const b=Math.sin(this.t*1.4)*.8;this.pose=Object.assign({},P.keys[0],{t:P.keys[0].t+b*.6})}},
- render(cv,pf,z=1){const C=P.cam;const[c,s]=fit(cv,[C[0],C[1],C[2]*z]);draw(c,solve(this.pose),{g:s,pf,chair:P.chair})}}}
+ render(cv,pf,z=1){const C=P.cam;const[c,s]=fit(cv,[C[0],C[1],C[2]*z]);const ly=layer(cv);
+  if(P.img){ly.w.style.display='block';if(ly.src!==P.img){ly.i.src=IMG[P.img]||P.img;ly.src=P.img}
+   const a=Math.abs(pf),hot=pf>=0,col=hot?'255,107,74':'91,214,201';
+   ly.g.style.left=ly.c.style.left=P.pt[0]*100+'%';ly.g.style.top=ly.c.style.top=P.pt[1]*100+'%';
+   ly.g.style.background=`radial-gradient(circle,rgba(${col},${.35+.6*a}) 0%,rgba(${col},${.18*a+.05}) 38%,rgba(${col},0) 70%)`;ly.g.style.width=(16+12*a)+'%';
+   ly.c.style.background=`rgb(${col})`;ly.c.style.boxShadow=`0 0 ${8+14*a}px rgba(${col},.9)`;ly.c.style.opacity=.55+.45*a;
+   const br=Math.sin(this.t*1.3)*.004;ly.i.style.transform=`scale(${1+br})`;ly.i.style.filter=`brightness(${1+.12*a}) saturate(${1+.1*a})`}
+  else{ly.w.style.display='none';draw(c,solve(this.pose),{g:s,pf,chair:P.chair})}}}}
+function layer(cv){if(cv._ly)return cv._ly;const w=document.createElement('div');w.className='pwrap';w.innerHTML='<img alt="" decoding="async"><div class="pglow"></div><div class="pcore"></div>';cv.after(w);
+ return cv._ly={w,i:w.querySelector('img'),g:w.querySelector('.pglow'),c:w.querySelector('.pcore'),src:''}}
 
 /* ================= EXERCISES (kegel only) ================= */
 const S_=(k,d,to,extra)=>Object.assign({k,d,to},extra||{});
