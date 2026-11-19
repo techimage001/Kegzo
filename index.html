@@ -60,6 +60,9 @@ main{max-width:1180px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-le
 .pwrap img{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:screen;transform-origin:50% 72%;will-change:transform,filter}
 .pglow{position:absolute;width:24%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;mix-blend-mode:screen}
 .pcore{position:absolute;width:2.2%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%}
+.hwrap{position:absolute;left:50%;top:57%;transform:translate(-50%,-50%);width:104%;aspect-ratio:1448/1086;pointer-events:none}
+.hwrap canvas,.hwrap img{position:absolute;inset:0;width:100%;height:100%}
+.hfb{display:none;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(ellipse 62% 58% at 50% 56%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 62% 58% at 50% 56%,#000 62%,transparent 100%)}
 /* player */
 .player{display:grid;gap:14px}.left{display:grid;gap:12px}
 .stage{position:relative;border-radius:24px;overflow:hidden;background:radial-gradient(120% 95% at 50% 38%,#2D2266 0%,#17132F 62%,#100D22 100%);border:1px solid #383163;aspect-ratio:4/3;width:100%;color:#F4F1FF}
@@ -215,26 +218,88 @@ const side=o=>Object.assign({v:'side'},o);
 const POS={
  lying:{n:'Lying down',img:'pos-lying.webp',pt:[.335,.64],cam:[186,232,1.75],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat. The easiest position because gravity helps.'},
- seated:{n:'Seated',chair:1,cam:[194,200,1.4],keys:[side({p:[182,198],t:180,h:180,L:{a:[226,255],f:90,k:-1,hd:[212,196],e:1},R:{a:[230,255],f:90,k:-1,hd:[216,198],e:1}})],
+ seated:{n:'Seated',img:'pos-seated.webp',chair:1,cam:[194,200,1.4],keys:[side({p:[182,198],t:180,h:180,L:{a:[226,255],f:90,k:-1,hd:[212,196],e:1},R:{a:[230,255],f:90,k:-1,hd:[216,198],e:1}})],
   how:'Sit upright on a firm chair, feet flat, weight spread across both sit bones.'},
- standing:{n:'Standing',cam:[200,192,1.3],keys:[side({p:[200,167],t:180,h:180,L:{a:[198,255],f:90,k:-1,hd:[199,172],e:1},R:{a:[202,255],f:90,k:-1,hd:[203,172],e:1}})],
+ standing:{n:'Standing',img:'pos-standing.webp',cam:[200,192,1.3],keys:[side({p:[200,167],t:180,h:180,L:{a:[198,255],f:90,k:-1,hd:[199,172],e:1},R:{a:[202,255],f:90,k:-1,hd:[203,172],e:1}})],
   how:'Stand tall, feet hip-width apart, knees soft. Harder, because the muscle works against gravity.'},
- walking:{n:'Walking',walk:1,cam:[200,192,1.3],keys:[side({p:[200,168],t:178,h:180,L:{a:[226,255],f:90,k:-1,hd:[186,170],e:1},R:{a:[176,250],f:112,k:-1,hd:[218,166],e:1}}),side({p:[200,168],t:178,h:180,L:{a:[176,250],f:112,k:-1,hd:[218,166],e:1},R:{a:[226,255],f:90,k:-1,hd:[186,170],e:1}})],
+ walking:{n:'Walking',img:'pos-walking.webp',walk:1,cam:[200,192,1.3],keys:[side({p:[200,168],t:178,h:180,L:{a:[226,255],f:90,k:-1,hd:[186,170],e:1},R:{a:[176,250],f:112,k:-1,hd:[218,166],e:1}}),side({p:[200,168],t:178,h:180,L:{a:[176,250],f:112,k:-1,hd:[218,166],e:1},R:{a:[226,255],f:90,k:-1,hd:[186,170],e:1}})],
   how:'Walk at an easy pace and hold the squeeze for a few steps. This trains the muscle for everyday life.'}};
 const IMG={};const PORDER=['lying','seated','standing','walking'];
 function Fig(posId){const P=POS[posId];return{P,t:0,pose:P.keys[0],
  step(dt){this.t+=dt;if(P.walk){const u=(Math.sin(this.t*Math.PI/.55)+1)/2;this.pose=lerpP(P.keys[0],P.keys[1],u);this.pose.p=[200,168-Math.abs(Math.cos(this.t*Math.PI/.55))*3]}
   else{const b=Math.sin(this.t*1.4)*.8;this.pose=Object.assign({},P.keys[0],{t:P.keys[0].t+b*.6})}},
- render(cv,pf,z=1){const C=P.cam;const[c,s]=fit(cv,[C[0],C[1],C[2]*z]);const ly=layer(cv);
-  if(P.img){ly.w.style.display='block';if(ly.src!==P.img){ly.i.src=IMG[P.img]||P.img;ly.src=P.img}
-   const a=Math.abs(pf),hot=pf>=0,col=hot?'255,107,74':'91,214,201';
-   ly.g.style.left=ly.c.style.left=P.pt[0]*100+'%';ly.g.style.top=ly.c.style.top=P.pt[1]*100+'%';
-   ly.g.style.background=`radial-gradient(circle,rgba(${col},${.35+.6*a}) 0%,rgba(${col},${.18*a+.05}) 38%,rgba(${col},0) 70%)`;ly.g.style.width=(16+12*a)+'%';
-   ly.c.style.background=`rgb(${col})`;ly.c.style.boxShadow=`0 0 ${8+14*a}px rgba(${col},.9)`;ly.c.style.opacity=.55+.45*a;
-   const br=Math.sin(this.t*1.3)*.004;ly.i.style.transform=`scale(${1+br})`;ly.i.style.filter=`brightness(${1+.12*a}) saturate(${1+.1*a})`}
-  else{ly.w.style.display='none';draw(c,solve(this.pose),{g:s,pf,chair:P.chair})}}}}
-function layer(cv){if(cv._ly)return cv._ly;const w=document.createElement('div');w.className='pwrap';w.innerHTML='<img alt="" decoding="async"><div class="pglow"></div><div class="pcore"></div>';cv.after(w);
- return cv._ly={w,i:w.querySelector('img'),g:w.querySelector('.pglow'),c:w.querySelector('.pcore'),src:''}}
+ render(cv,pf,z=1){const now=performance.now()/1000,dt=Math.min(.1,now-(this.lt||now));this.lt=now;
+  if(P.img){if(!cv._h)cv._h=Holo(cv);const c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);cv._h.w.style.display='block';holoDraw(cv._h,posOf(P),pf,this.t,dt)}
+  else{if(cv._h)cv._h.w.style.display='none';const C=P.cam;const[c,s]=fit(cv,[C[0],C[1],C[2]*z]);draw(c,solve(this.pose),{g:s,pf,chair:P.chair})}}}}
+const posOf=P=>Object.keys(POS).find(k=>POS[k]===P);
+/* ================= HOLOGRAM RENDERER (WebGL warp + x-ray pelvic floor + particles) ================= */
+const IW=1448,IH=1086;
+const RIG={
+ lying:{A:[470,625],B:[505,730],U:[1,0],C:[900,640],floor:.905},
+ standing:{A:[668,585],B:[760,565],U:[0,-1],C:[735,300],floor:.915},
+ seated:{A:[868,652],B:[945,668],U:[0,-1],C:[880,380],floor:.905},
+ walking:{A:[720,575],B:[640,548],U:[0,-1],C:[740,330],floor:.905,walk:1}};
+const VS='attribute vec2 p;varying vec2 v;void main(){v=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}';
+const FS=`precision mediump float;uniform sampler2D tx;uniform float t,L,br,bob;uniform vec2 P,U,C;varying vec2 v;
+const vec2 K=vec2(1.3333,1.);float g(vec2 d,float r){return exp(-dot(d,d)/(r*r));}
+void main(){vec2 uv=v,d=vec2(0.);
+ d+=(uv-C)*.035*br*g((uv-C)*K,.13);
+ d+=U*L*.016*g((uv-P)*K,.06);
+ d.y+=bob;
+ vec4 c=texture2D(tx,uv-d);vec3 bg=vec3(.065,.04,.17);
+ float a=smoothstep(.03,.17,length(c.rgb-bg)),lum=dot(c.rgb,vec3(.3,.5,.2));
+ float pg=g((uv-P)*K,.075);vec3 tint=L>=0.?vec3(1.,.42,.29):vec3(.36,.84,.79);
+ c.rgb=mix(c.rgb,tint*(.35+lum*1.5),clamp(pg*abs(L)*.62,0.,1.)*a);
+ c.rgb+=a*.03*sin(uv.y*1100.+t*8.);
+ float sw=exp(-pow((uv.x-(fract(t*.16)*1.8-.4))/.03,2.));c.rgb+=a*sw*.18*vec3(.85,.8,1.);
+ c.rgb*=1.+.06*abs(L);
+ float e=smoothstep(0.,.07,uv.x)*smoothstep(0.,.07,1.-uv.x)*smoothstep(0.,.06,uv.y)*smoothstep(0.,.03,1.-uv.y);a*=e;
+ gl_FragColor=vec4(c.rgb*a,a);}`;
+function Holo(cv){const w=document.createElement('div');w.className='hwrap';
+ w.innerHTML='<canvas class="hgl"></canvas><canvas class="hfx"></canvas><img class="hfb" alt="">';cv.after(w);
+ const gc=w.querySelector('.hgl'),fx=w.querySelector('.hfx'),fb=w.querySelector('.hfb');
+ let gl=null;try{gl=gc.getContext('webgl',{premultipliedAlpha:true,alpha:true,antialias:false})}catch(e){}
+ const H={w,gl,fx,fb,pos:'',tex:null,ready:false,parts:[],rings:[],lastL:0,br:.5,t:0};
+ if(gl){const sh=(ty,src)=>{const s=gl.createShader(ty);gl.shaderSource(s,src);gl.compileShader(s);return s};
+  const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(pr);
+  if(!gl.getProgramParameter(pr,gl.LINK_STATUS)){H.gl=gl=null}else{gl.useProgram(pr);const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+   const loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+   H.u={};['t','L','br','bob','P','U','C','tx'].forEach(k=>H.u[k]=gl.getUniformLocation(pr,k));H.tex=gl.createTexture();gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA)}}
+ if(!gl){gc.style.display='none';fb.style.display='block'}
+ return H}
+function holoSet(H,posId){if(H.pos===posId)return;H.pos=posId;H.ready=false;H.parts=[];H.rings=[];const src=IMG[POS[posId].img]||POS[posId].img;
+ if(!H.gl){H.fb.src=src;H.ready=true;return}
+ const im=new Image();im.onload=()=>{const gl=H.gl;gl.bindTexture(gl.TEXTURE_2D,H.tex);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,im);H.ready=true};im.src=src}
+function sizeC(c){const r=c.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d));if(c.width!==w||c.height!==h){c.width=w;c.height=h}return[w,h]}
+function holoDraw(H,posId,L,t,dt){holoSet(H,posId);const R=RIG[posId],nx=v=>[v[0]/IW,v[1]/IH];
+ const A=nx(R.A),B=nx(R.B),Pm=[(A[0]+B[0])/2,(A[1]+B[1])/2],C=nx(R.C);
+ const bt=L<-.1?1:L>.3?.15:.5+.35*Math.sin(t*1.1);H.br+=(bt-H.br)*Math.min(1,dt*2.2);
+ const bob=R.walk?-.007*Math.abs(Math.sin(t*Math.PI/.55)):0;
+ if(H.gl&&H.ready){const gl=H.gl,[w,h]=sizeC(H.w.querySelector('.hgl'));gl.viewport(0,0,w,h);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.uniform1f(H.u.t,t);gl.uniform1f(H.u.L,L);gl.uniform1f(H.u.br,H.br);gl.uniform1f(H.u.bob,bob);gl.uniform2f(H.u.P,Pm[0],Pm[1]);gl.uniform2f(H.u.U,R.U[0],R.U[1]);gl.uniform2f(H.u.C,C[0],C[1]);gl.uniform1i(H.u.tx,0);gl.drawArrays(gl.TRIANGLE_STRIP,0,4)}
+ else if(!H.gl){H.fb.style.transform=`translateY(${bob*100}%) scale(${1+.004*H.br})`;H.fb.style.filter=`brightness(${1+.12*Math.abs(L)})`}
+ /* --- overlay: x-ray pelvic floor sling, particles, pulse rings, treadmill --- */
+ const [w,h]=sizeC(H.fx),c=H.fx.getContext('2d');c.clearRect(0,0,w,h);
+ const X=p=>[p[0]*w,(p[1]+bob)*h],a=X(A),b=X(B),m=[(a[0]+b[0])/2,(a[1]+b[1])/2],U=R.U,sag=w*(.026-.03*L),cp=[m[0]-U[0]*sag,m[1]-U[1]*sag];
+ const hot=L>=0,k=Math.abs(L),col=hot?[255,107,74]:[91,214,201],mix=(x,y,u)=>Math.round(x+(y-x)*u),base=[214,205,255];
+ const rgb=`${mix(base[0],col[0],Math.min(1,k*1.4))},${mix(base[1],col[1],Math.min(1,k*1.4))},${mix(base[2],col[2],Math.min(1,k*1.4))}`;
+ const len=Math.hypot(b[0]-a[0],b[1]-a[1]),nrm=[-(b[1]-a[1])/len,(b[0]-a[0])/len],lw=Math.max(2,w*.0075);
+ c.lineCap='round';c.globalCompositeOperation='lighter';
+ for(let i=-1;i<=1;i++){const o=i*lw*1.1;c.strokeStyle=`rgba(${rgb},${i?.45:.95})`;c.shadowColor=`rgba(${rgb},.9)`;c.shadowBlur=lw*(3+4*k);c.lineWidth=i?lw*.55:lw;
+  c.beginPath();c.moveTo(a[0]+nrm[0]*o,a[1]+nrm[1]*o);c.quadraticCurveTo(cp[0]+nrm[0]*o*1.6,cp[1]+nrm[1]*o*1.6,b[0]+nrm[0]*o,b[1]+nrm[1]*o);c.stroke()}
+ c.shadowBlur=0;[a,b].forEach(p=>{c.fillStyle=`rgba(${rgb},.9)`;c.beginPath();c.arc(p[0],p[1],lw*.9,0,7);c.fill()});
+ const sc=[(a[0]+2*cp[0]+b[0])/4,(a[1]+2*cp[1]+b[1])/4];
+ if(L>.45&&H.lastL<=.45)H.rings.push({r:0,a:1,c:'255,107,74'});if(L<-.35&&H.lastL>=-.35)H.rings.push({r:0,a:.8,c:'91,214,201'});H.lastL=L;
+ H.rings=H.rings.filter(r=>(r.r+=dt*w*.12,r.a-=dt*1.1)>0);H.rings.forEach(r=>{c.strokeStyle=`rgba(${r.c},${r.a*.7})`;c.lineWidth=lw*.6;c.beginPath();c.arc(sc[0],sc[1],r.r+lw,0,7);c.stroke()});
+ const n=Math.random()<k*1.1?1:0;
+ for(let i=0;i<n;i++){const ang=Math.random()*6.283;if(hot){const R0=w*(.07+Math.random()*.05);H.parts.push({x:sc[0]+Math.cos(ang)*R0,y:sc[1]+Math.sin(ang)*R0,tx:sc[0],ty:sc[1],life:0,max:.7,hot:1})}
+  else H.parts.push({x:sc[0]+(Math.random()-.5)*len*.6,y:sc[1],vx:(-U[0]+(Math.random()-.5)*.8)*w*.05,vy:(-U[1]+(Math.random()-.5)*.8)*w*.05,life:0,max:1.2,hot:0})}
+ H.parts=H.parts.filter(p=>(p.life+=dt)<p.max);
+ H.parts.forEach(p=>{const u=p.life/p.max;if(p.hot){p.x+=(p.tx-p.x)*Math.min(1,dt*5);p.y+=(p.ty-p.y)*Math.min(1,dt*5)}else{p.x+=p.vx*dt;p.y+=p.vy*dt}
+  const al=Math.sin(u*Math.PI),rr=lw*(p.hot?.55:.7);c.fillStyle=p.hot?`rgba(255,150,120,${al})`:`rgba(120,230,215,${al*.8})`;c.beginPath();c.arc(p.x,p.y,rr,0,7);c.fill()});
+ if(R.walk){const fy=R.floor*h,sp=w*.06,off=(t*w*.12)%sp;c.strokeStyle='rgba(160,140,255,.35)';c.lineWidth=Math.max(1,w*.002);for(let x=-off;x<w;x+=sp){c.beginPath();c.moveTo(x,fy+h*.012);c.lineTo(x+sp*.45,fy+h*.012);c.stroke()}}
+ c.globalCompositeOperation='source-over'}
 
 /* ================= EXERCISES (kegel only) ================= */
 const S_=(k,d,to,extra)=>Object.assign({k,d,to},extra||{});
