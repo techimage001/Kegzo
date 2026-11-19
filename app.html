@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kegzo Trainer: Kegel Exercise Game for Men</title>
+<meta name="description" content="Follow the 28-day kegel programme: guided sessions, a live animated coach, levels, streaks and a progress dashboard.">
+<link rel="canonical" href="https://kegzo.com/app.html">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#14112A">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Kegzo"><meta property="og:locale" content="en_GB">
+<meta property="og:title" content="Kegzo Trainer: Kegel Exercise Game for Men"><meta property="og:description" content="Follow the 28-day kegel programme: guided sessions, a live animated coach, levels, streaks and a progress dashboard."><meta property="og:url" content="https://kegzo.com/app.html"><meta property="og:image" content="https://kegzo.com/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml"><link rel="icon" href="/assets/icons/icon-96.png" sizes="96x96" type="image/png"><link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preload" href="/assets/fonts/outfit-700.woff2?v=1" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/inter-400.woff2?v=1" as="font" type="font/woff2" crossorigin>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://kegzo.com/#org","name":"Kegzo","url":"https://kegzo.com/","logo":"https://kegzo.com/assets/icons/icon-512.png"},{"@type":"WebSite","@id":"https://kegzo.com/#site","name":"Kegzo","url":"https://kegzo.com/","publisher":{"@id":"https://kegzo.com/#org"},"inLanguage":"en"},{"@type":"WebApplication","name":"Kegzo Trainer","url":"https://kegzo.com/app.html","applicationCategory":"HealthApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"publisher":{"@id":"https://kegzo.com/#org"}}]}</script>
+<style>
+@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2?v=1) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2?v=1) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2?v=1) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/outfit-600.woff2?v=1) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/outfit-700.woff2?v=1) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/outfit-800.woff2?v=1) format('woff2')}
+/* VOICE: a coach in a game; direct, plain, never explicit, never a medical promise
+   IDEA: a fitness game's training screen for one muscle you cannot see from outside
+   PICTURE: a glowing figure holds the position while a close-up shows the pelvic floor lifting, holding and dropping
+   COLOUR and TYPE: deep ink-violet stage, lavender glow body, coral for squeeze, aqua for drop; Outfit display, Inter body
+   LAYOUT: mobile first; stage, then close-up row, controls, how-to; two columns from 900px */
+:root{color-scheme:dark;--bg:#14112A;--surf:#1F1A3D;--surf2:#2A2450;--ink:#F4F1FF;--mut:#B6AFD8;--line:#383163;--hot:#FF6B4A;--hotInk:#2A0E07;--cool:#5BD6C9;--coolSoft:#1D3B47;--hotSoft:#46283A}
+*{box-sizing:border-box;min-width:0}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:clip;-webkit-tap-highlight-color:transparent}
+h1,h2,h3{font-family:Outfit,Inter,system-ui,sans-serif;line-height:1.08;margin:0;text-wrap:balance}
+h1{font-size:clamp(30px,7vw,44px);font-weight:700}h2{font-size:22px;font-weight:600}h3{font-size:17px;font-weight:600}
+p{margin:0}button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}a{color:var(--cool)}
+:focus-visible{outline:3px solid var(--cool);outline-offset:2px;border-radius:10px}
+.mut{color:var(--mut)}.tiny{font-size:13px}.small{font-size:14px}.num{font-variant-numeric:tabular-nums}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:8px;font:700 21px Outfit,sans-serif}.brand svg{width:30px;height:30px}
+.sp{flex:1}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;background:var(--surf2);font-size:13px;font-weight:600;white-space:nowrap}
+main{max-width:1180px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-left)) calc(40px + env(safe-area-inset-bottom))}
+.screen{display:none}.screen.on{display:block;animation:in .25s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(6px)}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 22px;border-radius:999px;font-weight:600;font-size:16px;background:var(--surf2)}
+.btn.hot{background:var(--hot);color:var(--hotInk)}.btn.ghost{background:transparent;border:1px solid var(--line)}.btn.wide{width:100%}.btn.sm{min-height:40px;padding:0 14px;font-size:14px}
+.btn svg{width:22px;height:22px}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:20px;padding:18px}
+/* plan */
+.weeks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:16px 0}
+.wk{border-radius:14px;padding:10px 8px;background:var(--surf);border:1px solid var(--line);text-align:center;font-size:12px;color:var(--mut)}
+.wk b{display:block;font:700 15px Outfit,sans-serif;color:var(--ink);margin-top:2px}
+.wk.on{background:var(--hot);border-color:var(--hot);color:var(--hotInk)}.wk.on b{color:var(--hotInk)}
+.wk svg{width:26px;height:26px;display:block;margin:0 auto 4px}
+.ovgrid{display:grid;gap:16px}
+.hero{position:relative;border-radius:24px;overflow:hidden;background:radial-gradient(120% 90% at 50% 40%,#2B2160,#14112A 70%);border:1px solid var(--line);aspect-ratio:4/3;width:100%}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero .lab{position:absolute;left:16px;top:14px;right:16px;display:flex;justify-content:space-between;gap:10px;color:#F4F1FF;font:700 18px Outfit,sans-serif}
+.stat{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:6px}.stat div b{display:block;font:700 22px Outfit,sans-serif}.stat div span{font-size:13px;color:var(--mut)}
+.item{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin-bottom:8px;width:100%;text-align:left}
+.ico{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;background:var(--hotSoft);color:var(--hot)}
+.ico.c{background:var(--coolSoft);color:var(--cool)}
+.ico svg{width:28px;height:28px}
+.item b{display:block;font-weight:600}.item small{font-size:13px;color:var(--mut)}
+.item em{font-style:normal;font-size:13px;color:var(--mut);white-space:nowrap;text-align:right}
+.lock{font-size:12px;font-weight:600;color:var(--mut);background:var(--surf2);padding:3px 8px;border-radius:99px;white-space:nowrap}
+.sechead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:26px 0 12px}
+.why{display:grid;gap:10px}
+.note{display:flex;gap:10px;padding:12px 14px;border-radius:14px;background:var(--coolSoft);font-size:14px}
+.note svg{width:20px;height:20px;flex:none;color:var(--cool);margin-top:2px}
+.hwrap{position:absolute;left:50%;top:57%;transform:translate(-50%,-50%);width:104%;aspect-ratio:1448/1086;pointer-events:none}
+.hwrap canvas,.hwrap img{position:absolute;inset:0;width:100%;height:100%}
+.hfb{display:none;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(ellipse 62% 58% at 50% 56%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 62% 58% at 50% 56%,#000 62%,transparent 100%)}
+/* player */
+.player{display:grid;gap:14px}.left{display:grid;gap:12px}
+.stage{position:relative;border-radius:24px;overflow:hidden;background:radial-gradient(120% 95% at 50% 38%,#2D2266 0%,#17132F 62%,#100D22 100%);border:1px solid #383163;aspect-ratio:4/3;width:100%;color:#F4F1FF}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.ex-n{position:absolute;left:16px;top:10px;font:800 clamp(44px,13vw,70px)/1 Outfit,sans-serif;color:var(--hot);letter-spacing:-.02em;text-shadow:0 2px 18px #FF6B4A55}
+.ex-t{position:absolute;left:16px;top:clamp(56px,15vw,82px);font:700 clamp(17px,4.6vw,24px)/1.1 Outfit,sans-serif;max-width:62%;text-transform:uppercase}
+.ex-s{position:absolute;left:16px;top:calc(clamp(56px,15vw,82px) + clamp(22px,6vw,30px));font-size:12px;font-weight:600;color:#B6AFD8}
+.ring{position:absolute;right:12px;top:12px;width:clamp(74px,22vw,100px);aspect-ratio:1}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font:700 clamp(24px,7vw,32px) Outfit,sans-serif;font-variant-numeric:tabular-nums}
+.ring small{position:absolute;left:0;right:0;bottom:-16px;text-align:center;font-size:11px;font-weight:600;color:#B6AFD8}
+.reps{position:absolute;left:16px;bottom:12px;font:700 clamp(28px,8vw,40px)/1 Outfit,sans-serif;font-variant-numeric:tabular-nums}
+.reps small{display:block;font:600 12px Inter,sans-serif;color:#B6AFD8;margin-top:2px}
+.pos{position:absolute;right:14px;bottom:14px;background:#2A2450cc;color:#F4F1FF}
+.stage.rest .restcover{display:block}.restcover{position:absolute;inset:0;display:none;background:linear-gradient(#100D22d0,#100D2200 50%)}
+.live{display:grid;grid-template-columns:clamp(116px,32vw,150px) 1fr;gap:14px;align-items:center;background:var(--surf);border:1px solid var(--line);border-radius:20px;padding:12px}
+.mv{position:relative;aspect-ratio:1;width:100%}
+.mv svg{position:absolute;inset:0;width:100%;height:100%}
+.phase{font:700 clamp(30px,8.5vw,42px)/1 Outfit,sans-serif;min-height:42px}
+.cue{color:var(--mut);font-size:15px;margin-top:6px;min-height:46px}
+.mvlab{font-size:12px;font-weight:600;color:var(--mut);margin-bottom:4px}
+.bars{display:flex;gap:5px}
+.bars i{flex:1;height:7px;border-radius:9px;background:var(--surf2);overflow:hidden;position:relative}
+.bars i b{position:absolute;inset:0;width:0;background:var(--hot)}
+.bars i.c b{background:var(--cool)}
+.ctrl{display:flex;align-items:center;justify-content:center;gap:12px}
+.ib{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--surf2);flex:none}
+.ib svg{width:24px;height:24px}.ib[aria-pressed=false]{opacity:.5}
+.ctrl .btn{flex:1;max-width:220px}
+.next{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mut)}
+.how{display:grid;gap:14px}.how ol{margin:0;padding-left:20px;display:grid;gap:8px}
+.cols{display:grid;gap:12px}
+.box{background:var(--surf2);border-radius:14px;padding:12px 14px;font-size:14px}
+.box h3{font-size:14px;margin-bottom:6px}.box ul{margin:0;padding-left:18px}
+.done{text-align:center;display:grid;gap:16px;max-width:520px;margin:0 auto}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.kpi{background:var(--surf2);border-radius:14px;padding:12px}.kpi b{display:block;font:700 24px Outfit,sans-serif}.kpi span{font-size:13px;color:var(--mut)}
+.disc{text-align:center;font-size:13px;color:var(--mut);margin-top:26px}
+@media (max-width:599px){.stage{aspect-ratio:10/10.5}}
+@media (min-width:600px){.cols{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:900px){
+ .ovgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+ .ovgrid .stick{position:sticky;top:84px;display:grid;gap:14px}
+ .player{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:start}
+ .player .left{position:sticky;top:76px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+.tag{font-size:12px;font-weight:600;padding:3px 9px;border-radius:99px;background:var(--coolSoft);color:var(--cool);white-space:nowrap}
+
+/* app shell */
+.top .lv{display:flex;gap:6px}
+.acct{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);font-size:14px;font-weight:600}
+.avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--surf2);font-weight:700}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);background:var(--surf);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 8px;font-size:12px;font-weight:500;color:var(--mut);min-height:58px}
+.tabs button svg{width:24px;height:24px}
+.tabs button[aria-current=page]{color:var(--ink)}.tabs button[aria-current=page] svg{color:var(--hot)}
+main.app{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+.view{display:none}.view.on{display:block;animation:in .25s ease-out}
+.today{display:grid;gap:14px;background:var(--hot);color:var(--hotInk);border-radius:22px;padding:18px}
+.today .btn{background:var(--hotInk);color:#FFE9E2}
+.today p{opacity:.85}
+.hero2{position:relative;border-radius:22px;overflow:hidden;background:radial-gradient(120% 90% at 50% 40%,#2B2160,#14112A 70%);border:1px solid var(--line);aspect-ratio:4/3}
+.hero2 canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero2 .lab{position:absolute;left:14px;top:12px;right:14px;display:flex;justify-content:space-between;gap:8px;font:700 17px Outfit,sans-serif}
+.lvl{display:flex;align-items:center;gap:14px}
+.lvl svg{width:58px;height:58px;flex:none}
+.bar{height:10px;border-radius:99px;background:var(--surf2);overflow:hidden}.bar>i{display:block;height:100%;border-radius:inherit;background:var(--hot);transition:width .6s ease-out}.bar.c>i{background:var(--cool)}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.between{justify-content:space-between}
+.quest{display:grid;gap:10px}.qhead{display:flex;gap:12px;align-items:flex-start}
+.kpis4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.k{background:var(--surf2);border-radius:14px;padding:12px 14px}.k b{display:block;font:700 24px Outfit,sans-serif;font-variant-numeric:tabular-nums}.k span{font-size:13px;color:var(--mut)}
+.grid{display:grid;gap:14px}
+.heat{display:grid;grid-template-columns:auto repeat(12,minmax(0,1fr));gap:4px;align-items:center;max-width:440px}
+.heat i{aspect-ratio:1;border-radius:4px;background:var(--surf2)}.heat i.l1{background:color-mix(in srgb,var(--hot) 45%,var(--surf2))}.heat i.l2{background:var(--hot)}.heat i.fut{background:transparent;border:1px dashed var(--line)}
+.heat span{font-size:12px;color:var(--mut);padding-right:4px}
+.chart{position:relative;height:190px}.chart svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.hrow{display:grid;grid-template-columns:56px 1fr 34px;gap:10px;align-items:center;font-size:13px;margin:6px 0}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.bdg{text-align:center;padding:12px 6px;border-radius:14px;background:var(--surf2);font-size:13px;font-weight:500}.bdg svg{width:42px;height:42px;display:block;margin:0 auto 6px}.bdg.off{opacity:.35}
+.empty{padding:20px;text-align:center;border:1px dashed var(--line);border-radius:14px;color:var(--mut);font-size:15px}
+.links{display:grid;gap:8px}
+.lk{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;border-radius:14px;background:var(--surf);border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:600}
+.lk small{display:block;font-weight:400;color:var(--mut);font-size:13px}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}.switch:last-child{border-bottom:0}
+.tg{width:52px;height:32px;border-radius:99px;background:var(--surf2);position:relative;flex:none;border:1px solid var(--line)}
+.tg::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--mut);transition:transform .18s ease-out}
+.tg[aria-checked=true]{background:var(--cool);border-color:var(--cool)}.tg[aria-checked=true]::after{transform:translateX(20px);background:#fff}
+.seg2{display:inline-grid;grid-auto-flow:column;background:var(--surf2);border-radius:999px;padding:3px}.seg2 button{padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;min-height:38px}.seg2 button[aria-pressed=true]{background:var(--surf)}
+.overlay{position:fixed;inset:0;z-index:60;background:var(--bg);overflow-y:auto;display:none;padding:max(16px,env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom))}
+.overlay.on{display:block}
+.ob{max-width:520px;margin:0 auto;display:grid;gap:16px;min-height:calc(100dvh - 60px);align-content:center}
+.dots{display:flex;gap:6px;justify-content:center}.dots i{width:7px;height:7px;border-radius:9px;background:var(--line)}.dots i.on{background:var(--hot);width:20px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--surf);min-height:56px;font-weight:500}
+.opt[aria-pressed=true]{border-color:var(--hot);background:var(--hotSoft)}
+.opt .dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none}.opt[aria-pressed=true] .dot{border-color:var(--hot);background:var(--hot)}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.steps2{counter-reset:s;display:grid;gap:10px;padding:0;margin:0;list-style:none}
+.steps2 li{display:grid;grid-template-columns:30px 1fr;gap:10px}
+.steps2 li::before{counter-increment:s;content:counter(s);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--hot);color:var(--hotInk);font:700 15px Outfit,sans-serif}
+.wrong{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.wrong div{background:var(--surf2);border-radius:14px;padding:12px;font-size:14px}
+.pl-top{display:flex;justify-content:space-between;align-items:center;gap:10px;max-width:1180px;margin:0 auto 12px}
+.sheetwrap{position:fixed;inset:0;z-index:80;background:#000a;display:none;align-items:flex-end;justify-content:center}.sheetwrap.on{display:flex}
+.sheet{background:var(--surf);width:100%;max-width:520px;border-radius:24px 24px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom));max-height:92dvh;overflow-y:auto;display:grid;gap:14px;animation:up .25s ease-out}
+@keyframes up{from{transform:translateY(30px);opacity:0}}
+.field{width:100%;min-height:50px;padding:0 16px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:16px}
+.holdbtn{width:170px;height:170px;border-radius:50%;margin:0 auto;display:grid;place-items:center;background:var(--hot);color:var(--hotInk);font:700 20px Outfit,sans-serif;user-select:none;-webkit-user-select:none;touch-action:none;box-shadow:0 0 0 10px var(--hotSoft)}
+.holdbtn.on{transform:scale(.96);box-shadow:0 0 0 18px var(--hotSoft)}.holdbtn:disabled{opacity:.5}
+.big{font:700 52px Outfit,sans-serif;text-align:center;font-variant-numeric:tabular-nums}
+.rate{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.rate button{min-height:52px;border-radius:14px;background:var(--surf2);font:600 18px Outfit,sans-serif}.rate button[aria-pressed=true]{background:var(--cool);color:#06231F}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:999px;font-size:14px;font-weight:500;z-index:90;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw;text-align:center}.toast.on{opacity:1}
+.danger{color:#FF8A80}
+.foot{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:center;margin-top:20px;font-size:13px}.foot a{color:var(--mut)}
+@media (min-width:640px){.kpis4{grid-template-columns:repeat(4,minmax(0,1fr))}.sheetwrap{align-items:center}.sheet{border-radius:24px}}
+@media (min-width:900px){
+ .tabs{position:sticky;top:61px;bottom:auto;z-index:19;max-width:640px;margin:12px auto 0;border:1px solid var(--line);border-radius:16px;grid-template-columns:repeat(4,1fr);padding:4px}
+ .tabs button{flex-direction:row;justify-content:center;gap:8px;font-size:15px;min-height:44px;border-radius:12px;padding:0}
+ .tabs button[aria-current=page]{background:var(--surf2)}
+ main.app{padding-bottom:48px}
+ .tgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+ .two{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+ .toast{bottom:28px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="/" style="color:inherit;text-decoration:none"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#FF6B4A"/><path d="M7 19c4 4 14 4 18 0" stroke="#2A0E07" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="16" cy="12" r="3.2" fill="#2A0E07"/></svg>Kegzo</a>
+  <span class="sp"></span>
+  <span class="lv"><span class="chip num" id="topLv">Lv 1</span><span class="chip num" id="topSt" title="Training streak">0 days</span></span>
+  <span id="acct"></span>
+</header>
+<nav class="tabs" aria-label="App sections">
+  <button data-v="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z" fill="currentColor"/></svg>Today</button>
+  <button data-v="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Progress</button>
+  <button data-v="learn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19a2 2 0 0 1 2-2h13"/></svg>Learn</button>
+  <button data-v="me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Me</button>
+</nav>
+<main class="app">
+  <section class="view" id="v-today" aria-label="Today"></section>
+  <section class="view" id="v-progress" aria-label="Progress"></section>
+  <section class="view" id="v-learn" aria-label="Learn"></section>
+  <section class="view" id="v-me" aria-label="Me"></section>
+  <p class="disc">General fitness information, not medical advice. Stop if anything hurts.</p>
+</main>
+
+<!-- session player -->
+<div class="overlay" id="pl" role="dialog" aria-modal="true" aria-label="Training session">
+  <div class="pl-top"><span class="chip" id="plLabel">Session</span><button class="btn ghost sm" id="quitB">End session</button></div>
+  <div class="player" style="max-width:1180px;margin:0 auto">
+    <div class="left">
+      <div class="stage" id="stage">
+        <canvas id="cv"></canvas><div class="restcover"></div>
+        <div class="ex-n num" id="exN">01</div><div class="ex-t" id="exT"></div><div class="ex-s" id="exS"></div>
+        <div class="ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#100D22aa" stroke="#3A3270" stroke-width="7"/><circle id="ringP" cx="50" cy="50" r="44" fill="none" stroke="#FF6B4A" stroke-width="7" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="0"/></svg><b id="ringT">5</b><small id="ringL">Get ready</small></div>
+        <div class="reps" id="reps"></div>
+        <span class="chip pos" id="pos">Lying</span>
+      </div>
+      <div class="live">
+        <div><p class="mvlab">Inside view</p><div class="mv" id="mv"></div></div>
+        <div><div class="phase" id="phase">Get ready</div><p class="cue" id="cue" aria-live="polite"></p></div>
+      </div>
+      <div class="bars" id="bars"></div>
+      <div class="ctrl">
+        <button class="ib" id="prevB" aria-label="Previous exercise"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>
+        <button class="btn hot" id="playB">Pause</button>
+        <button class="ib" id="nextB" aria-label="Next exercise"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
+        <button class="ib" id="voiceB" aria-label="Voice coach" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
+      </div>
+      <div class="next" id="nextUp"></div>
+    </div>
+    <div class="card how" id="how"></div>
+  </div>
+</div>
+
+<!-- finish -->
+<div class="overlay" id="fin" role="dialog" aria-modal="true" aria-label="Session complete">
+  <div class="done" style="padding-top:10px">
+    <div class="hero2" style="max-height:300px"><canvas id="finCv"></canvas></div>
+    <h1 id="finT">Session complete</h1>
+    <div class="kpis"><div class="kpi"><b class="num" id="fMin">0</b><span>Minutes</span></div><div class="kpi"><b class="num" id="fSq">0</b><span>Squeezes</span></div><div class="kpi"><b class="num" id="fXp">+0</b><span>XP</span></div></div>
+    <div id="finExtra" class="grid"></div>
+    <button class="btn hot wide" id="finB">Done</button>
+  </div>
+</div>
+
+<div class="overlay" id="ob" role="dialog" aria-modal="true" aria-label="Get started"></div>
+<div class="sheetwrap" id="sw"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+{
+const $=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* ================= FIGURE ENGINE (two-bone IK, poses as targets) ================= */
+const LEN={torso:54,neck:20,ua:30,fa:28,th:46,sh:44,ft:14},FLOOR=262;
+const rad=a=>a*Math.PI/180,dir=a=>[Math.sin(rad(a)),Math.cos(rad(a))],add=(a,b,k=1)=>[a[0]+b[0]*k,a[1]+b[1]*k];
+function ik(R,T,a,b,s){const dx=T[0]-R[0],dy=T[1]-R[1];let d=Math.hypot(dx,dy);d=Math.max(Math.abs(a-b)+.5,Math.min(a+b-.3,d));
+ const base=Math.atan2(dy,dx),A=Math.acos(Math.max(-1,Math.min(1,(a*a+d*d-b*b)/(2*a*d)))),g=base+s*A;
+ return[[R[0]+a*Math.cos(g),R[1]+a*Math.sin(g)],[R[0]+d*Math.cos(base),R[1]+d*Math.sin(base)]]}
+const lerp=(a,b,u)=>a+(b-a)*u;
+function lerpP(a,b,u){if(typeof a==='number'&&typeof b==='number')return lerp(a,b,u);if(Array.isArray(a)&&Array.isArray(b))return a.map((x,i)=>lerp(x,b[i],u));
+ if(a&&b&&typeof a==='object'){const o={};for(const k in b)o[k]=(k in a)?lerpP(a[k],b[k],u):b[k];return o}return u<.5&&a!==undefined?a:b}
+function solve(P){const td=dir(P.t),N=add(P.p,td,LEN.torso),H=add(N,dir(P.h),LEN.neck);const S={P:P.p,N,H,hip:{L:P.p,R:P.p},sh:{L:N,R:N}};
+ for(const s of['L','R']){const L=P[s];const[kn,an]=ik(P.p,L.a,LEN.th,LEN.sh,L.k);const toe=add(an,dir(L.f),LEN.ft);const[el,hd]=ik(N,L.hd,LEN.ua,LEN.fa,L.e);S[s]={kn,an,toe,el,hd}}return S}
+const COL={near:'#ECE7FF',far:'#8E84CF',glow:'rgba(160,140,255,.75)'};
+function line(c,a,b,w,col){c.strokeStyle=col;c.lineWidth=w;c.beginPath();c.moveTo(a[0],a[1]);c.lineTo(b[0],b[1]);c.stroke()}
+function draw(c,S,o={}){const g=o.g||1,pf=o.pf||0;c.lineCap='round';c.lineJoin='round';
+ const gr=c.createLinearGradient(-100,0,500,0);gr.addColorStop(0,'rgba(140,120,255,0)');gr.addColorStop(.5,'rgba(140,120,255,.45)');gr.addColorStop(1,'rgba(140,120,255,0)');c.shadowBlur=0;line(c,[-100,FLOOR],[500,FLOOR],2,gr);
+ const sx=(S.P[0]+(S.L.an[0]+S.R.an[0])/2)/2,rg=c.createRadialGradient(sx,FLOOR,2,sx,FLOOR,90);rg.addColorStop(0,'rgba(120,100,255,.28)');rg.addColorStop(1,'rgba(120,100,255,0)');c.fillStyle=rg;c.beginPath();c.ellipse(sx,FLOOR+2,90,9,0,0,7);c.fill();
+ if(o.chair){c.shadowColor='rgba(140,120,255,.5)';c.shadowBlur=8*g;const cc='#5E55A0';line(c,[164,208],[216,208],7,cc);line(c,[168,208],[168,FLOOR],5,cc);line(c,[210,208],[210,FLOOR],5,cc);line(c,[164,208],[160,140],6,cc)}
+ const B=(far)=>{c.shadowColor=COL.glow;c.shadowBlur=(far?6:14)*g;return far?COL.far:COL.near};
+ const leg=(s,far)=>{const col=B(far),L=S[s];line(c,S.P,L.kn,16,col);line(c,L.kn,L.an,12.5,col);line(c,L.an,L.toe,8,col)};
+ const arm=(s,far)=>{const col=B(far),A=S[s];line(c,S.N,A.el,11,col);line(c,A.el,A.hd,9,col);c.fillStyle=col;c.beginPath();c.arc(A.hd[0],A.hd[1],5.5,0,7);c.fill()};
+ const torso=()=>{const col=B(),mid=lerpP(S.P,S.N,.55);line(c,S.P,mid,24,col);line(c,mid,S.N,28,col);line(c,S.N,lerpP(S.N,S.H,.55),10,col);c.fillStyle=col;c.beginPath();c.arc(S.H[0],S.H[1],12.5,0,7);c.fill()};
+ arm('L',true);leg('L',true);torso();leg('R');arm('R');
+ /* pelvic floor glow: coral = squeeze, aqua = drop */
+ const a=Math.abs(pf),hot=pf>=0,p=add(S.P,dir(S.P===S.N?0:0),0),r=18+a*20;c.shadowBlur=0;
+ const rg2=c.createRadialGradient(p[0],p[1],1,p[0],p[1],r);rg2.addColorStop(0,hot?`rgba(255,107,74,${.25+.65*a})`:`rgba(91,214,201,${.25+.65*a})`);rg2.addColorStop(1,hot?'rgba(255,107,74,0)':'rgba(91,214,201,0)');c.fillStyle=rg2;c.beginPath();c.arc(p[0],p[1],r,0,7);c.fill();
+ c.fillStyle=hot?'#FF6B4A':'#5BD6C9';c.globalAlpha=.6+.4*a;c.beginPath();c.arc(p[0],p[1],4+a*3,0,7);c.fill();c.globalAlpha=1}
+function fit(cv,C){const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d));if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h}
+ const c=cv.getContext('2d'),s=Math.min(w/400,h/300)*C[2];c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,w,h);c.setTransform(s,0,0,s,w/2-C[0]*s,h*(h>w*.8?.62:.58)-C[1]*s);return[c,s]}
+
+/* ================= POSITIONS ================= */
+const side=o=>Object.assign({v:'side'},o);
+const POS={
+ lying:{n:'Lying down',img:'pos-lying.webp',pt:[.335,.64],cam:[186,232,1.75],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+  how:'Lie on your back, knees bent, feet flat. The easiest position because gravity helps.'},
+ seated:{n:'Seated',img:'pos-seated.webp',chair:1,cam:[194,200,1.4],keys:[side({p:[182,198],t:180,h:180,L:{a:[226,255],f:90,k:-1,hd:[212,196],e:1},R:{a:[230,255],f:90,k:-1,hd:[216,198],e:1}})],
+  how:'Sit upright on a firm chair, feet flat, weight spread across both sit bones.'},
+ standing:{n:'Standing',img:'pos-standing.webp',cam:[200,192,1.3],keys:[side({p:[200,167],t:180,h:180,L:{a:[198,255],f:90,k:-1,hd:[199,172],e:1},R:{a:[202,255],f:90,k:-1,hd:[203,172],e:1}})],
+  how:'Stand tall, feet hip-width apart, knees soft. Harder, because the muscle works against gravity.'},
+ walking:{n:'Walking',img:'pos-walking.webp',walk:1,cam:[200,192,1.3],keys:[side({p:[200,168],t:178,h:180,L:{a:[226,255],f:90,k:-1,hd:[186,170],e:1},R:{a:[176,250],f:112,k:-1,hd:[218,166],e:1}}),side({p:[200,168],t:178,h:180,L:{a:[176,250],f:112,k:-1,hd:[218,166],e:1},R:{a:[226,255],f:90,k:-1,hd:[186,170],e:1}})],
+  how:'Walk at an easy pace and hold the squeeze for a few steps. This trains the muscle for everyday life.'}};
+const IMG={};const PORDER=['lying','seated','standing','walking'];
+function Fig(posId){const P=POS[posId];return{P,t:0,pose:P.keys[0],
+ step(dt){this.t+=dt;if(P.walk){const u=(Math.sin(this.t*Math.PI/.55)+1)/2;this.pose=lerpP(P.keys[0],P.keys[1],u);this.pose.p=[200,168-Math.abs(Math.cos(this.t*Math.PI/.55))*3]}
+  else{const b=Math.sin(this.t*1.4)*.8;this.pose=Object.assign({},P.keys[0],{t:P.keys[0].t+b*.6})}},
+ render(cv,pf,z=1,lift=0){const now=performance.now()/1000,dt=Math.min(.1,now-(this.lt||now));this.lt=now;
+  if(P.img){if(!cv._h)cv._h=Holo(cv);const c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);cv._h.w.style.display='block';holoDraw(cv._h,posOf(P),pf,this.t,dt,lift)}
+  else{if(cv._h)cv._h.w.style.display='none';const C=P.cam;const[c,s]=fit(cv,[C[0],C[1],C[2]*z]);draw(c,solve(this.pose),{g:s,pf,chair:P.chair})}}}}
+const posOf=P=>Object.keys(POS).find(k=>POS[k]===P);
+/* ================= HOLOGRAM RENDERER (WebGL warp + x-ray pelvic floor + particles) ================= */
+const IW=1448,IH=1086;
+const RIG={
+ lying:{A:[470,625],B:[505,730],U:[1,0],C:[900,640],HP:[600,700],floor:.905},
+ standing:{A:[668,585],B:[760,565],U:[0,-1],C:[735,300],floor:.915},
+ seated:{A:[868,652],B:[945,668],U:[0,-1],C:[880,380],floor:.905},
+ walking:{A:[720,575],B:[640,548],U:[0,-1],C:[740,330],floor:.905,walk:1}};
+const VS='attribute vec2 p;varying vec2 v;void main(){v=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}';
+const FS=`precision mediump float;uniform sampler2D tx;uniform float t,L,br,bob,lf;uniform vec2 HP;uniform vec2 P,U,C;varying vec2 v;
+const vec2 K=vec2(1.3333,1.);float g(vec2 d,float r){return exp(-dot(d,d)/(r*r));}
+void main(){vec2 uv=v,d=vec2(0.);
+ d+=(uv-C)*.035*br*g((uv-C)*K,.13);
+ d+=U*L*.016*g((uv-P)*K,.06);
+ float wl=g((uv-HP)*K,.17)*(1.-smoothstep(.80,.88,uv.y));d.y-=.075*lf*wl;
+ d.y+=bob;
+ vec4 c=texture2D(tx,uv-d);vec3 bg=vec3(.065,.04,.17);
+ float a=smoothstep(.03,.17,length(c.rgb-bg)),lum=dot(c.rgb,vec3(.3,.5,.2));
+ float pg=g((uv-P)*K,.075);vec3 tint=L>=0.?vec3(1.,.42,.29):vec3(.36,.84,.79);
+ c.rgb=mix(c.rgb,tint*(.35+lum*1.5),clamp(pg*abs(L)*.62,0.,1.)*a);
+ c.rgb+=a*.03*sin(uv.y*1100.+t*8.);
+ float sw=exp(-pow((uv.x-(fract(t*.16)*1.8-.4))/.03,2.));c.rgb+=a*sw*.18*vec3(.85,.8,1.);
+ c.rgb*=1.+.06*abs(L);
+ float e=smoothstep(0.,.07,uv.x)*smoothstep(0.,.07,1.-uv.x)*smoothstep(0.,.06,uv.y)*smoothstep(0.,.03,1.-uv.y);a*=e;
+ gl_FragColor=vec4(c.rgb*a,a);}`;
+function Holo(cv){const w=document.createElement('div');w.className='hwrap';
+ w.innerHTML='<canvas class="hgl"></canvas><canvas class="hfx"></canvas><img class="hfb" alt="">';cv.after(w);
+ const gc=w.querySelector('.hgl'),fx=w.querySelector('.hfx'),fb=w.querySelector('.hfb');
+ let gl=null;try{gl=gc.getContext('webgl',{premultipliedAlpha:true,alpha:true,antialias:false})}catch(e){}
+ const H={w,gl,fx,fb,pos:'',tex:null,ready:false,parts:[],rings:[],lastL:0,br:.5,t:0};
+ if(gl){const sh=(ty,src)=>{const s=gl.createShader(ty);gl.shaderSource(s,src);gl.compileShader(s);return s};
+  const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(pr);
+  if(!gl.getProgramParameter(pr,gl.LINK_STATUS)){H.gl=gl=null}else{gl.useProgram(pr);const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+   const loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+   H.u={};['t','L','br','bob','P','U','C','tx','lf','HP'].forEach(k=>H.u[k]=gl.getUniformLocation(pr,k));H.tex=gl.createTexture();gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA)}}
+ if(!gl){gc.style.display='none';fb.style.display='block'}
+ return H}
+function holoSet(H,posId){if(H.pos===posId)return;H.pos=posId;H.ready=false;H.parts=[];H.rings=[];const src=IMG[POS[posId].img]||POS[posId].img;
+ if(!H.gl){H.fb.src=src;H.ready=true;return}
+ const im=new Image();im.onload=()=>{const gl=H.gl;gl.bindTexture(gl.TEXTURE_2D,H.tex);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,im);H.ready=true};im.src=src}
+function sizeC(c){const r=c.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d));if(c.width!==w||c.height!==h){c.width=w;c.height=h}return[w,h]}
+function holoDraw(H,posId,L,t,dt,lift=0){holoSet(H,posId);const R=RIG[posId],nx=v=>[v[0]/IW,v[1]/IH];
+ const A=nx(R.A),B=nx(R.B),Pm=[(A[0]+B[0])/2,(A[1]+B[1])/2],C=nx(R.C);
+ const bt=L<-.1?1:L>.3?.15:.5+.35*Math.sin(t*1.1);H.br+=(bt-H.br)*Math.min(1,dt*2.2);
+ const bob=R.walk?-.007*Math.abs(Math.sin(t*Math.PI/.55)):0;
+ if(H.gl&&H.ready){const gl=H.gl,[w,h]=sizeC(H.w.querySelector('.hgl'));gl.viewport(0,0,w,h);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.uniform1f(H.u.t,t);gl.uniform1f(H.u.L,L);gl.uniform1f(H.u.br,H.br);gl.uniform1f(H.u.bob,bob);gl.uniform2f(H.u.P,Pm[0],Pm[1]);gl.uniform2f(H.u.U,R.U[0],R.U[1]);gl.uniform2f(H.u.C,C[0],C[1]);gl.uniform1i(H.u.tx,0);gl.uniform1f(H.u.lf,lift);const hp=R.HP?nx(R.HP):[0,0];gl.uniform2f(H.u.HP,hp[0],hp[1]);gl.drawArrays(gl.TRIANGLE_STRIP,0,4)}
+ else if(!H.gl){H.fb.style.transform=`translateY(${bob*100}%) scale(${1+.004*H.br})`;H.fb.style.filter=`brightness(${1+.12*Math.abs(L)})`}
+ /* --- overlay: x-ray pelvic floor sling, particles, pulse rings, treadmill --- */
+ const [w,h]=sizeC(H.fx),c=H.fx.getContext('2d');c.clearRect(0,0,w,h);
+ const hpn=R.HP?nx(R.HP):null,X=p=>{let dy=0;if(hpn&&lift){const dx=(p[0]-hpn[0])*1.3333,dd=p[1]-hpn[1];dy=-.075*lift*Math.exp(-(dx*dx+dd*dd)/(.17*.17))*(1-Math.min(1,Math.max(0,(p[1]-.8)/.08)))}return[p[0]*w,(p[1]+bob+dy)*h]},a=X(A),b=X(B),m=[(a[0]+b[0])/2,(a[1]+b[1])/2],U=R.U,sag=w*(.026-.03*L),cp=[m[0]-U[0]*sag,m[1]-U[1]*sag];
+ const hot=L>=0,k=Math.abs(L),col=hot?[255,107,74]:[91,214,201],mix=(x,y,u)=>Math.round(x+(y-x)*u),base=[214,205,255];
+ const rgb=`${mix(base[0],col[0],Math.min(1,k*1.4))},${mix(base[1],col[1],Math.min(1,k*1.4))},${mix(base[2],col[2],Math.min(1,k*1.4))}`;
+ const len=Math.hypot(b[0]-a[0],b[1]-a[1]),nrm=[-(b[1]-a[1])/len,(b[0]-a[0])/len],lw=Math.max(2,w*.0075);
+ c.lineCap='round';c.globalCompositeOperation='lighter';
+ for(let i=-1;i<=1;i++){const o=i*lw*1.1;c.strokeStyle=`rgba(${rgb},${i?.45:.95})`;c.shadowColor=`rgba(${rgb},.9)`;c.shadowBlur=lw*(3+4*k);c.lineWidth=i?lw*.55:lw;
+  c.beginPath();c.moveTo(a[0]+nrm[0]*o,a[1]+nrm[1]*o);c.quadraticCurveTo(cp[0]+nrm[0]*o*1.6,cp[1]+nrm[1]*o*1.6,b[0]+nrm[0]*o,b[1]+nrm[1]*o);c.stroke()}
+ c.shadowBlur=0;[a,b].forEach(p=>{c.fillStyle=`rgba(${rgb},.9)`;c.beginPath();c.arc(p[0],p[1],lw*.9,0,7);c.fill()});
+ const sc=[(a[0]+2*cp[0]+b[0])/4,(a[1]+2*cp[1]+b[1])/4];
+ if(L>.45&&H.lastL<=.45)H.rings.push({r:0,a:1,c:'255,107,74'});if(L<-.35&&H.lastL>=-.35)H.rings.push({r:0,a:.8,c:'91,214,201'});H.lastL=L;
+ H.rings=H.rings.filter(r=>(r.r+=dt*w*.12,r.a-=dt*1.1)>0);H.rings.forEach(r=>{c.strokeStyle=`rgba(${r.c},${r.a*.7})`;c.lineWidth=lw*.6;c.beginPath();c.arc(sc[0],sc[1],r.r+lw,0,7);c.stroke()});
+ const n=Math.random()<k*1.1?1:0;
+ for(let i=0;i<n;i++){const ang=Math.random()*6.283;if(hot){const R0=w*(.07+Math.random()*.05);H.parts.push({x:sc[0]+Math.cos(ang)*R0,y:sc[1]+Math.sin(ang)*R0,tx:sc[0],ty:sc[1],life:0,max:.7,hot:1})}
+  else H.parts.push({x:sc[0]+(Math.random()-.5)*len*.6,y:sc[1],vx:(-U[0]+(Math.random()-.5)*.8)*w*.05,vy:(-U[1]+(Math.random()-.5)*.8)*w*.05,life:0,max:1.2,hot:0})}
+ H.parts=H.parts.filter(p=>(p.life+=dt)<p.max);
+ H.parts.forEach(p=>{const u=p.life/p.max;if(p.hot){p.x+=(p.tx-p.x)*Math.min(1,dt*5);p.y+=(p.ty-p.y)*Math.min(1,dt*5)}else{p.x+=p.vx*dt;p.y+=p.vy*dt}
+  const al=Math.sin(u*Math.PI),rr=lw*(p.hot?.55:.7);c.fillStyle=p.hot?`rgba(255,150,120,${al})`:`rgba(120,230,215,${al*.8})`;c.beginPath();c.arc(p.x,p.y,rr,0,7);c.fill()});
+ if(k>.12){c.globalCompositeOperation='lighter';const dirv=hot?[U[0],U[1]]:[-U[0],-U[1]],pr=[-dirv[1],dirv[0]],ph=(t*1.6)%1;for(let j=0;j<3;j++){const q=(ph+j/3)%1,dist=w*(.035+.07*q),al=Math.sin(q*Math.PI)*Math.min(1,k*1.5),cx=sc[0]+dirv[0]*dist,cy=sc[1]+dirv[1]*dist,sz=w*.016;c.strokeStyle=`rgba(${hot?'255,140,110':'110,225,210'},${al})`;c.lineWidth=Math.max(2,w*.005);c.shadowColor=c.strokeStyle;c.shadowBlur=lw*2;c.beginPath();c.moveTo(cx-pr[0]*sz-dirv[0]*sz*.8,cy-pr[1]*sz-dirv[1]*sz*.8);c.lineTo(cx,cy);c.lineTo(cx+pr[0]*sz-dirv[0]*sz*.8,cy+pr[1]*sz-dirv[1]*sz*.8);c.stroke()}c.shadowBlur=0}
+ if(R.walk){const fy=R.floor*h,sp=w*.06,off=(t*w*.12)%sp;c.strokeStyle='rgba(160,140,255,.35)';c.lineWidth=Math.max(1,w*.002);for(let x=-off;x<w;x+=sp){c.beginPath();c.moveTo(x,fy+h*.012);c.lineTo(x+sp*.45,fy+h*.012);c.stroke()}}
+ c.globalCompositeOperation='source-over'}
+
+
+/* ================= EXERCISES (kegel only) ================= */
+const S_=(k,d,to,extra)=>Object.assign({k,d,to},extra||{});
+const rep=a=>{a[a.length-1].r=1;return a};
+function times(n,f){let o=[];for(let i=0;i<n;i++)o=o.concat(rep(f(i)));return o}
+const EX={
+ find:{n:'Find and lift',type:'Technique',wk:1,ic:'find',
+  steps:()=>times(5,()=>[S_('squeeze',2,.6),S_('hold',3,.6),S_('relax',3,0),S_('rest',3,0)]),
+  how:['Get into position and relax your belly, glutes and thighs.','Gently draw up and in, as if stopping wind and stopping the flow of urine at the same time.','You should feel the base of the penis pull in slightly and the testicles lift. That is the right muscle.','Hold, then let it go completely before the next one.'],
+  feel:'A lift and tightening deep between your legs, nothing in your bum or belly.',avoid:['Clenching your glutes','Pushing your belly out','Holding your breath'],tip:'Use about half effort while you learn. Precision beats force.'},
+ power:{n:'Power holds',type:'Strength',wk:1,ic:'hold',
+  steps:(l=1)=>times(6,()=>[S_('squeeze',1,1),S_('hold',Math.min(10,4+l),1),S_('relax',2,0),S_('rest',5,0)]),
+  how:['Squeeze as hard as you can while still breathing normally.','Hold the squeeze for the full count. If it fades, relax and reset.','Let go completely, then rest as long as you held.'],
+  feel:'A strong, steady lift that you can keep without shaking.',avoid:['Squeezing your buttocks to help','Holding your breath to get a stronger squeeze','Cutting the rest short'],tip:'Holds grow by a second each level, up to 10 seconds.'},
+ flicks:{n:'Quick flicks',type:'Speed',wk:1,ic:'flick',
+  steps:()=>times(12,()=>[S_('squeeze',.7,1),S_('relax',1,0)]),
+  how:['Squeeze hard and fast, then let go straight away.','Each flick is a full squeeze and a full release.','Keep a steady rhythm and stay relaxed everywhere else.'],
+  feel:'Quick pulses deep in the pelvis.',avoid:['Half squeezes that never fully release','Bouncing your whole body','Rushing so the squeezes get weak'],tip:'Quality first. Slow down if the squeezes get weaker.'},
+ drop:{n:'Reverse kegel',type:'Release',wk:1,ic:'drop',rel:1,
+  steps:()=>times(5,()=>[S_('drop',4,-.7),S_('out',5,0)]),
+  how:['Breathe in slowly into your belly.','As you breathe in, let the pelvic floor soften, widen and drop, the opposite of a squeeze.','Breathe out and let it return to neutral without squeezing.'],
+  feel:'A gentle opening and heaviness low down, like the moment you start to pee.',avoid:['Pushing or straining hard','Squeezing on the way back','Holding your breath'],tip:'A muscle that can fully relax works better. Never skip this one.'},
+ endure:{n:'Endurance hold',type:'Stamina',wk:1,ic:'endure',
+  steps:(l=1)=>times(2,()=>[S_('squeeze',2,.5),S_('hold',Math.min(40,14+l*2),.5),S_('relax',3,0),S_('rest',8,0)]),
+  how:['Squeeze at about half strength.','Hold that steady squeeze for the whole count while breathing normally.','Relax fully at the end.'],
+  feel:'A light, steady lift you could keep while talking.',avoid:['Starting too hard and fading','Holding your breath','Tensing your shoulders'],tip:'Think of it as a gentle hold, not a maximum effort.'},
+ elevator:{n:'The elevator',type:'Control',wk:2,ic:'elev',
+  steps:()=>times(3,()=>[S_('up',1.5,.34),S_('hold',1.5,.34),S_('up',1.5,.67),S_('hold',1.5,.67),S_('up',1.5,1),S_('hold',2,1),S_('down',1.8,.67),S_('down',1.8,.34),S_('down',2,0),S_('rest',4,0)]),
+  how:['Lift a third of the way and pause: floor one.','Lift more and pause: floor two. Then a full squeeze: floor three.','Lower one floor at a time, slowly, all the way to the ground.'],
+  feel:'Control at each level, especially on the way down.',avoid:['Dropping straight from the top','Losing your breath','Using your belly to lift'],tip:'The slow lowering is the hardest and most useful part.'},
+ pyramid:{n:'Pyramid',type:'Strength',wk:2,ic:'pyr',
+  steps:()=>[2,4,6,8,6,4,2].flatMap(h=>rep([S_('squeeze',1,1),S_('hold',h,1),S_('relax',2,0),S_('rest',Math.max(3,h),0)])),
+  how:['Squeeze and hold for 2 seconds, then rest.','Each hold gets longer: 4, 6, then 8 seconds.','Then come back down: 6, 4, 2.'],
+  feel:'Your strength being tested as the holds get longer.',avoid:['Letting the squeeze fade mid-hold','Skipping the rest','Holding your breath'],tip:'If you cannot hold 8 seconds yet, relax early and keep going.'},
+ wave:{n:'Wave squeezes',type:'Speed',wk:3,ic:'wave',
+  steps:()=>times(4,()=>[S_('squeeze',.6,.8),S_('relax',.6,.1),S_('squeeze',.6,.8),S_('relax',.6,.1),S_('squeeze',.6,1),S_('hold',3,1),S_('relax',2,0),S_('rest',3,0)]),
+  how:['Two quick squeezes and releases.','On the third, squeeze fully and hold.','Let go completely, rest, and repeat the wave.'],
+  feel:'Fast control followed by a strong hold.',avoid:['Blurring the quick squeezes together','Not fully releasing between waves','Tensing your thighs'],tip:'Keep the rhythm even: pulse, pulse, hold.'},
+ bridgek:{n:'Bridge + kegel',type:'Bonus',wk:0,ic:'bridge',pos:'lying',
+  steps:()=>times(6,()=>[S_('bridge',2,0,{lift:1}),S_('squeeze',1,1,{lift:1}),S_('hold',4,1,{lift:1}),S_('relax',1.5,0,{lift:1}),S_('lower',2,0,{lift:0}),S_('rest',3,0,{lift:0})]),
+  how:['Lie on your back, knees bent, feet flat and hip-width apart.','Press through your heels and lift your hips into a bridge.','At the top, do a strong kegel: draw up and in and hold.','Release the kegel fully, then lower your hips slowly.'],
+  feel:'Glutes lift the hips, then the pelvic floor does its own separate squeeze at the top.',avoid:['Letting the bridge replace the kegel','Arching your lower back','Holding your breath'],tip:'Two jobs: your glutes lift you, then the kegel is its own squeeze.'},
+ walk:{n:'Walking holds',type:'Everyday',wk:4,ic:'walk',pos:'walking',
+  steps:()=>times(5,()=>[S_('squeeze',1.5,.7),S_('hold',5,.7),S_('relax',2,0),S_('rest',5,0)]),
+  how:['Walk at an easy pace.','Squeeze at about two-thirds strength and keep walking.','Hold for the count, relax, and keep walking until the next one.'],
+  feel:'The lift staying on while your legs move.',avoid:['Changing how you walk','Holding your breath','Clenching your glutes as you step'],tip:'Try this during a real walk once you know the count.'}};
+const ICONS={find:'<circle cx="12" cy="12" r="7"/><path d="M12 9v6M9 12l3-3 3 3"/>',hold:'<rect x="6" y="6" width="12" height="12" rx="3"/><path d="M9 12h6"/>',flick:'<path d="M3 15l3-6 3 6 3-6 3 6 3-6 3 6"/>',drop:'<path d="M12 4v13M7 12l5 5 5-5M5 20h14"/>',endure:'<circle cx="12" cy="13" r="7"/><path d="M12 9v4l3 2M10 3h4"/>',elev:'<path d="M7 20V4h10v16M7 9h10M7 14h10"/>',pyr:'<path d="M3 20h18M6 20V14M10 20V9M14 20V5M18 20v-6"/>',wave:'<path d="M2 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/>',bridge:'<path d="M2 19h20M5 19l3-6h8l3 6"/><path d="M12 13V8M9 10l3-3 3 3"/>',walk:'<circle cx="13" cy="4" r="2"/><path d="M13 7l-2 6 3 3v5M11 13l-3 8M11 9l-4 2M13 9l4 3"/>'};
+const icon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg>`;
+const secOf=id=>EX[id].steps().reduce((a,s)=>a+s.d,0);
+const repsOf=id=>EX[id].steps().filter(s=>s.r).length;
+const READY=6,REST=12;
+
+
+/* page + programme metadata (used by the app and the page generator) */
+const EXMETA={
+ find:{slug:'find-and-lift',sets:'5 gentle lifts',short:'Learn to find and lift the right muscle before anything else.',
+  why:'Most beginners squeeze the wrong muscles: the glutes, the belly or the inner thighs. Find and lift teaches the exact feeling of the pelvic floor working on its own, at half effort, so every other exercise trains the right thing.',
+  faq:[['How do I know I have found the right muscle?','The base of the penis draws in slightly and the testicles lift. Your bum, belly and thighs stay soft and you keep breathing.'],['Should I practise by stopping my urine?','No. Imagining it is a useful cue, but stopping the flow regularly while you pee is not recommended.']]},
+ power:{slug:'power-holds',sets:'6 holds of 5 to 10 seconds',short:'Strong squeezes held for up to 10 seconds to build strength.',
+  why:'Power holds are the core strength exercise of most pelvic floor programmes. A firm squeeze held for several seconds, followed by full relaxation and an equal rest, builds the strength of the muscles at the base of the penis.',
+  faq:[['How long should each hold be?','Start with what you can hold cleanly, often 4 or 5 seconds, and add a second as you level up, up to 10 seconds.'],['What if the squeeze fades before the count ends?','Relax, rest and start the next one. A clean shorter hold beats a long weak one.']]},
+ flicks:{slug:'quick-flicks',sets:'2 sets of 10 to 15 flicks',short:'Fast, strong squeezes with a full release to train speed.',
+  why:'Your pelvic floor needs speed as well as strength. Quick flicks train the fast-reacting fibres with short, sharp squeezes, and the full release between each one keeps the muscle from staying tense.',
+  faq:[['How fast should flicks be?','About one squeeze and one release every second or two. Slow down if the squeezes get weaker.'],['Do I need to fully relax between flicks?','Yes. A full release every time is half of the exercise.']]},
+ drop:{slug:'reverse-kegel',sets:'5 slow drops',short:'Breathe in and let the pelvic floor soften and drop.',
+  why:'A reverse kegel is the opposite of a squeeze. As you breathe in, the pelvic floor softens, widens and drops slightly. Training the release matters because a muscle that cannot fully relax does not work well, and many men hold too much tension down there.',
+  faq:[['Is a reverse kegel the same as pushing?','No. It is a gentle letting go on the in-breath, not straining or bearing down.'],['How often should I do reverse kegels?','In Kegzo they come in every session, and they make up most of the Relax track.']]},
+ endure:{slug:'endurance-hold',sets:'2 long holds at half strength',short:'A gentle squeeze held for longer to build stamina.',
+  why:'Endurance holds train the muscle to keep working at a moderate level for longer. The squeeze is light, around half strength, and the goal is to keep it steady while breathing normally.',
+  faq:[['How strong should the squeeze be?','About half your maximum. You should be able to talk while holding it.'],['Is it normal for the hold to fade?','Yes, at first. Relax fully and try again next session. Holds get longer as you level up.']]},
+ elevator:{slug:'the-elevator',sets:'3 rides up and down',short:'Lift in three stages, then lower one floor at a time.',
+  why:'The elevator trains control rather than raw strength. Lifting the pelvic floor in three stages and lowering it slowly teaches you to grade the squeeze, and the slow lowering is the hardest and most useful part.',
+  faq:[['I cannot feel three separate levels. Is that normal?','Very normal at first. Aim for small, then medium, then full, and keep practising.'],['Why is lowering slowly important?','Controlled lowering trains the muscle as it lengthens, which is harder than just letting go.']]},
+ pyramid:{slug:'pyramid',sets:'Holds of 2, 4, 6, 8, 6, 4, 2 seconds',short:'Holds that build up to 8 seconds and back down.',
+  why:'The pyramid tests strength and stamina in one set. Each hold gets longer up to 8 seconds, then shorter again, with a rest after each one as long as the hold.',
+  faq:[['What if I cannot reach 8 seconds?','Relax when the squeeze fades and carry on with the next hold. Your ceiling rises with practice.'],['When does the pyramid unlock?','In week 2 of the programme, once the basics are in place.']]},
+ wave:{slug:'wave-squeezes',sets:'4 waves',short:'Two quick pulses, then a strong hold.',
+  why:'Wave squeezes combine speed and strength. Two quick pulses followed by a full hold train the muscle to switch from fast to sustained effort, a step up from flicks and holds on their own.',
+  faq:[['Do I relax between the pulses?','Partly. Let go between the two quick pulses, then squeeze fully and hold on the third.'],['When does this unlock?','In week 3, alongside standing practice.']]},
+ walk:{slug:'walking-holds',sets:'5 holds while walking',short:'Hold the squeeze while you walk at an easy pace.',
+  why:'Walking holds take the skill off the floor and into everyday movement. Keeping a steady squeeze while your legs move teaches the pelvic floor to work while the rest of the body is busy.',
+  faq:[['Should I change the way I walk?','No. Walk normally at an easy pace and keep breathing.'],['Can I do this on a real walk?','Yes. Once you know the count, practise during any walk.']]},
+ bridgek:{slug:'bridge-kegel',sets:'6 bridges with a kegel hold',short:'Lift into a bridge, then add a strong kegel at the top.',
+  why:'This bonus exercise pairs a glute bridge with a kegel hold at the top. The glutes lift the hips, then the pelvic floor does its own separate squeeze, which is a good test that you can isolate it while other muscles work.',
+  faq:[['Is the bridge part of the kegel?','No. The bridge uses your glutes. The kegel is a separate squeeze you add at the top.'],['What if my back hurts?','Lift less high and keep your ribs down. Stop if it hurts.']]}};
+const DAYPLAN={strength:[['find','power','flicks','drop','endure'],['power','elevator','flicks','pyramid','drop'],['power','wave','elevator','endure','drop'],['walk','power','wave','pyramid','drop']],
+ relax:[['find','drop','endure','drop'],['drop','elevator','drop','endure'],['drop','flicks','drop','endure'],['walk','drop','endure','drop']]};
+
+/* ================= INSIDE VIEW (close-up of the pelvic floor) ================= */
+function mvInit(){$('#mv').innerHTML=`<svg viewBox="0 0 300 300" aria-hidden="true">
+<defs><radialGradient id="mg"><stop offset="0" stop-color="#FF6B4A" stop-opacity=".18"/><stop offset="1" stop-color="#FF6B4A" stop-opacity="0"/></radialGradient></defs>
+<circle cx="150" cy="150" r="146" fill="url(#mg)"/><circle cx="150" cy="150" r="128" fill="none" stroke="#2A2450" stroke-width="12"/>
+<circle id="mvRing" cx="150" cy="150" r="128" fill="none" stroke="#FF6B4A" stroke-width="12" stroke-linecap="round" transform="rotate(-90 150 150)" stroke-dasharray="804" stroke-dashoffset="804"/>
+<g fill="none" stroke="#8E84CF" stroke-width="4" stroke-linecap="round" opacity=".7"><path d="M76 92c-6 34 4 62 30 80"/><path d="M224 92c6 34-4 62-30 80"/><path d="M96 108c16 10 34 14 54 14s38-4 54-14" stroke-dasharray="3 9"/></g>
+<path id="mvHalo" fill="none" stroke-width="32" stroke-linecap="round"/><path id="mvBand" fill="none" stroke-width="11" stroke-linecap="round"/><path id="mvArrow" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
+function mvDraw(L,prog){const y=196,cy=y+30-L*62,lx=104,rx=196,ly=y-L*14,d=`M${lx} ${ly}Q150 ${cy} ${rx} ${ly}`,hot=L>=0,col=hot?'#FF6B4A':'#5BD6C9';
+ const b=$('#mvBand'),h=$('#mvHalo'),a=$('#mvArrow');b.setAttribute('d',d);b.setAttribute('stroke',col);h.setAttribute('d',d);h.setAttribute('stroke',col);h.style.opacity=.12+Math.abs(L)*.25;
+ const ay=cy-30;if(Math.abs(L)>.08){a.setAttribute('stroke',col);a.setAttribute('d',hot?`M138 ${ay+2}l12-12 12 12`:`M138 ${ay+48}l12 12 12-12`);a.style.opacity=Math.min(1,Math.abs(L)*1.6)}else a.style.opacity=0;
+ $('#mvRing').setAttribute('stroke',col);$('#mvRing').setAttribute('stroke-dashoffset',804*(1-prog))}
+
+
+Object.assign(IMG,{'pos-lying.webp':'/assets/img/pos-lying.webp','pos-seated.webp':'/assets/img/pos-seated.webp','pos-standing.webp':'/assets/img/pos-standing.webp','pos-walking.webp':'/assets/img/pos-walking.webp'});
+/* ================= STORE (versioned, portable to a future native app) ================= */
+const KEY='kegzo.v1';
+const dk=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const wkOf=d=>{const x=new Date(d);x.setHours(12);return dk(addD(x,-((x.getDay()+6)%7)))};
+const dOf=s=>new Date(s+'T12:00');
+const fresh=()=>({v:1,created:dk(new Date()),ob:{done:false,track:'strength',flags:[]},sessions:[],tests:[],xp:0,badges:[],settings:{voice:true,vib:true,discreet:false},gate:{dismissed:false,email:'',state:''}});
+let mem=null;
+function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);return Object.assign(fresh(),o,{settings:Object.assign(fresh().settings,o.settings||{}),gate:Object.assign(fresh().gate,o.gate||{})})}}catch(e){}return mem||fresh()}
+function save(){mem=S;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+let S=load();
+function ping(e){try{const b=JSON.stringify({e});if(navigator.sendBeacon)navigator.sendBeacon('/api/hit.php',new Blob([b],{type:'application/json'}));else fetch('/api/hit.php',{method:'POST',body:b,keepalive:true}).catch(()=>{})}catch(_){}}
+
+/* ================= GAME ================= */
+const TITLES=['Rookie','Base Builder','Steady Hand','Floor Captain','Iron Core','Control Pro','Elevator Ace','Calm Commander','Grandmaster','Legend'];
+const lvlOf=xp=>Math.min(50,Math.floor((1+Math.sqrt(1+xp/5))/2)),xpFor=l=>20*l*(l-1),title=l=>TITLES[Math.min(9,Math.floor((l-1)/5))];
+function streak(){const days=new Set(S.sessions.map(s=>s.d)),today=new Date();today.setHours(12);if(!days.size)return{n:0,shield:true};
+ const first=[...days].sort()[0],used={};let n=0,d=days.has(dk(today))?today:addD(today,-1);
+ for(let i=0;i<600;i++){const k=dk(d);if(k<first)break;if(days.has(k))n++;else{const w=wkOf(d);if(used[w])break;used[w]=1}d=addD(d,-1)}return{n,shield:!used[wkOf(today)]}}
+const bestHold=()=>S.tests.reduce((m,t)=>Math.max(m,t.hold),0),totalMin=()=>Math.round(S.sessions.reduce((a,s)=>a+s.min,0));
+const totalSq=()=>S.sessions.reduce((a,s)=>a+(s.sq||0),0);
+const BADGES=[['first','First session',()=>S.sessions.length>=1],['found','Muscle found',()=>S.ob.done],['s3','3-day streak',()=>streak().n>=3],['s7','7-day streak',()=>streak().n>=7],
+ ['test','Self-tester',()=>S.tests.length>=1],['w1','Week 1 done',()=>progDays()>=7],['sq500','500 squeezes',()=>totalSq()>=500],['l5','Level 5',()=>lvlOf(S.xp)>=5],['l10','Level 10',()=>lvlOf(S.xp)>=10],['d28','28 days',()=>progDays()>=28]];
+function newBadges(){const got=[];for(const[b,n,f]of BADGES)if(!S.badges.includes(b)&&f()){S.badges.push(b);got.push(n)}return got}
+const hex=(on,lab)=>`<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3l18 10v22L24 45 6 35V13z" fill="${on?'#FF6B4A':'none'}" stroke="${on?'#FF6B4A':'currentColor'}" stroke-width="2"/><text x="24" y="29" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="700" font-size="13" fill="${on?'#2A0E07':'currentColor'}">${lab}</text></svg>`;
+/* programme: one programme day per calendar day with a completed daily session */
+const dayDates=()=>[...new Set(S.sessions.filter(s=>s.kind==='day').map(s=>s.d))].sort();
+const progDays=()=>dayDates().length;
+function todayInfo(){const done=dayDates().includes(dk(new Date())),n=progDays(),day=Math.min(28,done?n:n+1),week=Math.min(4,Math.ceil(day/7)),track=S.ob.track==='relax'?'relax':'strength';
+ return{day,week,done,pos:PORDER[week-1],list:DAYPLAN[track][week-1]}}
+const lvl=()=>lvlOf(S.xp);
+const stepsOf=id=>EX[id].steps(lvl());
+const secOfL=id=>stepsOf(id).reduce((a,s)=>a+s.d,0);
+
+/* ================= UI HELPERS ================= */
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2600)}
+let onClose=null;
+function sheet(h,cb){$('#sheet').innerHTML=h;$('#sw').classList.add('on');onClose=cb||null;const f=$('#sheet').querySelector('button,input');f&&f.focus()}
+function closeSheet(){$('#sw').classList.remove('on');const c=onClose;onClose=null;c&&c()}
+$('#sw').addEventListener('click',e=>{if(e.target.id==='sw'||e.target.closest('[data-close]'))closeSheet()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#sw').classList.contains('on'))closeSheet()});
+const ico=(k,cls='')=>`<span class="ico ${cls}">${icon(k)}</span>`;
+const svgI=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const NOTE=svgI('<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/>');
+
+/* ================= ACCOUNT / SOFT GATE ================= */
+function acct(){const a=$('#acct');if(S.gate.email&&S.gate.state==='verified'){a.innerHTML=`<button class="avatar" id="avB" aria-label="Account">${esc(S.gate.email[0].toUpperCase())}</button>`;$('#avB').onclick=()=>{sheet(`<h2>Account</h2><p class="mut">${esc(S.gate.email)}</p><p class="small">Progress saving is on. Kegzo is currently free.</p><button class="btn ghost wide" id="soB">Sign out on this device</button><button class="btn hot wide" data-close>Close</button>`);$('#soB').onclick=()=>{S.gate={dismissed:true,email:'',state:''};save();closeSheet();render()}}}
+ else{a.innerHTML=`<button class="acct" id="siB">${S.gate.state==='pending'?'Check email':'Sign in'}</button>`;$('#siB').onclick=()=>gate(false)}}
+function maybeGate(){if(S.sessions.filter(s=>s.kind!=='test').length>=3&&!S.gate.email&&!S.gate.dismissed)gate(true)}
+function gate(auto){sheet(`<h2>${auto?'Nice work. Keep your progress safe':'Sign up or sign in'}</h2>
+ <p class="mut">Save your level, streak and charts so they follow you to any device. Training stays open either way.</p>
+ <form id="gF" class="grid" novalidate><label class="small" for="gE">Email address</label><input class="field" id="gE" type="email" autocomplete="email" required placeholder="you@example.com" value="${esc(S.gate.email||'')}">
+ <input type="text" name="website" id="gH" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+ <p class="small"><b>Sign up is 100% free. No payment or card details.</b></p>
+ <button class="btn hot wide" id="gB">Send my link</button><p class="tiny mut" id="gM" aria-live="polite"></p></form>
+ <p class="tiny mut">Already signed up? Enter the same email and tap the link we send to unlock this device.</p>
+ <button class="btn ghost wide" data-close>${auto?'Not now':'Close'}</button>`,()=>{if(auto&&!S.gate.email){S.gate.dismissed=true;save()}});
+ const t0=Date.now();
+ $('#gF').addEventListener('submit',async e=>{e.preventDefault();const v=$('#gE').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){$('#gM').textContent='Please enter a valid email address.';return}
+  $('#gB').disabled=true;$('#gM').textContent='Sending…';
+  try{const fd=new FormData();fd.append('email',v);fd.append('website',$('#gH').value);fd.append('t',String(Date.now()-t0));fd.append('src','app');
+   const r=await fetch('/api/subscribe.php',{method:'POST',body:fd});const j=await r.json().catch(()=>({}));
+   if(!r.ok||!j.ok)throw new Error(j.error||'Something went wrong. Please try again.');
+   S.gate.email=v;S.gate.state=j.state||'pending';save();render();
+   $('#sheet').innerHTML=j.state==='verified'?`<h2>You're signed in</h2><p class="mut">Progress saving is on for <b>${esc(v)}</b>.</p><button class="btn hot wide" data-close>Done</button>`:`<h2>Check your inbox</h2><p class="mut">We sent a one-click link to <b>${esc(v)}</b>. Tap it to confirm. If it's not there in a few minutes, check your spam folder.</p><button class="btn hot wide" data-close>Done</button>`;ping('signup')}
+  catch(err){$('#gB').disabled=false;$('#gM').textContent=err.message||'Could not send. Check your connection and try again.'}})}
+/* verified link lands on /app.html#verified */
+function checkVerified(){if(location.hash==='#verified'){S.gate.state='verified';S.gate.dismissed=true;save();toast('Email confirmed. Progress saving is on');try{history.replaceState(null,'','#today')}catch(e){}}}
+
+/* ================= SELF-TEST (weekly boss) ================= */
+function selfTest(){const T={hold:0,flicks:0,relax:0};ping('test_start');
+ const s1=()=>{sheet(`<div class="row between"><h2>Boss test 1 of 3</h2><span class="tag">Max hold</span></div>
+ <p class="mut">Press and hold the button while you squeeze. Let go of the button the moment your squeeze fades. Keep breathing.</p>
+ <div class="big" id="tv">0.0s</div><button class="holdbtn" id="hb">Hold</button><button class="btn hot wide" id="n1" disabled>Next</button>`);
+  let t0=0,iv;const hb=$('#hb');
+  const dn=e=>{e.preventDefault();t0=performance.now();hb.classList.add('on');buzz([30]);iv=setInterval(()=>$('#tv').textContent=((performance.now()-t0)/1000).toFixed(1)+'s',100)};
+  const up=()=>{if(!t0)return;clearInterval(iv);hb.classList.remove('on');T.hold=Math.min(120,Math.round((performance.now()-t0)/100)/10);t0=0;$('#tv').textContent=T.hold.toFixed(1)+'s';$('#n1').disabled=T.hold<1};
+  hb.addEventListener('pointerdown',dn);['pointerup','pointerleave','pointercancel'].forEach(ev=>hb.addEventListener(ev,up));$('#n1').onclick=s2};
+ const s2=()=>{sheet(`<div class="row between"><h2>Boss test 2 of 3</h2><span class="tag">Quick flicks</span></div>
+ <p class="mut">You get 10 seconds. Tap once for every full squeeze and release.</p><div class="big" id="fv">0</div><p class="small mut" id="fl" style="text-align:center">Press Start</p>
+ <button class="holdbtn" id="fb">Start</button><button class="btn hot wide" id="n2" disabled>Next</button>`);
+  let n=0,on=false,left=10;const fb=$('#fb');
+  fb.addEventListener('click',()=>{if(!on&&left===10){on=true;fb.textContent='Tap';$('#fl').textContent='10s left';const iv=setInterval(()=>{left--;$('#fl').textContent=left+'s left';if(left<=0){clearInterval(iv);on=false;fb.textContent='Done';fb.disabled=true;T.flicks=n;$('#n2').disabled=false;buzz([60,40,60])}},1000);return}if(on){n++;$('#fv').textContent=n;buzz([12])}});$('#n2').onclick=s3};
+ const s3=()=>{sheet(`<div class="row between"><h2>Boss test 3 of 3</h2><span class="tag">Relax score</span></div>
+ <p class="mut">After a squeeze, how fully could you let go? 1 means it stayed tight, 5 means completely loose.</p>
+ <div class="rate" id="rt">${[1,2,3,4,5].map(i=>`<button aria-pressed="false" data-r="${i}">${i}</button>`).join('')}</div><button class="btn hot wide" id="n3" disabled>Save results</button>`);
+  $('#rt').addEventListener('click',e=>{const b=e.target.closest('[data-r]');if(!b)return;T.relax=+b.dataset.r;$$('#rt button').forEach(x=>x.setAttribute('aria-pressed',x===b));$('#n3').disabled=false});
+  $('#n3').onclick=()=>{const prev=bestHold();S.tests.push({d:dk(new Date()),hold:T.hold,flicks:T.flicks,relax:T.relax});S.xp+=30;const nb=newBadges();save();ping('test_done');
+   sheet(`<h2>${T.hold>prev&&prev?'New best hold!':'Results saved'}</h2><div class="kpis4"><div class="k"><b>${T.hold.toFixed(1)}s</b><span>Max hold</span></div><div class="k"><b>${T.flicks}</b><span>Flicks in 10s</span></div><div class="k"><b>${T.relax}/5</b><span>Relax score</span></div><div class="k"><b>+30</b><span>XP</span></div></div>${nb.length?`<div class="note">${NOTE}<p>New badge: <b>${nb.map(esc).join(', ')}</b></p></div>`:''}<button class="btn hot wide" data-close>See my progress</button>`,()=>go('progress'));render()}};
+ s1()}
+
+/* ================= ONBOARDING + SAFETY CHECK ================= */
+const QS=[['Do you feel pain or aching in your pelvis, groin, lower back or when sitting?','pain'],['Is it hard to fully relax down there, or do you often feel you need to pee urgently?','tight'],['Do you feel tense or sore after tightening those muscles?','sore'],['Have you had surgery in the pelvic area in the last few months?','surg']];
+let OB={step:0,ans:{},checks:[false,false,false],track:'strength'};
+const obFig=Fig('lying');
+function ob(){const o=$('#ob');o.classList.add('on');const s=OB.step,dots=n=>`<div class="dots">${Array.from({length:7},(_,i)=>`<i class="${i===n?'on':''}"></i>`).join('')}</div>`;let h='';
+ if(s===0)h=`<div class="hero2"><canvas id="obCv" aria-label="Animated pelvic floor guide"></canvas></div><h1>Kegel training, built like a game.</h1><p class="mut">A 28-day programme of short guided kegel sessions with levels, streaks and a progress dashboard. Start straight away. Your training stays on this device.</p><button class="btn hot wide" data-ob="next">Let's start</button><p class="tiny mut" style="text-align:center">General fitness information, not medical advice.</p>`;
+ else if(s>=1&&s<=4){const[q,k]=QS[s-1];h=`${dots(s-1)}<p class="tiny mut">Safety check ${s} of 4</p><h2>${q}</h2><div class="yn"><button class="opt" data-a="yes" aria-pressed="${OB.ans[k]===true}"><span class="dot"></span>Yes</button><button class="opt" data-a="no" aria-pressed="${OB.ans[k]===false}"><span class="dot"></span>No</button></div><p class="tiny mut">This picks your starting track. It is not a diagnosis.</p><button class="btn ghost" data-ob="back">Back</button>`}
+ else if(s===5){const flag=OB.ans.pain||OB.ans.tight||OB.ans.sore;OB.track=flag?'relax':'strength';
+  h=`${dots(4)}<span class="tag" style="justify-self:start">${OB.track==='relax'?'Relax track':'Strength track'}</span><h2>${OB.track==='relax'?"We'll start with letting go.":"You're set for the Strength track."}</h2>
+  <p class="mut">${OB.track==='relax'?'Your answers suggest your pelvic floor may already be working hard. More squeezing can make that worse, so your sessions focus on reverse kegels and gentle holds.':'Your sessions build strength, speed and control, and every session also trains letting go with reverse kegels.'}</p>
+  ${flag?`<div class="note">${NOTE}<p>If you have pain or ongoing symptoms, a GP or pelvic floor physiotherapist can check what's going on.</p></div>`:''}${OB.ans.surg?`<div class="note">${NOTE}<p>After recent surgery, check with your doctor before starting pelvic floor training.</p></div>`:''}
+  <div class="note">${NOTE}<p>Erection problems can be an early sign of heart or circulation issues, so a check-up with a doctor is always worth it.</p></div>
+  <button class="btn hot wide" data-ob="next">Next: find the muscle</button><button class="btn ghost" data-ob="back">Back</button>`}
+ else if(s===6)h=`${dots(5)}<h2>Find the right muscle</h2><ol class="steps2"><li><p><b>Relax</b> your belly, bum and thighs.</p></li><li><p><b>Draw up and in</b>, as if stopping wind and the flow of urine at the same time. Just imagine it.</p></li><li><p><b>Feel for it:</b> the base of the penis pulls in slightly and the testicles lift. That's the right muscle.</p></li><li><p><b>Let go completely</b> before the next one.</p></li></ol>
+  <div class="wrong">${[['Glutes clench','Your bum stays soft'],['Belly pushes','Your stomach stays relaxed'],['Breath held','Keep breathing'],['Thighs squeeze','Your legs stay loose']].map(([a,b])=>`<div><b>✕ ${a}</b><br><span class="mut">${b}</span></div>`).join('')}</div>
+  <button class="btn hot wide" data-ob="next">Try it, then check yourself</button><button class="btn ghost" data-ob="back">Back</button>`;
+ else if(s===7){const ok=OB.checks.every(Boolean);h=`${dots(6)}<h2>Quick self-check</h2><p class="mut">Do one gentle squeeze for 3 seconds, then let go. Tick what was true.</p><div class="grid">${["My bum stayed soft","I kept breathing","My belly didn't push out"].map((t,i)=>`<button class="opt" data-ck="${i}" aria-pressed="${OB.checks[i]}"><span class="dot"></span>${t}</button>`).join('')}</div>
+  <p class="small mut">${ok?"That's the right muscle. Day 1 unlocked.":'All three need to be true. Try again slowly, most people need a few goes.'}</p><button class="btn hot wide" data-ob="finish" ${ok?'':'disabled'}>Unlock Day 1</button><button class="btn ghost" data-ob="back">Back</button>`}
+ o.innerHTML=`<div class="ob">${h}</div>`;o.scrollTop=0}
+$('#ob').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.a){OB.ans[QS[OB.step-1][1]]=b.dataset.a==='yes';OB.step++;ob();return}
+ if(b.dataset.ck){OB.checks[+b.dataset.ck]=!OB.checks[+b.dataset.ck];ob();return}
+ const a=b.dataset.ob;if(a==='next'){OB.step++;ob()}else if(a==='back'){OB.step=Math.max(0,OB.step-1);ob()}
+ else if(a==='finish'){const first=!S.ob.done;S.ob={done:true,track:OB.track,flags:Object.keys(OB.ans).filter(k=>OB.ans[k])};if(first)S.xp+=20;newBadges();save();$('#ob').classList.remove('on');ping('onboarded');toast(first?'Day 1 unlocked. +20 XP':'Track updated');render();if(PENDING){const id=PENDING;PENDING=null;startSession([id],'single')}}});
+
+/* ================= VIEWS ================= */
+function today(){const T=todayInfo(),l=lvl(),lo=xpFor(l),hi=xpFor(l+1),pc=l>=50?100:Math.round((S.xp-lo)/(hi-lo)*100),st=streak();
+ const thisW=wkOf(new Date()),daysW=new Set(S.sessions.filter(s=>wkOf(dOf(s.d))===thisW).map(s=>s.d)).size;
+ const prevBest=S.tests.filter(t=>wkOf(dOf(t.d))!==thisW).reduce((m,t)=>Math.max(m,t.hold),0),target=prevBest?Math.ceil(prevBest+1):0,beat=target&&S.tests.some(t=>wkOf(dOf(t.d))===thisW&&t.hold>=target),testedW=S.tests.some(t=>wkOf(dOf(t.d))===thisW);
+ const mins=Math.round((T.list.reduce((a,id)=>a+secOfL(id)+READY,0)+REST*(T.list.length-1))/60);
+ return`<div class="grid tgrid">
+ <div class="grid">
+  <div class="today"><p class="tiny" style="font-weight:700">Week ${T.week} · Day ${T.day} of 28 · ${POS[T.pos].n}</p><h2>${T.done?"Today's session is done":'Your session for today'}</h2><p>${T.done?'Nice work. Come back tomorrow for the next day, or train again for extra XP.':`${T.list.length} kegel exercises, about ${mins} minutes.`}</p><button class="btn wide" id="goDay">${T.done?'Train again':'Start Day '+T.day}</button></div>
+  <div class="hero2"><canvas id="heroCv" aria-label="Animated preview of this week's position"></canvas><div class="lab"><span>${POS[T.pos].n}</span><span class="chip" style="background:#2A2450">Week ${T.week}</span></div></div>
+  <div class="weeks">${PORDER.map((p,i)=>`<div class="wk ${i===T.week-1?'on':''}">Week ${i+1}<b>${POS[p].n.replace(' down','')}</b></div>`).join('')}</div>
+  <div>${T.list.map((id,i)=>`<button class="item" data-try="${id}">${ico(EX[id].ic,EX[id].rel?'c':'')}<span><b>${String(i+1).padStart(2,'0')}  ${EX[id].n}</b><small>${EXMETA[id].sets}</small></span><em class="num">${Math.max(1,Math.round(secOfL(id)/60))} min</em></button>`).join('')}</div>
+ </div>
+ <div class="grid">
+  <div class="card"><div class="lvl">${hex(true,l)}<div style="flex:1"><p class="tiny mut">Level ${l}</p><h2>${title(l)}</h2></div><div style="text-align:right"><b class="num" style="font:700 22px Outfit,sans-serif">${st.n}</b><p class="tiny mut">day streak</p></div></div>
+   <div style="margin-top:12px"><div class="row between tiny mut"><span class="num">${S.xp-lo} / ${hi-lo} XP</span><span>${st.shield?'Rest-day shield ready':'Shield used this week'}</span></div><div class="bar" style="margin-top:6px"><i style="width:${pc}%"></i></div></div></div>
+  <div class="card quest"><div class="qhead">${ico('hold')}<div style="flex:1"><p class="tiny mut">Weekly boss</p><h3>${target?`Hold for ${target} seconds`:'Take your first max-hold test'}</h3><p class="small mut">${target?(beat?'Beaten. Boss down!':"Beat your best hold in this week's test."):'It sets the target for your weekly boss challenges.'}</p></div></div><button class="btn ${beat||testedW?'ghost':'cool'} wide" id="testB">${testedW?'Retake the test':'Take the test'}</button></div>
+  <div class="card quest"><div class="qhead">${ico('endure','c')}<div style="flex:1"><p class="tiny mut">Weekly quest</p><h3>Train on 4 days this week</h3></div><b class="num">${Math.min(daysW,4)}/4</b></div><div class="bar c"><i style="width:${Math.min(100,daysW/4*100)}%"></i></div></div>
+  <div class="sechead" style="margin:6px 0 0"><h2>All exercises</h2><span class="tiny mut">Tap to try one</span></div>
+  <div>${Object.keys(EX).map(id=>`<button class="item" data-try="${id}">${ico(EX[id].ic,EX[id].rel?'c':'')}<span><b>${EX[id].n}</b><small>${EX[id].type} · ${EXMETA[id].sets}</small></span><span class="lock">${EX[id].wk?'Week '+EX[id].wk:'Bonus'}</span></button>`).join('')}</div>
+ </div></div>`}
+function progress(){const st=streak(),t=S.tests,last=t[t.length-1],today_=dk(new Date());
+ const start=addD(dOf(wkOf(new Date())),-77),cnt={};S.sessions.forEach(s=>cnt[s.d]=(cnt[s.d]||0)+1);
+ let heat='';['M','','W','','F','','S'].forEach((lab,r)=>{heat+=`<span>${lab}</span>`;for(let c=0;c<12;c++){const d=dk(addD(start,c*7+r)),n=cnt[d]||0;heat+=`<i class="${d>today_?'fut':n>1?'l2':n?'l1':''}" title="${d}: ${n}"></i>`}});
+ const thisW=wkOf(new Date()),lastW=dk(addD(dOf(thisW),-7)),sum=w=>S.sessions.filter(s=>wkOf(dOf(s.d))===w).reduce((a,s)=>({n:a.n+1,m:a.m+s.min,q:a.q+(s.sq||0)}),{n:0,m:0,q:0}),a=sum(thisW),b=sum(lastW);
+ const diff=(x,y)=>y?`<span class="tiny mut">${x>=y?'+':'−'}${Math.abs(Math.round(x-y))} vs last week</span>`:'<span class="tiny mut">First week</span>';
+ return`<div class="row between" style="margin-bottom:14px"><h1>Progress</h1><button class="btn cool sm" id="testB2">Max-hold test</button></div>
+ <div class="kpis4"><div class="k"><b>${lvl()}</b><span>Level</span></div><div class="k"><b>${st.n}</b><span>Day streak</span></div><div class="k"><b>${totalSq()}</b><span>Squeezes</span></div><div class="k"><b>${bestHold()?bestHold().toFixed(1)+'s':'–'}</b><span>Best hold</span></div></div>
+ <div class="grid two" style="margin-top:14px">
+  <div class="card"><div class="sechead" style="margin-top:0"><h3>Max hold trend</h3><span class="tiny mut">${t.length} test${t.length===1?'':'s'}</span></div>${t.length>1?'<div class="chart" id="hc"><svg></svg></div>':`<div class="empty">Take the weekly max-hold test ${t.length?'once more':'twice'} to see your trend.</div>`}</div>
+  <div class="card"><div class="sechead" style="margin-top:0"><h3>Consistency</h3><span class="tiny mut">Last 12 weeks</span></div><div class="heat">${heat}</div></div>
+  <div class="card"><div class="sechead" style="margin-top:0"><h3>Quick flicks in 10 seconds</h3></div>${t.length?t.slice(-6).map(x=>`<div class="hrow"><span class="mut">${x.d.slice(5).replace('-','/')}</span><div class="bar"><i style="width:${Math.min(100,x.flicks/20*100)}%"></i></div><b class="num">${x.flicks}</b></div>`).join(''):'<div class="empty">Your flick counts from each test appear here.</div>'}</div>
+  <div class="card"><div class="sechead" style="margin-top:0"><h3>Relax score</h3><span class="tiny mut">Out of 5</span></div>${t.length?t.slice(-6).map(x=>`<div class="hrow"><span class="mut">${x.d.slice(5).replace('-','/')}</span><div class="bar c"><i style="width:${x.relax/5*100}%"></i></div><b class="num">${x.relax}</b></div>`).join(''):'<div class="empty">Letting go matters as much as squeezing.</div>'}</div>
+ </div>
+ <div class="sechead"><h2>This week</h2></div>
+ <div class="kpis4"><div class="k"><b>${a.n}</b><span>Sessions</span><br>${diff(a.n,b.n)}</div><div class="k"><b>${Math.round(a.m)}</b><span>Minutes</span><br>${diff(a.m,b.m)}</div><div class="k"><b>${a.q}</b><span>Squeezes</span><br>${diff(a.q,b.q)}</div><div class="k"><b>${last?last.relax+'/5':'–'}</b><span>Latest relax score</span></div></div>
+ <div class="sechead"><h2>Badges</h2><span class="tiny mut">${S.badges.length} of ${BADGES.length}</span></div>
+ <div class="badges">${BADGES.map(([k,n])=>{const on=S.badges.includes(k),m=n.match(/\d+/);return`<div class="bdg ${on?'':'off'}">${hex(on,m?m[0]:n[0])}${n}</div>`}).join('')}</div>`}
+function learn(){const G=[['kegel-exercises-for-men','Kegel exercises for men','The complete beginner guide'],['how-to-find-your-pelvic-floor-muscle','How to find the right muscle','The cues that work for men'],['kegels-and-erections','Kegels and erections','What the research says'],['what-is-a-reverse-kegel','What is a reverse kegel?','Why letting go matters'],['how-long-do-kegels-take-to-work','How long do kegels take?','Realistic timelines'],['kegel-mistakes','Common kegel mistakes','And how to fix them'],['tight-pelvic-floor-men','Signs of a tight pelvic floor','When not to squeeze harder'],['kegel-positions','Lying, seated, standing, walking','Why the position changes']];
+ return`<h1>Learn</h1><p class="mut" style="margin:8px 0 16px">Short, plain guides. Everything here is currently free.</p>
+ <div class="grid two"><div class="links">${G.map(([s,t,d])=>`<a class="lk" href="/guides/${s}.html"><span>${t}<small>${d}</small></span><span aria-hidden="true">›</span></a>`).join('')}</div>
+ <div class="grid"><div class="card grid"><h3>When to stop</h3><p class="small">Stop if anything hurts, and don't push through soreness. If you have pain, tension or symptoms that don't settle, see a GP or a pelvic floor physiotherapist.</p><div class="note">${NOTE}<p>Erection problems can be an early sign of heart or circulation issues. A check-up with a doctor is always worth it. Kegzo is training, not treatment.</p></div><button class="btn ghost" id="retake">Retake the safety check</button></div>
+ <div class="card grid"><h3>Exercise guides</h3><div class="links">${Object.keys(EX).map(id=>`<a class="lk" href="/exercises/${EXMETA[id].slug}.html"><span>${EX[id].n}<small>${EXMETA[id].sets}</small></span><span aria-hidden="true">›</span></a>`).join('')}</div></div></div></div>`}
+function me(){const s=S.settings,sw=(k,t,d)=>`<div class="switch"><div><b>${t}</b><p class="tiny mut">${d}</p></div><button class="tg" role="switch" aria-checked="${!!s[k]}" data-set="${k}" aria-label="${t}"></button></div>`;
+ return`<h1>Me</h1><div class="grid two" style="margin-top:16px">
+ <div class="card"><h3>Training</h3><div class="switch"><div><b>Track</b><p class="tiny mut">${S.ob.track==='relax'?'Relax: letting go first':'Strength: lift and release'}</p></div><div class="seg2" id="trk"><button data-t="strength" aria-pressed="${S.ob.track!=='relax'}">Strength</button><button data-t="relax" aria-pressed="${S.ob.track==='relax'}">Relax</button></div></div>
+  ${sw('voice','Voice coach','Speaks each step out loud')}${sw('vib','Vibration cues','Buzzes on each squeeze and drop (Android)')}${sw('discreet','Discreet mode','Silent, no voice, vibration only')}</div>
+ <div class="card grid"><h3>Account</h3>${S.gate.email?`<p class="small">${S.gate.state==='verified'?'Signed in as':'Waiting for you to confirm'} <b>${esc(S.gate.email)}</b>.</p>`:`<p class="small mut">Sign up to keep your progress across devices. <b>100% free, no payment or card details.</b></p>`}<button class="btn ${S.gate.email?'ghost':'hot'}" id="meG">${S.gate.email?'Manage':'Sign up or sign in'}</button>
+  <h3 style="margin-top:6px">Your data</h3><p class="small mut">Your training is stored in this browser on this device. Nothing about your sessions is sent anywhere. Only your email is stored on our server if you sign up.</p>
+  <div class="row"><button class="btn ghost danger" id="delB">Delete everything</button></div><p class="tiny mut" id="delM"></p></div>
+ </div>
+ <div class="foot"><a href="/about.html">About</a><a href="/how-we-write.html">How we write</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></div>`}
+
+/* ================= CHART ================= */
+function chart(){const el=$('#hc');if(!el)return;const s=el.querySelector('svg'),t=S.tests.slice(-8);
+ const draw=()=>{const W=el.clientWidth,H=el.clientHeight,pl=34,pr=12,pt=14,pb=24,mx=Math.ceil(Math.max(...t.map(x=>x.hold))/5)*5||5,X=i=>pl+(W-pl-pr)*(i/(t.length-1)),Y=v=>pt+(H-pt-pb)*(1-v/mx),pts=t.map((x,i)=>[X(i),Y(x.hold)]);
+  let g='';[0,mx/2,mx].forEach(v=>g+=`<line x1="${pl}" x2="${W-pr}" y1="${Y(v)}" y2="${Y(v)}" style="stroke:var(--line)"/><text x="${pl-8}" y="${Y(v)+4}" text-anchor="end" font-size="12" style="fill:var(--mut)">${v}s</text>`);
+  t.forEach((x,i)=>{if(W>420||i===0||i===t.length-1)g+=`<text x="${X(i)}" y="${H-5}" text-anchor="middle" font-size="12" style="fill:var(--mut)">${x.d.slice(5).replace('-','/')}</text>`});
+  const ln=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join('');g+=`<path d="${ln}L${pts[pts.length-1][0]} ${Y(0)}L${pts[0][0]} ${Y(0)}Z" fill="#FF6B4A" opacity=".12"/><path d="${ln}" fill="none" stroke="#FF6B4A" stroke-width="3" stroke-linejoin="round"/>`;
+  pts.forEach((p,i)=>g+=`<circle cx="${p[0]}" cy="${p[1]}" r="${i===pts.length-1?6:4}" fill="${i===pts.length-1?'#FF6B4A':'#1F1A3D'}" stroke="#FF6B4A" stroke-width="2.5"/>`);s.innerHTML=g};
+ new ResizeObserver(draw).observe(el)}
+
+/* ================= ROUTER / RENDER ================= */
+const VIEWS=['today','progress','learn','me'];let cur='today',PENDING=null;
+function go(v){if(!VIEWS.includes(v))v='today';cur=v;VIEWS.forEach(x=>$('#v-'+x).classList.toggle('on',x===v));$$('.tabs button').forEach(b=>b.dataset.v===v?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));
+ if(location.hash.slice(1)!==v)try{history.replaceState(null,'','#'+v)}catch(e){}render();window.scrollTo(0,0)}
+function render(){$('#topLv').textContent='Lv '+lvl();const st=streak().n;$('#topSt').textContent=st+' day'+(st===1?'':'s');acct();
+ if(cur==='today'){$('#v-today').innerHTML=today();$('#goDay').onclick=()=>{const T=todayInfo();startSession(T.list,'day')};$('#testB').onclick=selfTest;heroF=Fig(todayInfo().pos)}
+ if(cur==='progress'){$('#v-progress').innerHTML=progress();$('#testB2').onclick=selfTest;chart()}
+ if(cur==='learn'){$('#v-learn').innerHTML=learn();$('#retake').onclick=()=>{OB={step:1,ans:{},checks:[false,false,false],track:'strength'};ob()}}
+ if(cur==='me'){$('#v-me').innerHTML=me();bindMe()}}
+function bindMe(){const v=$('#v-me');
+ v.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{const k=b.dataset.set;S.settings[k]=!S.settings[k];save();render()});
+ v.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{S.ob.track=b.dataset.t;save();render();toast(b.dataset.t==='relax'?'Relax track on':'Strength track on')});
+ $('#meG').onclick=()=>gate(false);
+ let armed=false;$('#delB').onclick=()=>{if(!armed){armed=true;$('#delB').textContent='Tap again to delete';$('#delM').textContent='This removes every session, test and setting from this device.';return}
+  try{localStorage.removeItem(KEY)}catch(e){}S=fresh();mem=null;OB={step:0,ans:{},checks:[false,false,false],track:'strength'};render();ob()}}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-try]');if(b){if(!S.ob.done){PENDING=b.dataset.try;OB.step=0;ob();return}startSession([b.dataset.try],'single')}});
+$('.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(b)go(b.dataset.v)});
+
+/* ================= PLAYER ================= */
+const W={list:[],kind:'day',i:0,ph:'ready',t:0,si:0,st:0,rep:0,L:0,from:0,lift:0,liftFrom:0,paused:false,fig:null,pos:'lying',cueI:0,sq:0};
+let STEPS=[],CUM=[];
+const WORD={squeeze:'Squeeze',hold:'Hold',relax:'Relax',rest:'Rest',drop:'Drop',out:'Return',up:'Up a floor',down:'Down a floor',bridge:'Lift hips',lower:'Lower hips'};
+const CUES={squeeze:'Draw up and in',hold:['Keep breathing','Bum stays soft','Belly relaxed','Thighs loose'],relax:'Let go completely',rest:'Rest. Nothing to do',drop:'Breathe in, let it soften and drop',out:'Breathe out, back to neutral',up:'Lift a little more',down:'Lower slowly, stay in control',bridge:'Press through your heels, hips up',lower:'Lower slowly and let everything go'};
+function voiceOn(){return S.settings.voice&&!S.settings.discreet}
+function say(t){if(!voiceOn()||!('speechSynthesis' in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);const v=speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
+function buzz(p){if(p&&S.settings.vib&&navigator.vibrate)try{navigator.vibrate(p)}catch(e){}}
+const RC=276.5;function ring(left,tot,lab,col){$('#ringT').textContent=Math.max(0,Math.ceil(left));$('#ringL').textContent=lab;const p=$('#ringP');p.setAttribute('stroke',col);p.setAttribute('stroke-dashoffset',RC*(1-Math.max(0,left)/tot))}
+function howHTML(id,i){const e=EX[id],m=EXMETA[id],p=POS[W.pos];return`<div><p class="tiny mut" style="font-weight:600">${String(i+1).padStart(2,'0')} · ${e.type} · ${m.sets}</p><h2>${e.n}</h2></div><ol>${e.how.map(s=>`<li>${s}</li>`).join('')}</ol>
+ <div class="cols"><div class="box"><h3>Feel it</h3><p>${e.feel}</p></div><div class="box"><h3>Avoid</h3><ul>${e.avoid.map(a=>`<li>${a}</li>`).join('')}</ul></div><div class="box"><h3>Coach tip</h3><p>${e.tip}</p></div></div>
+ <div class="note">${NOTE}<p><b>Position: ${p.n}.</b> ${p.how}</p></div>`}
+function updReps(){const tot=STEPS.filter(s=>s.r).length;$('#reps').innerHTML=`${W.rep}<span style="font-size:.55em;color:#B6AFD8"> / ${tot}</span><small>${W.list[W.i]==='endure'?'Long holds':'Reps'}</small>`}
+function loadEx(i){W.i=i;W.ph='ready';W.t=0;W.si=0;W.st=0;W.rep=0;W.lift=0;W.from=W.L;const id=W.list[i],e=EX[id];W.pos=e.pos||W.basePos;W.fig=Fig(W.pos);
+ STEPS=stepsOf(id);CUM=[0];STEPS.forEach((s,j)=>CUM.push(CUM[j]+s.d));
+ $('#exN').textContent=String(i+1).padStart(2,'0');$('#exT').textContent=e.n;$('#exS').textContent=EXMETA[id].sets;$('#pos').textContent=POS[W.pos].n;
+ $('#how').innerHTML=howHTML(id,i);$('#stage').classList.remove('rest');updReps();$('#phase').textContent='Get ready';$('#phase').style.color='var(--ink)';$('#cue').textContent=POS[W.pos].how;
+ const nx=W.list[i+1];$('#nextUp').innerHTML=nx?`${ico(EX[nx].ic,EX[nx].rel?'c':'')}<span>Next: <b style="color:var(--ink)">${EX[nx].n}</b></span>`:'<span>Last exercise of the session</span>';
+ $$('#bars i').forEach((b,j)=>b.firstChild.style.width=j<i?'100%':'0%');say(e.n)}
+function enterStep(){const s=STEPS[W.si];W.from=W.L;W.liftFrom=W.lift;W.st=0;const ph=$('#phase');ph.textContent=WORD[s.k];
+ ph.style.color=s.to<0||s.k==='drop'?'var(--cool)':(s.k==='squeeze'||s.k==='up'||s.k==='hold')?'var(--hot)':'var(--ink)';
+ const c=CUES[s.k];$('#cue').textContent=Array.isArray(c)?c[W.cueI++%c.length]:c;
+ if(s.k==='squeeze'||s.k==='up'){buzz([50]);if(s.d>=1)say(WORD[s.k])}else if(s.k==='drop'){buzz([25,40,25]);say('Drop')}else if(s.k==='bridge'){buzz([40]);say('Lift your hips')}else if(s.k==='lower'){say('Lower')}else if(s.k==='relax'&&s.d>=1.5){say('Relax')}else if(s.k==='hold'&&s.d>=3){say('Hold')}}
+const easeF=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
+function startSession(list,kind){W.list=list;W.kind=kind;W.basePos=kind==='day'?todayInfo().pos:(EX[list[0]].pos||PORDER[Math.max(0,Math.min(3,(EX[list[0]].wk||1)-1))]);
+ W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').textContent=kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise';
+ $('#bars').innerHTML=list.map(id=>`<i class="${EX[id].rel?'c':''}"><b></b></i>`).join('');$('#pl').classList.add('on');$('#pl').scrollTop=0;document.body.style.overflow='hidden';
+ if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');loadEx(0)}
+function nextEx(){if(W.i>=W.list.length-1){finish();return}W.ph='rest';W.t=0;$('#stage').classList.add('rest');$$('#bars i')[W.i].firstChild.style.width='100%';$('#phase').textContent='Rest';$('#phase').style.color='var(--cool)';$('#cue').textContent='Breathe easy. Next up: '+EX[W.list[W.i+1]].n;say('Rest')}
+function tick(dt){const tot=CUM[CUM.length-1];
+ if(W.ph==='ready'){W.t+=dt;ring(READY-W.t,READY,'Get ready','#5BD6C9');W.L+=(0-W.L)*Math.min(1,dt*4);W.lift+=(0-W.lift)*Math.min(1,dt*4);mvDraw(W.L,0);if(W.t>=READY){W.ph='work';W.si=0;enterStep()}}
+ else if(W.ph==='work'){const s=STEPS[W.si];W.st+=dt;const ramp=s.k==='hold'||s.k==='rest'?.3:s.d*.8;W.L=W.from+(s.to-W.from)*easeF(Math.min(1,W.st/ramp));if(s.lift!=null)W.lift=W.liftFrom+(s.lift-W.liftFrom)*easeF(Math.min(1,W.st/s.d));
+  const e=CUM[W.si]+W.st;ring(tot-e,tot,'Seconds',EX[W.list[W.i]].rel?'#5BD6C9':'#FF6B4A');mvDraw(W.L,Math.min(1,W.st/s.d));$$('#bars i')[W.i].firstChild.style.width=Math.min(100,e/tot*100)+'%';
+  if(W.st>=s.d){if(s.k==='squeeze'||s.k==='up')W.sq++;if(s.r){W.rep++;updReps()}W.si++;if(W.si>=STEPS.length)nextEx();else enterStep()}}
+ else if(W.ph==='rest'){W.t+=dt;ring(REST-W.t,REST,'Rest','#5BD6C9');W.L+=(0-W.L)*Math.min(1,dt*3);mvDraw(W.L,0);if(W.t>=REST)loadEx(W.i+1)}}
+function closePl(){$('#pl').classList.remove('on');document.body.style.overflow='';try{speechSynthesis.cancel()}catch(e){}try{W.lock&&W.lock.release()}catch(e){}W.ph='off'}
+function finish(){const min=Math.max(.5,Math.round((performance.now()-W.started)/6000)/10),today_=dk(new Date()),firstDay=W.kind==='day'&&!dayDates().includes(today_);
+ const before=lvl(),xp=W.sq*2+(W.kind==='day'?30:10)+(firstDay?20:0);S.sessions.push({d:today_,kind:W.kind,ids:W.list,min,sq:W.sq,xp});S.xp+=xp;const nb=newBadges();save();closePl();ping('session_done');
+ const after=lvl();$('#fMin').textContent=Math.max(1,Math.round(min));$('#fSq').textContent=W.sq;$('#fXp').textContent='+'+xp;
+ $('#finT').textContent=W.kind==='day'?`Day ${todayInfo().day} complete`:'Exercise complete';
+ $('#finExtra').innerHTML=(after>before?`<div class="note">${NOTE}<p><b>Level ${after}: ${title(after)}.</b> Your holds just got a little longer.</p></div>`:'')+(nb.length?`<div class="note">${NOTE}<p>New badge${nb.length>1?'s':''}: <b>${nb.map(esc).join(', ')}</b></p></div>`:'')+`<p class="mut small">Streak: <b>${streak().n} day${streak().n===1?'':'s'}</b>. Most programmes take around 3 months of steady practice, so consistency beats intensity.</p>`;
+ $('#fin').classList.add('on');say('Session complete. Great work.');finF=Fig(W.pos)}
+$('#finB').onclick=()=>{$('#fin').classList.remove('on');go('today');maybeGate()};
+$('#playB').onclick=()=>{W.paused=!W.paused;$('#playB').textContent=W.paused?'Resume':'Pause';if(W.paused){try{speechSynthesis.cancel()}catch(e){}$('#phase').textContent='Paused';$('#phase').style.color='var(--ink)'}else if(W.ph==='work')enterStep()};
+$('#nextB').onclick=()=>{if(W.i<W.list.length-1)loadEx(W.i+1);else finish()};
+$('#prevB').onclick=()=>loadEx(Math.max(0,W.ph==='ready'&&W.t<2?W.i-1:W.i));
+$('#voiceB').onclick=()=>{S.settings.voice=!S.settings.voice;if(S.settings.voice)S.settings.discreet=false;save();$('#voiceB').setAttribute('aria-pressed',voiceOn());if(!voiceOn())try{speechSynthesis.cancel()}catch(e){}toast(voiceOn()?'Voice coach on':'Voice coach off')};
+$('#quitB').onclick=()=>{closePl();render();toast('Session ended. Finish a session to earn XP')};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&$('#pl').classList.contains('on')&&!W.paused){W.paused=true;$('#playB').textContent='Resume';$('#phase').textContent='Paused';try{speechSynthesis.cancel()}catch(e){}}});
+
+/* ================= LOOP ================= */
+let heroF=Fig('lying'),finF=Fig('standing'),last=0;
+function frame(ts){const dt=Math.min(.1,(ts-(last||ts))/1000);last=ts;const u=(ts/1000%3)/3,pf=u<.15?u/.15:u<.55?1:u<.7?1-(u-.55)/.15:u<.85?-(u-.7)/.15*.7:-.7+(u-.85)/.15*.7;
+ if($('#ob').classList.contains('on')){const c=$('#obCv');if(c){obFig.step(dt);obFig.render(c,pf)}}
+ else if($('#pl').classList.contains('on')){if(!W.paused&&W.ph!=='off'){tick(dt);W.fig.step(dt)}W.fig.render($('#cv'),W.L,1,W.lift)}
+ else if($('#fin').classList.contains('on')){finF.step(dt);finF.render($('#finCv'),.5+.5*Math.sin(ts/600))}
+ else if(cur==='today'){const c=$('#heroCv');if(c){heroF.step(dt);heroF.render(c,pf)}}
+ requestAnimationFrame(frame)}
+
+/* ================= BOOT ================= */
+mvInit();mvDraw(0,0);$('#voiceB').setAttribute('aria-pressed',voiceOn());
+checkVerified();
+const h=location.hash.slice(1),exH=h.startsWith('ex-')?Object.keys(EXMETA).find(k=>'ex-'+EXMETA[k].slug===h):null;
+go(VIEWS.includes(h)?h:'today');
+if(!S.ob.done){if(exH)PENDING=exH;ob()}else if(exH)startSession([exH],'single');
+requestAnimationFrame(frame);ping('app_open');
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('/sw.js').catch(()=>{});
+window.addEventListener('hashchange',()=>{const x=location.hash.slice(1);if(VIEWS.includes(x)&&x!==cur)go(x)});
+
+}
+</script>
+</body>
+</html>

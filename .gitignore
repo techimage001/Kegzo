@@ -1,0 +1,4 @@
+kegzo_private/
+*.sqlite
+*.sqlite-*
+node_modules/

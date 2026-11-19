@@ -1,0 +1,87 @@
+/* ================= EXERCISES (kegel only) ================= */
+const S_=(k,d,to,extra)=>Object.assign({k,d,to},extra||{});
+const rep=a=>{a[a.length-1].r=1;return a};
+function times(n,f){let o=[];for(let i=0;i<n;i++)o=o.concat(rep(f(i)));return o}
+const EX={
+ find:{n:'Find and lift',type:'Technique',wk:1,ic:'find',
+  steps:()=>times(5,()=>[S_('squeeze',2,.6),S_('hold',3,.6),S_('relax',3,0),S_('rest',3,0)]),
+  how:['Get into position and relax your belly, glutes and thighs.','Gently draw up and in, as if stopping wind and stopping the flow of urine at the same time.','You should feel the base of the penis pull in slightly and the testicles lift. That is the right muscle.','Hold, then let it go completely before the next one.'],
+  feel:'A lift and tightening deep between your legs, nothing in your bum or belly.',avoid:['Clenching your glutes','Pushing your belly out','Holding your breath'],tip:'Use about half effort while you learn. Precision beats force.'},
+ power:{n:'Power holds',type:'Strength',wk:1,ic:'hold',
+  steps:(l=1)=>times(6,()=>[S_('squeeze',1,1),S_('hold',Math.min(10,4+l),1),S_('relax',2,0),S_('rest',5,0)]),
+  how:['Squeeze as hard as you can while still breathing normally.','Hold the squeeze for the full count. If it fades, relax and reset.','Let go completely, then rest as long as you held.'],
+  feel:'A strong, steady lift that you can keep without shaking.',avoid:['Squeezing your buttocks to help','Holding your breath to get a stronger squeeze','Cutting the rest short'],tip:'Holds grow by a second each level, up to 10 seconds.'},
+ flicks:{n:'Quick flicks',type:'Speed',wk:1,ic:'flick',
+  steps:()=>times(12,()=>[S_('squeeze',.7,1),S_('relax',1,0)]),
+  how:['Squeeze hard and fast, then let go straight away.','Each flick is a full squeeze and a full release.','Keep a steady rhythm and stay relaxed everywhere else.'],
+  feel:'Quick pulses deep in the pelvis.',avoid:['Half squeezes that never fully release','Bouncing your whole body','Rushing so the squeezes get weak'],tip:'Quality first. Slow down if the squeezes get weaker.'},
+ drop:{n:'Reverse kegel',type:'Release',wk:1,ic:'drop',rel:1,
+  steps:()=>times(5,()=>[S_('drop',4,-.7),S_('out',5,0)]),
+  how:['Breathe in slowly into your belly.','As you breathe in, let the pelvic floor soften, widen and drop, the opposite of a squeeze.','Breathe out and let it return to neutral without squeezing.'],
+  feel:'A gentle opening and heaviness low down, like the moment you start to pee.',avoid:['Pushing or straining hard','Squeezing on the way back','Holding your breath'],tip:'A muscle that can fully relax works better. Never skip this one.'},
+ endure:{n:'Endurance hold',type:'Stamina',wk:1,ic:'endure',
+  steps:(l=1)=>times(2,()=>[S_('squeeze',2,.5),S_('hold',Math.min(40,14+l*2),.5),S_('relax',3,0),S_('rest',8,0)]),
+  how:['Squeeze at about half strength.','Hold that steady squeeze for the whole count while breathing normally.','Relax fully at the end.'],
+  feel:'A light, steady lift you could keep while talking.',avoid:['Starting too hard and fading','Holding your breath','Tensing your shoulders'],tip:'Think of it as a gentle hold, not a maximum effort.'},
+ elevator:{n:'The elevator',type:'Control',wk:2,ic:'elev',
+  steps:()=>times(3,()=>[S_('up',1.5,.34),S_('hold',1.5,.34),S_('up',1.5,.67),S_('hold',1.5,.67),S_('up',1.5,1),S_('hold',2,1),S_('down',1.8,.67),S_('down',1.8,.34),S_('down',2,0),S_('rest',4,0)]),
+  how:['Lift a third of the way and pause: floor one.','Lift more and pause: floor two. Then a full squeeze: floor three.','Lower one floor at a time, slowly, all the way to the ground.'],
+  feel:'Control at each level, especially on the way down.',avoid:['Dropping straight from the top','Losing your breath','Using your belly to lift'],tip:'The slow lowering is the hardest and most useful part.'},
+ pyramid:{n:'Pyramid',type:'Strength',wk:2,ic:'pyr',
+  steps:()=>[2,4,6,8,6,4,2].flatMap(h=>rep([S_('squeeze',1,1),S_('hold',h,1),S_('relax',2,0),S_('rest',Math.max(3,h),0)])),
+  how:['Squeeze and hold for 2 seconds, then rest.','Each hold gets longer: 4, 6, then 8 seconds.','Then come back down: 6, 4, 2.'],
+  feel:'Your strength being tested as the holds get longer.',avoid:['Letting the squeeze fade mid-hold','Skipping the rest','Holding your breath'],tip:'If you cannot hold 8 seconds yet, relax early and keep going.'},
+ wave:{n:'Wave squeezes',type:'Speed',wk:3,ic:'wave',
+  steps:()=>times(4,()=>[S_('squeeze',.6,.8),S_('relax',.6,.1),S_('squeeze',.6,.8),S_('relax',.6,.1),S_('squeeze',.6,1),S_('hold',3,1),S_('relax',2,0),S_('rest',3,0)]),
+  how:['Two quick squeezes and releases.','On the third, squeeze fully and hold.','Let go completely, rest, and repeat the wave.'],
+  feel:'Fast control followed by a strong hold.',avoid:['Blurring the quick squeezes together','Not fully releasing between waves','Tensing your thighs'],tip:'Keep the rhythm even: pulse, pulse, hold.'},
+ bridgek:{n:'Bridge + kegel',type:'Bonus',wk:0,ic:'bridge',pos:'lying',
+  steps:()=>times(6,()=>[S_('bridge',2,0,{lift:1}),S_('squeeze',1,1,{lift:1}),S_('hold',4,1,{lift:1}),S_('relax',1.5,0,{lift:1}),S_('lower',2,0,{lift:0}),S_('rest',3,0,{lift:0})]),
+  how:['Lie on your back, knees bent, feet flat and hip-width apart.','Press through your heels and lift your hips into a bridge.','At the top, do a strong kegel: draw up and in and hold.','Release the kegel fully, then lower your hips slowly.'],
+  feel:'Glutes lift the hips, then the pelvic floor does its own separate squeeze at the top.',avoid:['Letting the bridge replace the kegel','Arching your lower back','Holding your breath'],tip:'Two jobs: your glutes lift you, then the kegel is its own squeeze.'},
+ walk:{n:'Walking holds',type:'Everyday',wk:4,ic:'walk',pos:'walking',
+  steps:()=>times(5,()=>[S_('squeeze',1.5,.7),S_('hold',5,.7),S_('relax',2,0),S_('rest',5,0)]),
+  how:['Walk at an easy pace.','Squeeze at about two-thirds strength and keep walking.','Hold for the count, relax, and keep walking until the next one.'],
+  feel:'The lift staying on while your legs move.',avoid:['Changing how you walk','Holding your breath','Clenching your glutes as you step'],tip:'Try this during a real walk once you know the count.'}};
+const ICONS={find:'<circle cx="12" cy="12" r="7"/><path d="M12 9v6M9 12l3-3 3 3"/>',hold:'<rect x="6" y="6" width="12" height="12" rx="3"/><path d="M9 12h6"/>',flick:'<path d="M3 15l3-6 3 6 3-6 3 6 3-6 3 6"/>',drop:'<path d="M12 4v13M7 12l5 5 5-5M5 20h14"/>',endure:'<circle cx="12" cy="13" r="7"/><path d="M12 9v4l3 2M10 3h4"/>',elev:'<path d="M7 20V4h10v16M7 9h10M7 14h10"/>',pyr:'<path d="M3 20h18M6 20V14M10 20V9M14 20V5M18 20v-6"/>',wave:'<path d="M2 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/>',bridge:'<path d="M2 19h20M5 19l3-6h8l3 6"/><path d="M12 13V8M9 10l3-3 3 3"/>',walk:'<circle cx="13" cy="4" r="2"/><path d="M13 7l-2 6 3 3v5M11 13l-3 8M11 9l-4 2M13 9l4 3"/>'};
+const icon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg>`;
+const secOf=id=>EX[id].steps().reduce((a,s)=>a+s.d,0);
+const repsOf=id=>EX[id].steps().filter(s=>s.r).length;
+const READY=6,REST=12;
+
+
+/* page + programme metadata (used by the app and the page generator) */
+const EXMETA={
+ find:{slug:'find-and-lift',sets:'5 gentle lifts',short:'Learn to find and lift the right muscle before anything else.',
+  why:'Most beginners squeeze the wrong muscles: the glutes, the belly or the inner thighs. Find and lift teaches the exact feeling of the pelvic floor working on its own, at half effort, so every other exercise trains the right thing.',
+  faq:[['How do I know I have found the right muscle?','The base of the penis draws in slightly and the testicles lift. Your bum, belly and thighs stay soft and you keep breathing.'],['Should I practise by stopping my urine?','No. Imagining it is a useful cue, but stopping the flow regularly while you pee is not recommended.']]},
+ power:{slug:'power-holds',sets:'6 holds of 5 to 10 seconds',short:'Strong squeezes held for up to 10 seconds to build strength.',
+  why:'Power holds are the core strength exercise of most pelvic floor programmes. A firm squeeze held for several seconds, followed by full relaxation and an equal rest, builds the strength of the muscles at the base of the penis.',
+  faq:[['How long should each hold be?','Start with what you can hold cleanly, often 4 or 5 seconds, and add a second as you level up, up to 10 seconds.'],['What if the squeeze fades before the count ends?','Relax, rest and start the next one. A clean shorter hold beats a long weak one.']]},
+ flicks:{slug:'quick-flicks',sets:'2 sets of 10 to 15 flicks',short:'Fast, strong squeezes with a full release to train speed.',
+  why:'Your pelvic floor needs speed as well as strength. Quick flicks train the fast-reacting fibres with short, sharp squeezes, and the full release between each one keeps the muscle from staying tense.',
+  faq:[['How fast should flicks be?','About one squeeze and one release every second or two. Slow down if the squeezes get weaker.'],['Do I need to fully relax between flicks?','Yes. A full release every time is half of the exercise.']]},
+ drop:{slug:'reverse-kegel',sets:'5 slow drops',short:'Breathe in and let the pelvic floor soften and drop.',
+  why:'A reverse kegel is the opposite of a squeeze. As you breathe in, the pelvic floor softens, widens and drops slightly. Training the release matters because a muscle that cannot fully relax does not work well, and many men hold too much tension down there.',
+  faq:[['Is a reverse kegel the same as pushing?','No. It is a gentle letting go on the in-breath, not straining or bearing down.'],['How often should I do reverse kegels?','In Kegzo they come in every session, and they make up most of the Relax track.']]},
+ endure:{slug:'endurance-hold',sets:'2 long holds at half strength',short:'A gentle squeeze held for longer to build stamina.',
+  why:'Endurance holds train the muscle to keep working at a moderate level for longer. The squeeze is light, around half strength, and the goal is to keep it steady while breathing normally.',
+  faq:[['How strong should the squeeze be?','About half your maximum. You should be able to talk while holding it.'],['Is it normal for the hold to fade?','Yes, at first. Relax fully and try again next session. Holds get longer as you level up.']]},
+ elevator:{slug:'the-elevator',sets:'3 rides up and down',short:'Lift in three stages, then lower one floor at a time.',
+  why:'The elevator trains control rather than raw strength. Lifting the pelvic floor in three stages and lowering it slowly teaches you to grade the squeeze, and the slow lowering is the hardest and most useful part.',
+  faq:[['I cannot feel three separate levels. Is that normal?','Very normal at first. Aim for small, then medium, then full, and keep practising.'],['Why is lowering slowly important?','Controlled lowering trains the muscle as it lengthens, which is harder than just letting go.']]},
+ pyramid:{slug:'pyramid',sets:'Holds of 2, 4, 6, 8, 6, 4, 2 seconds',short:'Holds that build up to 8 seconds and back down.',
+  why:'The pyramid tests strength and stamina in one set. Each hold gets longer up to 8 seconds, then shorter again, with a rest after each one as long as the hold.',
+  faq:[['What if I cannot reach 8 seconds?','Relax when the squeeze fades and carry on with the next hold. Your ceiling rises with practice.'],['When does the pyramid unlock?','In week 2 of the programme, once the basics are in place.']]},
+ wave:{slug:'wave-squeezes',sets:'4 waves',short:'Two quick pulses, then a strong hold.',
+  why:'Wave squeezes combine speed and strength. Two quick pulses followed by a full hold train the muscle to switch from fast to sustained effort, a step up from flicks and holds on their own.',
+  faq:[['Do I relax between the pulses?','Partly. Let go between the two quick pulses, then squeeze fully and hold on the third.'],['When does this unlock?','In week 3, alongside standing practice.']]},
+ walk:{slug:'walking-holds',sets:'5 holds while walking',short:'Hold the squeeze while you walk at an easy pace.',
+  why:'Walking holds take the skill off the floor and into everyday movement. Keeping a steady squeeze while your legs move teaches the pelvic floor to work while the rest of the body is busy.',
+  faq:[['Should I change the way I walk?','No. Walk normally at an easy pace and keep breathing.'],['Can I do this on a real walk?','Yes. Once you know the count, practise during any walk.']]},
+ bridgek:{slug:'bridge-kegel',sets:'6 bridges with a kegel hold',short:'Lift into a bridge, then add a strong kegel at the top.',
+  why:'This bonus exercise pairs a glute bridge with a kegel hold at the top. The glutes lift the hips, then the pelvic floor does its own separate squeeze, which is a good test that you can isolate it while other muscles work.',
+  faq:[['Is the bridge part of the kegel?','No. The bridge uses your glutes. The kegel is a separate squeeze you add at the top.'],['What if my back hurts?','Lift less high and keep your ribs down. Stop if it hurts.']]}};
+const DAYPLAN={strength:[['find','power','flicks','drop','endure'],['power','elevator','flicks','pyramid','drop'],['power','wave','elevator','endure','drop'],['walk','power','wave','pyramid','drop']],
+ relax:[['find','drop','endure','drop'],['drop','elevator','drop','endure'],['drop','flicks','drop','endure'],['walk','drop','endure','drop']]};
+if(typeof module!=='undefined')module.exports={EX,EXMETA,DAYPLAN,ICONS,S_,times};
