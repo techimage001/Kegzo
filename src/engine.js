@@ -42,6 +42,8 @@ const POS={
   how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'},
  fours:{n:'On all fours',sprite:'fours-sprite.webp',frames:4,fw:439,fh:439,c:[212,250],pts:[[165,255],[158,246],[178,238]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Hands under shoulders, knees under hips, back flat. Lift your knees into a plank when the coach says.'},
+ seatopen:{n:'Seated',sprite:'seatopen-sprite.webp',frames:4,fw:439,fh:439,c:[220,212],pts:[[220,236],[220,244],[220,248]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+  how:'Sit tall on the front half of a chair, feet flat, hands resting on your knees. Open your knees when the coach says.'},
  climber:{n:'Plank',sprite:'climber-sprite.webp',frames:4,fw:720,fh:358,c:[330,200],pts:[[310,187],[318,191],[324,195]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Start in a high plank, hands under shoulders, body in a straight line. Move slowly, this is about control, not speed.'}};
 const IMG={};const PORDER=['lying','seated','standing','walking'];
