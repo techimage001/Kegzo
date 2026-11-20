@@ -42,8 +42,16 @@ const EX={
  walk:{n:'Walking holds',type:'Everyday',wk:4,ic:'walk',pos:'walking',
   steps:()=>times(5,()=>[S_('squeeze',1.5,.7),S_('hold',5,.7),S_('relax',2,0),S_('rest',5,0)]),
   how:['Walk at an easy pace.','Squeeze at about two-thirds strength and keep walking.','Hold for the count, relax, and keep walking until the next one.'],
-  feel:'The lift staying on while your legs move.',avoid:['Changing how you walk','Holding your breath','Clenching your glutes as you step'],tip:'Try this during a real walk once you know the count.'}};
-const ICONS={find:'<circle cx="12" cy="12" r="7"/><path d="M12 9v6M9 12l3-3 3 3"/>',hold:'<rect x="6" y="6" width="12" height="12" rx="3"/><path d="M9 12h6"/>',flick:'<path d="M3 15l3-6 3 6 3-6 3 6 3-6 3 6"/>',drop:'<path d="M12 4v13M7 12l5 5 5-5M5 20h14"/>',endure:'<circle cx="12" cy="13" r="7"/><path d="M12 9v4l3 2M10 3h4"/>',elev:'<path d="M7 20V4h10v16M7 9h10M7 14h10"/>',pyr:'<path d="M3 20h18M6 20V14M10 20V9M14 20V5M18 20v-6"/>',wave:'<path d="M2 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/>',bridge:'<path d="M2 19h20M5 19l3-6h8l3 6"/><path d="M12 13V8M9 10l3-3 3 3"/>',walk:'<circle cx="13" cy="4" r="2"/><path d="M13 7l-2 6 3 3v5M11 13l-3 8M11 9l-4 2M13 9l4 3"/>'};
+  feel:'The lift staying on while your legs move.',avoid:['Changing how you walk','Holding your breath','Clenching your glutes as you step'],tip:'Try this during a real walk once you know the count.'},
+ plankk:{n:'Plank lift kegel',type:'Bonus',wk:0,ic:'plank',pos:'fours',
+  steps:()=>times(5,()=>[S_('plankup',2,0,{lift:1}),S_('squeeze',1,1,{lift:1}),S_('hold',5,1,{lift:1}),S_('relax',1.5,0,{lift:1}),S_('kneel',2,0,{lift:0}),S_('rest',4,0,{lift:0})]),
+  how:['Start on all fours, hands under shoulders, knees under hips.','Tuck your toes and lift your knees into a plank.','In the plank, do a strong kegel: draw up and in and hold.','Let the kegel go fully, then lower your knees back down.'],
+  feel:'Your arms and belly hold the plank while the pelvic floor does its own squeeze.',avoid:['Letting your hips sag','Holding your breath','Squeezing your glutes instead of the pelvic floor'],tip:'If the plank is too hard, stay on your knees and just do the kegel.'},
+ kneek:{n:'Knee drive kegel',type:'Bonus',wk:0,ic:'knee',pos:'climber',
+  steps:()=>times(8,()=>[S_('kneein',1.5,1,{lift:1}),S_('hold',2,1,{lift:1}),S_('legback',1.5,0,{lift:0}),S_('rest',2.5,0,{lift:0})]),
+  how:['Start in a high plank, body in a straight line.','Slowly draw one knee towards your chest and squeeze your pelvic floor as it comes in.','Hold the squeeze for two seconds.','Take the leg back and let the squeeze go. Switch legs each time.'],
+  feel:'A lift inside as the knee comes in, and a full release as the leg goes back.',avoid:['Rushing like a cardio move','Letting your hips bounce','Holding your breath'],tip:'Slow is the point. One knee, one squeeze, one release.'}};
+const ICONS={plank:'<path d="M3 17h18M5 17l4-6h8l2 6"/><circle cx="18" cy="8" r="2"/>',knee:'<path d="M4 18l5-7 4 3 4-6"/><circle cx="18" cy="6" r="2"/><path d="M3 20h18"/>',find:'<circle cx="12" cy="12" r="7"/><path d="M12 9v6M9 12l3-3 3 3"/>',hold:'<rect x="6" y="6" width="12" height="12" rx="3"/><path d="M9 12h6"/>',flick:'<path d="M3 15l3-6 3 6 3-6 3 6 3-6 3 6"/>',drop:'<path d="M12 4v13M7 12l5 5 5-5M5 20h14"/>',endure:'<circle cx="12" cy="13" r="7"/><path d="M12 9v4l3 2M10 3h4"/>',elev:'<path d="M7 20V4h10v16M7 9h10M7 14h10"/>',pyr:'<path d="M3 20h18M6 20V14M10 20V9M14 20V5M18 20v-6"/>',wave:'<path d="M2 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/>',bridge:'<path d="M2 19h20M5 19l3-6h8l3 6"/><path d="M12 13V8M9 10l3-3 3 3"/>',walk:'<circle cx="13" cy="4" r="2"/><path d="M13 7l-2 6 3 3v5M11 13l-3 8M11 9l-4 2M13 9l4 3"/>'};
 const icon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg>`;
 const secOf=id=>EX[id].steps().reduce((a,s)=>a+s.d,0);
 const repsOf=id=>EX[id].steps().filter(s=>s.r).length;
@@ -81,7 +89,13 @@ const EXMETA={
   faq:[['Should I change the way I walk?','No. Walk normally at an easy pace and keep breathing.'],['Can I do this on a real walk?','Yes. Once you know the count, practise during any walk.']]},
  bridgek:{slug:'bridge-kegel',sets:'6 bridges with a kegel hold',short:'Lift into a bridge, then add a strong kegel at the top.',
   why:'This bonus exercise pairs a glute bridge with a kegel hold at the top. The glutes lift the hips, then the pelvic floor does its own separate squeeze, which is a good test that you can isolate it while other muscles work.',
-  faq:[['Is the bridge part of the kegel?','No. The bridge uses your glutes. The kegel is a separate squeeze you add at the top.'],['What if my back hurts?','Lift less high and keep your ribs down. Stop if it hurts.']]}};
+  faq:[['Is the bridge part of the kegel?','No. The bridge uses your glutes. The kegel is a separate squeeze you add at the top.'],['What if my back hurts?','Lift less high and keep your ribs down. Stop if it hurts.']]},
+ plankk:{slug:'plank-lift-kegel',sets:'5 plank lifts with a kegel hold',short:'Lift from all fours into a plank, then add a strong kegel.',
+  why:'This bonus exercise lifts you from all fours into a plank and adds a kegel hold at the top. Your arms and belly hold the plank while the pelvic floor does its own separate squeeze, which trains it to stay switched on while the rest of your body is working hard.',
+  faq:[['Is the plank part of the kegel?','No. The plank uses your arms and belly. The kegel is a separate squeeze you add once you are up.'],['What if I cannot hold a plank?','Stay on your knees and do the kegel on all fours. That still counts.']]},
+ kneek:{slug:'knee-drive-kegel',sets:'8 slow knee drives with a kegel',short:'From a plank, draw one knee in slowly and squeeze as it comes in.',
+  why:'This bonus exercise pairs a slow knee drive with a kegel. You squeeze as the knee comes in and let go as the leg goes back, which links the pelvic floor to movement and trains a full release after every squeeze.',
+  faq:[['Is this a cardio move?','No. Go slowly. Each knee drive is one controlled squeeze and one full release.'],['Can I do it with my knees down?','Yes. From all fours, slide one knee forward a little and squeeze as it moves.']]}};
 const DAYPLAN={strength:[['find','power','flicks','drop','endure'],['power','elevator','flicks','pyramid','drop'],['power','wave','elevator','endure','drop'],['walk','power','wave','pyramid','drop']],
  relax:[['find','drop','endure','drop'],['drop','elevator','drop','endure'],['drop','flicks','drop','endure'],['walk','drop','endure','drop']]};
 if(typeof module!=='undefined')module.exports={EX,EXMETA,DAYPLAN,ICONS,S_,times};

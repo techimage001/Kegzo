@@ -195,8 +195,8 @@ $('.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(
 /* ================= PLAYER ================= */
 const W={list:[],kind:'day',i:0,ph:'ready',t:0,si:0,st:0,rep:0,L:0,from:0,lift:0,liftFrom:0,paused:false,fig:null,pos:'lying',cueI:0,sq:0};
 let STEPS=[],CUM=[];
-const WORD={squeeze:'Squeeze',hold:'Hold',relax:'Relax',rest:'Rest',drop:'Drop',out:'Return',up:'Up a floor',down:'Down a floor',bridge:'Lift hips',lower:'Lower hips'};
-const CUES={squeeze:'Draw up and in',hold:['Keep breathing','Bum stays soft','Belly relaxed','Thighs loose'],relax:'Let go completely',rest:'Rest. Nothing to do',drop:'Breathe in, let it soften and drop',out:'Breathe out, back to neutral',up:'Lift a little more',down:'Lower slowly, stay in control',bridge:'Press through your heels, hips up',lower:'Lower slowly and let everything go'};
+const WORD={squeeze:'Squeeze',hold:'Hold',relax:'Relax',rest:'Rest',drop:'Drop',out:'Return',up:'Up a floor',down:'Down a floor',bridge:'Lift hips',lower:'Lower hips',plankup:'Lift knees',kneel:'Knees down',kneein:'Knee in, squeeze',legback:'Leg back, let go'};
+const CUES={squeeze:'Draw up and in',hold:['Keep breathing','Bum stays soft','Belly relaxed','Thighs loose'],relax:'Let go completely',rest:'Rest. Nothing to do',drop:'Breathe in, let it soften and drop',out:'Breathe out, back to neutral',up:'Lift a little more',down:'Lower slowly, stay in control',bridge:'Press through your heels, hips up',lower:'Lower slowly and let everything go',plankup:'Tuck your toes and lift your knees',kneel:'Lower your knees gently',kneein:'Draw the knee in slowly and squeeze',legback:'Take the leg back and release fully'};
 function voiceOn(){return S.settings.voice&&!S.settings.discreet}
 let AC=null,AU=false,UTT=null,VOICE=null;
 function sndOn(){return S.settings.snd!==false&&!S.settings.discreet}
@@ -220,22 +220,25 @@ function loadEx(i){W.i=i;W.ph='ready';W.t=0;W.si=0;W.st=0;W.rep=0;W.lift=0;W.fro
  $('#exN').textContent=String(i+1).padStart(2,'0');$('#exT').textContent=e.n;$('#exS').textContent=EXMETA[id].sets;$('#pos').textContent=POS[W.pos].n;
  $('#how').innerHTML=howHTML(id,i);$('#stage').classList.remove('rest');updReps();$('#phase').textContent='Get ready';$('#phase').style.color='var(--ink)';$('#cue').textContent=POS[W.pos].how;
  const nx=W.list[i+1];$('#nextUp').innerHTML=nx?`${ico(EX[nx].ic,EX[nx].rel?'c':'')}<span>Next: <b style="color:var(--ink)">${EX[nx].n}</b></span>`:'<span>Last exercise of the session</span>';
- $$('#bars i').forEach((b,j)=>b.firstChild.style.width=j<i?'100%':'0%');say(e.n)}
+ $$('#bars i').forEach((b,j)=>b.firstChild.style.width=j<i?'100%':'0%');say((W.list.length>1?(i===W.list.length-1?'Last one. ':'Exercise '+(i+1)+'. '):'')+e.n+'. '+EXMETA[id].short)}
 function enterStep(){const s=STEPS[W.si];W.from=W.L;W.liftFrom=W.lift;W.st=0;const ph=$('#phase');ph.textContent=WORD[s.k];
- ph.style.color=s.to<0||s.k==='drop'?'#6FB7FF':(s.k==='squeeze'||s.k==='up'||s.k==='hold')?'#3DDC84':'var(--ink)';
+ ph.style.color=s.to<0||s.k==='drop'?'#6FB7FF':(s.k==='squeeze'||s.k==='up'||s.k==='hold'||s.k==='kneein')?'#3DDC84':'var(--ink)';
  const c=CUES[s.k];$('#cue').textContent=Array.isArray(c)?c[W.cueI++%c.length]:c;
- if(s.k==='squeeze'||s.k==='up'){buzz([50]);SFX.up();if(s.d>=1)say(WORD[s.k])}else if(s.k==='drop'){buzz([25,40,25]);SFX.down();say('Drop')}else if(s.k==='bridge'){buzz([40]);SFX.up();say('Lift your hips')}else if(s.k==='lower'){SFX.down();say('Lower')}else if(s.k==='relax'){SFX.down();if(s.d>=1.5)say('Relax')}else if(s.k==='hold'&&s.d>=3){say('Hold')}}
+ W.mid=0;const V={squeeze:s.d>=1?'Squeeze':'',up:'Up a floor',down:'Down a floor',drop:'Breathe in and drop',bridge:'Lift your hips',lower:'Lower your hips and let go',plankup:'Lift your knees into the plank',kneel:'Knees down',kneein:'Knee in, and squeeze',legback:'Leg back, let it go',relax:s.d>=1.5?'Relax':'',hold:s.d>=3?'Hold':''};
+ if(s.k==='squeeze'||s.k==='up'||s.k==='kneein'){buzz([50]);SFX.up()}else if(s.k==='drop'){buzz([25,40,25]);SFX.down()}else if(s.k==='bridge'||s.k==='plankup'){buzz([40]);SFX.up()}else if(s.k==='lower'||s.k==='kneel'||s.k==='legback'||s.k==='relax'||s.k==='down'){SFX.down()}
+ if(V[s.k])say(V[s.k])}
 const easeF=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
 function startSession(list,kind){unlockAudio();W.list=list;W.kind=kind;W.basePos=kind==='day'?todayInfo().pos:(EX[list[0]].pos||PORDER[Math.max(0,Math.min(3,(EX[list[0]].wk||1)-1))]);
  W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').textContent=kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise';
  $('#bars').innerHTML=list.map(id=>`<i class="${EX[id].rel?'c':''}"><b></b></i>`).join('');$('#pl').classList.add('on');$('#pl').scrollTop=0;document.body.style.overflow='hidden';
  if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');loadEx(0)}
-function nextEx(){if(W.i>=W.list.length-1){finish();return}W.ph='rest';W.t=0;$('#stage').classList.add('rest');$$('#bars i')[W.i].firstChild.style.width='100%';$('#phase').textContent='Rest';$('#phase').style.color='var(--cool)';$('#cue').textContent='Breathe easy. Next up: '+EX[W.list[W.i+1]].n;say('Rest')}
+function nextEx(){if(W.i>=W.list.length-1){finish();return}W.ph='rest';W.t=0;$('#stage').classList.add('rest');$$('#bars i')[W.i].firstChild.style.width='100%';$('#phase').textContent='Rest';$('#phase').style.color='var(--cool)';$('#cue').textContent='Breathe easy. Next up: '+EX[W.list[W.i+1]].n;say('Nice work. Rest and breathe. Next up, '+EX[W.list[W.i+1]].n)}
 function tick(dt){const tot=CUM[CUM.length-1];
  if(W.ph==='ready'){const pv=Math.ceil(READY-W.t);W.t+=dt;const nv=Math.ceil(READY-W.t);if(nv<pv&&nv>=1&&nv<=3)SFX.tick();ring(READY-W.t,READY,'Get ready','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*4);W.lift+=(0-W.lift)*Math.min(1,dt*4);mvDraw(W.L,0);if(W.t>=READY){W.ph='work';W.si=0;enterStep()}}
  else if(W.ph==='work'){const s=STEPS[W.si];W.st+=dt;const ramp=s.k==='hold'||s.k==='rest'?.3:s.d*.8;W.L=W.from+(s.to-W.from)*easeF(Math.min(1,W.st/ramp));if(s.lift!=null)W.lift=W.liftFrom+(s.lift-W.liftFrom)*easeF(Math.min(1,W.st/s.d));
   const e=CUM[W.si]+W.st;ring(tot-e,tot,'Seconds',EX[W.list[W.i]].rel?'#6FB7FF':'#FF6B4A');mvDraw(W.L,Math.min(1,W.st/s.d));$$('#bars i')[W.i].firstChild.style.width=Math.min(100,e/tot*100)+'%';
-  if(W.st>=s.d){if(s.k==='squeeze'||s.k==='up')W.sq++;if(s.r){W.rep++;updReps()}W.si++;if(W.si>=STEPS.length)nextEx();else enterStep()}}
+  if(s.k==='hold'){const left=Math.ceil(s.d-W.st);if(s.d>=8&&W.mid===0&&W.st>=s.d*.4){W.mid=1;say($('#cue').textContent)}if(s.d>=5&&left<=3&&left>=1&&W.mid!==10+left){W.mid=10+left;say(String(left))}}
+  if(W.st>=s.d){if(s.k==='squeeze'||s.k==='up'||s.k==='kneein')W.sq++;if(s.r){W.rep++;updReps()}W.si++;if(W.si>=STEPS.length)nextEx();else enterStep()}}
  else if(W.ph==='rest'){W.t+=dt;ring(REST-W.t,REST,'Rest','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*3);mvDraw(W.L,0);if(W.t>=REST)loadEx(W.i+1)}}
 function closePl(){$('#pl').classList.remove('on');document.body.style.overflow='';try{speechSynthesis.cancel()}catch(e){}try{W.lock&&W.lock.release()}catch(e){}W.ph='off'}
 function finish(){const min=Math.max(.5,Math.round((performance.now()-W.started)/6000)/10),today_=dk(new Date()),firstDay=W.kind==='day'&&!dayDates().includes(today_);

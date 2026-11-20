@@ -39,7 +39,11 @@ const POS={
  walking:{n:'Walking',img:'pos-walking.webp',walk:1,cam:[200,192,1.3],keys:[side({p:[200,168],t:178,h:180,L:{a:[226,255],f:90,k:-1,hd:[186,170],e:1},R:{a:[176,250],f:112,k:-1,hd:[218,166],e:1}}),side({p:[200,168],t:178,h:180,L:{a:[176,250],f:112,k:-1,hd:[218,166],e:1},R:{a:[226,255],f:90,k:-1,hd:[186,170],e:1}})],
   how:'Walk at an easy pace and hold the squeeze for a few steps. This trains the muscle for everyday life.'},
  bridge:{n:'Lying down',sprite:'bridge-sprite.webp',frames:5,fw:439,pts:[[125,300],[138,276],[146,252]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
-  how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'}};
+  how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'},
+ fours:{n:'On all fours',sprite:'fours-sprite.webp',frames:4,fw:439,fh:439,c:[212,250],pts:[[165,255],[158,246],[178,238]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+  how:'Hands under shoulders, knees under hips, back flat. Lift your knees into a plank when the coach says.'},
+ climber:{n:'Plank',sprite:'climber-sprite.webp',frames:4,fw:720,fh:358,c:[330,200],pts:[[310,187],[318,191],[324,195]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+  how:'Start in a high plank, hands under shoulders, body in a straight line. Move slowly, this is about control, not speed.'}};
 const IMG={};const PORDER=['lying','seated','standing','walking'];
 function Fig(posId){const P=POS[posId];return{P,t:0,pose:P.keys[0],
  step(dt){this.t+=dt;if(P.walk){const u=(Math.sin(this.t*Math.PI/.55)+1)/2;this.pose=lerpP(P.keys[0],P.keys[1],u);this.pose.p=[200,168-Math.abs(Math.cos(this.t*Math.PI/.55))*3]}
@@ -54,10 +58,10 @@ const SPR={};
 function spriteDraw(cv,P,pf,lift,t,dt,st){const src=IMG[P.sprite]||P.sprite;let im=SPR[src];if(!im){im=SPR[src]=new Image();im.src=src}
  const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),W=Math.max(1,Math.round(r.width*d)),H=Math.max(1,Math.round(r.height*d));if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}
  const c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.globalCompositeOperation='source-over';c.globalAlpha=1;c.clearRect(0,0,W,H);if(!im.complete||!im.naturalWidth)return;
- const fw=P.fw,s=Math.min(W*.98,H*1.3),k=s/fw,ox=W/2-219*k,oy=H*.6-255*k;
+ const fw=P.fw,fh=P.fh||P.fw,C=P.c||[219,255],sw=Math.min(W*.98,H*1.3*fw/fh),k=sw/fw,sh=fh*k,s=Math.min(sw,sh*1.25),ox=W/2-C[0]*k,oy=H*.6-C[1]*k;
  const fi=Math.max(0,Math.min(P.frames-1,lift*(P.frames-1))),a=Math.floor(fi),b=Math.min(P.frames-1,a+1),u=fi-a;
- c.drawImage(im,a*fw,0,fw,fw,ox,oy,s,s);if(u>0){c.globalAlpha=u;c.drawImage(im,b*fw,0,fw,fw,ox,oy,s,s);c.globalAlpha=1}
- c.globalCompositeOperation='destination-in';const rg=c.createRadialGradient(W/2,H*.6,s*.3,W/2,H*.6,s*.56);rg.addColorStop(0,'#000');rg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=rg;c.fillRect(0,0,W,H);
+ c.drawImage(im,a*fw,0,fw,fh,ox,oy,sw,sh);if(u>0){c.globalAlpha=u;c.drawImage(im,b*fw,0,fw,fh,ox,oy,sw,sh);c.globalAlpha=1}
+ c.globalCompositeOperation='destination-in';const rg=c.createRadialGradient(W/2,H*.6,Math.max(sw,sh)*.3,W/2,H*.6,Math.max(sw,sh)*.56);rg.addColorStop(0,'#000');rg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=rg;c.fillRect(0,0,W,H);
  c.globalCompositeOperation='lighter';
  const p=P.pts,q=lift<=.5?p[0].map((v,i)=>v+(p[1][i]-v)*lift*2):p[1].map((v,i)=>v+(p[2][i]-v)*(lift-.5)*2),x=ox+q[0]*k,y=oy+q[1]*k;
  const A=Math.abs(pf),hot=pf>=0,col=hot?'61,220,132':'111,183,255',R=s*(.07+.06*A);
