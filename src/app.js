@@ -28,7 +28,7 @@ const hex=(on,lab)=>`<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3l
 const dayDates=()=>[...new Set(S.sessions.filter(s=>s.kind==='day').map(s=>s.d))].sort();
 const progDays=()=>dayDates().length;
 function todayInfo(){const done=dayDates().includes(dk(new Date())),n=progDays(),day=Math.min(28,done?n:n+1),week=Math.min(4,Math.ceil(day/7)),track=S.ob.track==='relax'?'relax':'strength';
- return{day,week,done,pos:PORDER[week-1],list:DAYPLAN[track][week-1]}}
+ const full=DAYPLAN[track][week-1],m=(S.prof||{}).mins;return{day,week,done,pos:PORDER[week-1],list:m==='3'?full.slice(0,3):full}}
 const lvl=()=>lvlOf(S.xp);
 const stepsOf=id=>EX[id].steps(lvl());
 const secOfL=id=>stepsOf(id).reduce((a,s)=>a+s.d,0);
@@ -92,30 +92,41 @@ function selfTest(){const T={hold:0,flicks:0,relax:0};ping('test_start');
 
 /* ================= ONBOARDING + SAFETY CHECK ================= */
 const QS=[['Do you feel pain or aching in your pelvis, groin, lower back or when sitting?','pain'],['Is it hard to fully relax down there, or do you often feel you need to pee urgently?','tight'],['Do you feel tense or sore after tightening those muscles?','sore'],['Have you had surgery in the pelvic area in the last few months?','surg']];
-let OB={step:0,ans:{},checks:[false,false,false],track:'strength'};
-const obFig=Fig('bridge');
-function ob(){const o=$('#ob');o.classList.add('on');const s=OB.step,dots=n=>`<div class="dots">${Array.from({length:7},(_,i)=>`<i class="${i===n?'on':''}"></i>`).join('')}</div>`;let h='';
+const QZ=[['age','How old are you?',[['u18','🔒','Under 18'],['18','🙂','18 to 29'],['30','💪','30 to 44'],['45','🧭','45 to 59'],['60','🏅','60 or over']]],
+ ['goal',"What's your main goal?",[['control','🎯','Better control'],['stamina','⚡','More stamina'],['core','🧱','Stronger core'],['confidence','😎','Feel more confident'],['curious','👀','Just curious']]],
+ ['exp','Have you tried kegels before?',[['never','🌱','Never'],['few','🔁','A few times'],['regular','🏆','I do them already']]],
+ ['mins','How much time can you give a day?',[['3','⏱️','About 3 minutes'],['5','⏳','About 5 minutes'],['10','🔥','10 minutes or more']]],
+ ['when','When do you want to train?',[['morning','🌅','Morning'],['lunch','☀️','Lunchtime'],['evening','🌙','Evening']]],
+ ['style','Pick your coach style',[['calm','🧘','Calm and chilled'],['upbeat','📣','Upbeat and motivating']]]];
+const PLANN={control:'Control Builder',stamina:'Stamina Builder',core:'Core Builder',confidence:'Confidence Builder',curious:'Starter Path'};
+let OB={step:0,ans:{},checks:[false,false,false],track:'strength',prof:{}};
+const obFig=Fig('gbridge');
+function ob(){const o=$('#ob');o.classList.add('on');const s=OB.step,dots=n=>`<div class="obbar" role="progressbar" aria-valuemin="0" aria-valuemax="13" aria-valuenow="${s}"><i style="width:${Math.round(s/13*100)}%"></i></div>`;let h='';
  if(s===0)h=`<h1>Welcome to Kegzo</h1><p class="lead2">Your free pelvic floor coach. A few minutes a day, with a voice that talks you through every step.</p>
  <div class="ben"><div><b>Better control</b><span>Train the muscles that support your bladder</span></div><div><b>Stronger core</b><span>Your pelvic floor is the base of your core</span></div><div><b>More confidence</b><span>Feel stronger and more in control</span></div><div><b>Learn to relax</b><span>Letting go matters as much as squeezing</span></div></div>
  <h2 class="h3">How to use Kegzo</h2><ol class="steps3"><li><b>1</b><span>Press <strong>Start</strong> once a day</span></li><li><b>2</b><span>Follow the coach's voice and the video</span></li><li><b>3</b><span>Watch your progress grow</span></li></ol>
  <button class="btn hot wide" data-ob="next">Let's begin</button><p class="tiny mut" style="text-align:center">Free. No subscription. General fitness information, not medical advice.</p>`;
- else if(s>=1&&s<=4){const[q,k]=QS[s-1];h=`${dots(s-1)}<p class="tiny mut">Safety check ${s} of 4</p><h2>${q}</h2><div class="yn"><button class="opt" data-a="yes" aria-pressed="${OB.ans[k]===true}"><span class="dot"></span>Yes</button><button class="opt" data-a="no" aria-pressed="${OB.ans[k]===false}"><span class="dot"></span>No</button></div><p class="tiny mut">This picks your starting track. It is not a diagnosis.</p><button class="btn ghost" data-ob="back">Back</button>`}
- else if(s===5){const flag=OB.ans.pain||OB.ans.tight||OB.ans.sore;OB.track=flag?'relax':'strength';
-  h=`${dots(4)}<span class="tag" style="justify-self:start">${OB.track==='relax'?'Relax track':'Strength track'}</span><h2>${OB.track==='relax'?"We'll start with letting go.":"You're set for the Strength track."}</h2>
-  <p class="mut">${OB.track==='relax'?'Your answers suggest your pelvic floor may already be working hard. More squeezing can make that worse, so your sessions focus on reverse kegels and gentle holds.':'Your sessions build strength, speed and control, and every session also trains letting go with reverse kegels.'}</p>
+ else if(s===99)h=`<div class="blk"><div class="blki" aria-hidden="true">🔒</div><h1>Kegzo is for adults only</h1><p class="lead2">You need to be 18 or over to use the Kegzo exercises.</p><p class="mut">Thanks for being honest. If you have questions about your body or health, a parent, carer, school nurse or doctor is a good person to talk to.</p><a class="btn ghost wide" href="/">Back to the Kegzo homepage</a></div>`;
+ else if(s>=1&&s<=6){const[k,q,opts]=QZ[s-1];h=`${dots()}<p class="tiny mut">Question ${s} of 10</p><h2>${q}</h2><div class="qopts">${opts.map(([v,e,t])=>`<button class="opt qo" data-q="${k}" data-val="${v}" aria-pressed="${OB.prof[k]===v}"><span class="qe" aria-hidden="true">${e}</span>${t}</button>`).join('')}</div><button class="btn ghost" data-ob="back">Back</button>`}
+ else if(s>=7&&s<=10){const[q,k]=QS[s-7];h=`${dots()}<p class="tiny mut">Comfort check ${s-6} of 4 · Question ${s} of 10</p><h2>${q}</h2><div class="yn"><button class="opt" data-a="yes" aria-pressed="${OB.ans[k]===true}"><span class="dot"></span>Yes</button><button class="opt" data-a="no" aria-pressed="${OB.ans[k]===false}"><span class="dot"></span>No</button></div><p class="tiny mut">This picks your starting track. It is not a diagnosis.</p><button class="btn ghost" data-ob="back">Back</button>`}
+ else if(s===11){const flag=OB.ans.pain||OB.ans.tight||OB.ans.sore;OB.track=flag?'relax':'strength';const P=OB.prof||{},nm=OB.track==='relax'?'Relax & Reset':(PLANN[P.goal]||'Starter Path'),mn=P.mins==='3'?'3 min':P.mins==='10'?'10 min':'5–7 min',wh={morning:'Mornings',lunch:'Lunchtimes',evening:'Evenings'}[P.when]||'Any time',st=P.style==='calm'?'Calm':'Upbeat';
+  h=`${dots()}<p class="tiny mut" style="text-align:center">Your plan is ready</p><div class="pcard"><div class="pglow" aria-hidden="true"></div><span class="tag">${OB.track==='relax'?'Relax path':'Strength path'}</span><h2>${nm}</h2><p class="mut">28-day path · Level 1</p>
+  <div class="pstats"><div><b>${mn}</b><span>a day</span></div><div><b>${wh}</b><span>training time</span></div><div><b>${st}</b><span>coach style</span></div></div>
+  <div class="pbadge"><span aria-hidden="true">🏅</span><div><b>First badge waiting</b><span>Finish Day 1 to unlock it</span></div></div></div>
+  <p class="mut small">${OB.track==='relax'?"We'll start with letting go: slow breathing releases and gentle holds, then build up.":'Each week adds a new position and harder holds, from lying down to walking.'}</p>
   ${flag?`<div class="note">${NOTE}<p>If you have pain or ongoing symptoms, a GP or pelvic floor physiotherapist can check what's going on.</p></div>`:''}${OB.ans.surg?`<div class="note">${NOTE}<p>After recent surgery, check with your doctor before starting pelvic floor training.</p></div>`:''}
   <button class="btn hot wide" data-ob="next">Next: find the muscle</button><button class="btn ghost" data-ob="back">Back</button>`}
- else if(s===6)h=`${dots(5)}<h2>Find the right muscle</h2><ol class="steps2"><li><p><b>Relax</b> your belly, bum and thighs.</p></li><li><p><b>Draw up and in</b>, as if stopping wind and the flow of urine at the same time. Just imagine it.</p></li><li><p><b>Feel for it:</b> the base of the penis pulls in slightly and the testicles lift. That's the right muscle.</p></li><li><p><b>Let go completely</b> before the next one.</p></li></ol>
+ else if(s===12)h=`${dots()}<h2>Find the right muscle</h2><ol class="steps2"><li><p><b>Relax</b> your belly, bum and thighs.</p></li><li><p><b>Draw up and in</b>, as if stopping wind and the flow of urine at the same time. Just imagine it.</p></li><li><p><b>Feel for it:</b> the base of the penis pulls in slightly and the testicles lift. That's the right muscle.</p></li><li><p><b>Let go completely</b> before the next one.</p></li></ol>
   <div class="wrong">${[['Glutes clench','Your bum stays soft'],['Belly pushes','Your stomach stays relaxed'],['Breath held','Keep breathing'],['Thighs squeeze','Your legs stay loose']].map(([a,b])=>`<div><b>✕ ${a}</b><br><span class="mut">${b}</span></div>`).join('')}</div>
   <button class="btn hot wide" data-ob="next">Try it, then check yourself</button><button class="btn ghost" data-ob="back">Back</button>`;
- else if(s===7){const ok=OB.checks.every(Boolean);h=`${dots(6)}<h2>Quick self-check</h2><p class="mut">Do one gentle squeeze for 3 seconds, then let go. Tick what was true.</p><div class="grid">${["My bum stayed soft","I kept breathing","My belly didn't push out"].map((t,i)=>`<button class="opt" data-ck="${i}" aria-pressed="${OB.checks[i]}"><span class="dot"></span>${t}</button>`).join('')}</div>
+ else if(s===13){const ok=OB.checks.every(Boolean);h=`${dots()}<h2>Quick self-check</h2><p class="mut">Do one gentle squeeze for 3 seconds, then let go. Tick what was true.</p><div class="grid">${["My bum stayed soft","I kept breathing","My belly didn't push out"].map((t,i)=>`<button class="opt" data-ck="${i}" aria-pressed="${OB.checks[i]}"><span class="dot"></span>${t}</button>`).join('')}</div>
   <p class="small mut">${ok?"That's the right muscle. Day 1 unlocked.":'All three need to be true. Try again slowly, most people need a few goes.'}</p><button class="btn hot wide" data-ob="finish" ${ok?'':'disabled'}>Unlock Day 1</button><button class="btn ghost" data-ob="back">Back</button>`}
  o.innerHTML=`<div class="ob">${h}</div>`;o.scrollTop=0;}
 $('#ob').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
- if(b.dataset.a){OB.ans[QS[OB.step-1][1]]=b.dataset.a==='yes';OB.step++;ob();return}
+ if(b.dataset.q){if(b.dataset.q==='age'&&b.dataset.val==='u18'){try{localStorage.setItem('kegzo.u18','1')}catch(x){}OB.step=99;ob();return}OB.prof[b.dataset.q]=b.dataset.val;if(OB.ageOnly){S.prof=Object.assign(S.prof||{},{age:b.dataset.val});save();OB.ageOnly=0;$('#ob').classList.remove('on');render();return}OB.step++;ob();return}if(b.dataset.a){OB.ans[QS[OB.step-7][1]]=b.dataset.a==='yes';OB.step++;ob();return}
  if(b.dataset.ck){OB.checks[+b.dataset.ck]=!OB.checks[+b.dataset.ck];ob();return}
  const a=b.dataset.ob;if(a==='next'&&OB.replay&&OB.step===0){OB.replay=0;$('#ob').classList.remove('on');return}if(a==='next'){OB.step++;ob()}else if(a==='back'){OB.step=Math.max(0,OB.step-1);ob()}
- else if(a==='finish'){const first=!S.ob.done;S.ob={done:true,track:OB.track,flags:Object.keys(OB.ans).filter(k=>OB.ans[k])};if(first)S.xp+=20;newBadges();save();$('#ob').classList.remove('on');ping('onboarded');toast(first?'Day 1 unlocked. +20 XP':'Track updated');render();if(PENDING){const id=PENDING;PENDING=null;startSession([id],'single')}}});
+ else if(a==='finish'){const first=!S.ob.done;S.ob={done:true,track:OB.track,flags:Object.keys(OB.ans).filter(k=>OB.ans[k])};S.prof=Object.assign({},OB.prof);if(first)S.xp+=20;newBadges();save();$('#ob').classList.remove('on');ping('onboarded');toast(first?'Day 1 unlocked. +20 XP':'Track updated');render();if(PENDING){const id=PENDING;PENDING=null;startSession([id],'single')}}});
 
 /* ================= VIEWS ================= */
 function today(){const T=todayInfo(),l=lvl(),lo=xpFor(l),hi=xpFor(l+1),pc=l>=50?100:Math.round((S.xp-lo)/(hi-lo)*100),st=streak();
@@ -183,18 +194,18 @@ const VIEWS=['today','progress','learn','me'];let cur='today',PENDING=null;
 function go(v){if(!VIEWS.includes(v))v='today';cur=v;VIEWS.forEach(x=>$('#v-'+x).classList.toggle('on',x===v));$$('.tabs button').forEach(b=>b.dataset.v===v?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));
  if(location.hash.slice(1)!==v)try{history.replaceState(null,'','#'+v)}catch(e){}render();window.scrollTo(0,0)}
 function render(){$('#topLv').textContent='Lv '+lvl();const st=streak().n;$('#topSt').textContent=st+' day'+(st===1?'':'s');acct();
- if(cur==='today'){$('#v-today').innerHTML=today();$('#goDay').onclick=()=>{const T=todayInfo();startSession(T.list,'day')};$('#testB').onclick=selfTest;{const hp=todayInfo().pos;heroF=Fig(hp==='lying'?'bridge':hp)}}
+ if(cur==='today'){$('#v-today').innerHTML=today();$('#goDay').onclick=()=>{const T=todayInfo();startSession(T.list,'day')};$('#testB').onclick=selfTest;{const hp=todayInfo().pos;heroF=Fig(hp==='lying'?'gbridge':hp)}}
  if(cur==='progress'){$('#v-progress').innerHTML=progress();$('#testB2').onclick=selfTest;chart()}
- if(cur==='learn'){$('#v-learn').innerHTML=learn();$('#retake').onclick=()=>{OB={step:1,ans:{},checks:[false,false,false],track:'strength'};ob()}}
+ if(cur==='learn'){$('#v-learn').innerHTML=learn();$('#retake').onclick=()=>{OB={step:1,ans:{},checks:[false,false,false],track:'strength',prof:Object.assign({},S.prof||{})};ob()}}
  if(cur==='me'){$('#v-me').innerHTML=me();bindMe()}}
 function bindMe(){const v=$('#v-me');
  v.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{const k=b.dataset.set;S.settings[k]=!S.settings[k];save();render()});{const tb=v.querySelector('#testSnd');if(tb)tb.onclick=()=>{unlockAudio();const was=S.settings.discreet;if(was){toast('Discreet mode is on, so sound is off');return}SFX.done();setTimeout(()=>{cnt(3);setTimeout(()=>cnt(2),900);setTimeout(()=>cnt(1),1800);setTimeout(()=>say(voiceOn()?'Sound is working. You will hear the coach and the countdown.':''),2700)},700);if(!('speechSynthesis' in window))toast('This browser has no voice. You will still hear the beeps.')}}
  v.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{S.ob.track=b.dataset.t;save();render();toast(b.dataset.t==='relax'?'Relax track on':'Strength track on')});
  $('#meG').onclick=()=>gate(false);
  let armed=false;$('#delB').onclick=()=>{if(!armed){armed=true;$('#delB').textContent='Tap again to delete';$('#delM').textContent='This removes every session, test and setting from this device.';return}
-  try{localStorage.removeItem(KEY)}catch(e){}S=fresh();mem=null;OB={step:0,ans:{},checks:[false,false,false],track:'strength'};render();ob()}}
+  try{localStorage.removeItem(KEY)}catch(e){}S=fresh();mem=null;OB={step:0,ans:{},checks:[false,false,false],track:'strength',prof:{}};render();ob()}}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-try]');if(b){if(!S.ob.done){PENDING=b.dataset.try;OB.step=0;ob();return}startSession([b.dataset.try],'single')}});
-$('.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(b)go(b.dataset.v)});
+$('.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b)return;if($('#pl').classList.contains('on')){vstop();closePl();try{history.replaceState(null,'')}catch(x){}}if($('#fin').classList.contains('on'))$('#fin').classList.remove('on');go(b.dataset.v);render()});
 
 /* ================= PLAYER ================= */
 const W={list:[],kind:'day',i:0,ph:'ready',t:0,si:0,st:0,rep:0,L:0,from:0,lift:0,liftFrom:0,paused:false,fig:null,pos:'lying',cueI:0,sq:0};
@@ -234,7 +245,8 @@ function loadEx(i){W.i=i;W.ph='ready';W.t=0;W.si=0;W.st=0;W.rep=0;W.lift=0;W.fro
  $('#exN').textContent=String(i+1).padStart(2,'0');$('#exT').textContent=e.n;$('#exS').textContent=EXMETA[id].sets;$('#pos').textContent=POS[W.pos].n;
  $('#how').innerHTML=howHTML(id,i);$('#stage').classList.remove('rest');updReps();$('#phase').textContent='Get ready';$('#phase').style.color='var(--ink)';$('#cue').textContent=POS[W.pos].how;
  const nx=W.list[i+1];$('#nextUp').innerHTML=nx?`${ico(EX[nx].ic,EX[nx].rel?'c':'')}<span>Next: <b style="color:var(--ink)">${EX[nx].n}</b></span>`:'<span>Last exercise of the session</span>';
- $$('#bars i').forEach((b,j)=>b.firstChild.style.width=j<i?'100%':'0%');W.rdy=voiceOn()&&S.settings.intro!==false?Math.max(READY,vdur(INTRO(id))+4.2):READY;$('#skipB').style.display=W.rdy>READY?'':'none';if(W.rdy>READY)say(INTRO(id));else say(e.n)}
+ $$('#bars i').forEach((b,j)=>b.firstChild.style.width=j<i?'100%':'0%');W.ph='await';W.paused=false;$('#skipB').style.display='none';$('#phase').textContent='Ready when you are';$('#phase').style.color='var(--ink)';$('#playB').textContent='Start';$('#playB').classList.add('go');ring(CUM[CUM.length-1],CUM[CUM.length-1],'Seconds','#6FB7FF')}
+function beginEx(){unlockAudio();const id=W.list[W.i],e=EX[id];W.ph='ready';W.t=0;W.paused=false;$('#playB').textContent='Pause';$('#playB').classList.remove('go');$('#phase').textContent='Get ready';W.rdy=voiceOn()&&S.settings.intro!==false?Math.max(READY,vdur(INTRO(id))+4.2):READY;$('#skipB').style.display=W.rdy>READY?'':'none';if(W.rdy>READY)say(INTRO(id));else say(e.n)}
 function enterStep(){const s=STEPS[W.si];W.from=W.L;W.liftFrom=W.lift;W.st=0;const ph=$('#phase');ph.textContent=WORD[s.k];
  ph.style.color=s.to<0||s.k==='drop'||s.k==='inhale'?'#6FB7FF':(s.k==='squeeze'||s.k==='up'||s.k==='hold'||s.k==='kneein'||s.k==='squatdown'||s.k==='squatup'||s.k==='standup'||s.k==='sitdown'||s.k==='cough'||s.k==='liftdown'||s.k==='liftup'||s.k==='setdown'||s.k==='lungedown'||s.k==='lungeup')?'#3DDC84':'var(--ink)';
  const c=CUES[s.k];$('#cue').textContent=Array.isArray(c)?c[W.cueI++%c.length]:c;
@@ -244,7 +256,7 @@ function enterStep(){const s=STEPS[W.si];W.from=W.L;W.liftFrom=W.lift;W.st=0;con
 const easeF=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
 function startSession(list,kind){unlockAudio();try{history.pushState({kz:'pl'},'')}catch(e){}W.list=list;W.kind=kind;W.basePos=kind==='day'?todayInfo().pos:(EX[list[0]].pos||PORDER[Math.max(0,Math.min(3,(EX[list[0]].wk||1)-1))]);
  W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').textContent=kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise';
- $('#bars').innerHTML=list.map(id=>`<i class="${EX[id].rel?'c':''}"><b></b></i>`).join('');$('#pl').classList.add('on');$('#pl').scrollTop=0;document.body.style.overflow='hidden';
+ $('#bars').innerHTML=list.map(id=>`<i class="${EX[id].rel?'c':''}"><b></b></i>`).join('');$('#pl').classList.add('on');document.body.classList.add('inpl');$('#pl').scrollTop=0;document.body.style.overflow='hidden';
  if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');vprep([...list.map(id=>INTRO(id)),...list.map(id=>'Nice work. Rest and breathe. Next up, '+EX[id].n),'Squeeze','Hold','Relax','1','2','3','4','5','6','7','8','9','10','Session complete. Great work.']);loadEx(0)}
 function nextEx(){if(W.i>=W.list.length-1){finish();return}W.ph='rest';W.t=0;$('#stage').classList.add('rest');$$('#bars i')[W.i].firstChild.style.width='100%';$('#phase').textContent='Rest';$('#phase').style.color='var(--cool)';$('#cue').textContent='Breathe easy. Next up: '+EX[W.list[W.i+1]].n;say('Nice work. Rest and breathe. Next up, '+EX[W.list[W.i+1]].n)}
 function tick(dt){const tot=CUM[CUM.length-1];
@@ -252,9 +264,9 @@ function tick(dt){const tot=CUM[CUM.length-1];
  else if(W.ph==='work'){const s=STEPS[W.si];W.st+=dt;const ramp=s.k==='hold'||s.k==='rest'?.3:s.d*.8;W.L=W.from+(s.to-W.from)*easeF(Math.min(1,W.st/ramp));if(s.lift!=null)W.lift=W.liftFrom+(s.lift-W.liftFrom)*easeF(Math.min(1,W.st/s.d));
   const e=CUM[W.si]+W.st;ring(tot-e,tot,'Seconds',EX[W.list[W.i]].rel?'#6FB7FF':'#FF6B4A');mvDraw(W.L,Math.min(1,W.st/s.d));$$('#bars i')[W.i].firstChild.style.width=Math.min(100,e/tot*100)+'%';
   {const left=Math.ceil(s.d-W.st);if(countOn()&&s.d>=3){if(left>=1&&left<Math.ceil(s.d)&&W.mid!==100+left){W.mid=100+left;cnt(left)}}else if(s.k==='hold'){if(s.d>=8&&W.mid===0&&W.st>=s.d*.4){W.mid=1;say($('#cue').textContent)}if(s.d>=5&&left<=3&&left>=1&&W.mid!==10+left){W.mid=10+left;say(String(left))}}}
-  if(W.st>=s.d){if(s.k==='squeeze'||s.k==='up'||s.k==='kneein')W.sq++;if(s.r){W.rep++;updReps();{const tot=STEPS.filter(x=>x.r).length;if(tot>=4&&W.rep===Math.floor(tot/2))W.cheer='Halfway there. Great work.';else if(tot>=3&&W.rep===tot-1)W.cheer='Last one. Make it count.'}}W.si++;if(W.si>=STEPS.length)nextEx();else enterStep()}}
+  if(W.st>=s.d){if(s.k==='squeeze'||s.k==='up'||s.k==='kneein')W.sq++;if(s.r){W.rep++;updReps();if((S.prof||{}).style!=='calm'){const tot=STEPS.filter(x=>x.r).length;if(tot>=4&&W.rep===Math.floor(tot/2))W.cheer='Halfway there. Great work.';else if(tot>=3&&W.rep===tot-1)W.cheer='Last one. Make it count.'}}W.si++;if(W.si>=STEPS.length)nextEx();else enterStep()}}
  else if(W.ph==='rest'){const pr=Math.ceil(REST-W.t);W.t+=dt;const nr=Math.ceil(REST-W.t);if(nr<pr&&nr>=1&&nr<=5)cnt(nr);ring(REST-W.t,REST,'Rest','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*3);mvDraw(W.L,0);if(W.t>=REST)loadEx(W.i+1)}}
-function closePl(){$('#pl').classList.remove('on');document.body.style.overflow='';vstop();try{W.lock&&W.lock.release()}catch(e){}W.ph='off'}
+function closePl(){$('#pl').classList.remove('on');document.body.classList.remove('inpl');document.body.style.overflow='';vstop();try{W.lock&&W.lock.release()}catch(e){}W.ph='off'}
 function finish(){const min=Math.max(.5,Math.round((performance.now()-W.started)/6000)/10),today_=dk(new Date()),firstDay=W.kind==='day'&&!dayDates().includes(today_);
  const before=lvl(),xp=W.sq*2+(W.kind==='day'?30:10)+(firstDay?20:0);S.sessions.push({d:today_,kind:W.kind,ids:W.list,min,sq:W.sq,xp});S.xp+=xp;const nb=newBadges();save();closePl();ping('session_done');
  const after=lvl();$('#fMin').textContent=Math.max(1,Math.round(min));$('#fSq').textContent=W.sq;$('#fXp').textContent='+'+xp;
@@ -263,12 +275,13 @@ function finish(){const min=Math.max(.5,Math.round((performance.now()-W.started)
  $('#fin').classList.add('on');SFX.done();say('Session complete. Great work.');finF=Fig(W.pos)}
 $('#finB').onclick=()=>{$('#fin').classList.remove('on');go('today');maybeGate()};
 $('#skipB').onclick=()=>{if(W.ph==='ready'){vstop();W.t=Math.max(W.t,(W.rdy||READY)-3.05);$('#skipB').style.display='none'}};
-$('#playB').onclick=()=>{W.paused=!W.paused;$('#playB').textContent=W.paused?'Resume':'Pause';if(W.paused){vstop();$('#phase').textContent='Paused';$('#phase').style.color='var(--ink)'}else if(W.ph==='work')enterStep()};
+$('#playB').onclick=()=>{if(W.ph==='await'){beginEx();return}W.paused=!W.paused;$('#playB').textContent=W.paused?'Continue':'Pause';if(W.paused){vstop();$('#phase').textContent='Paused';$('#phase').style.color='var(--ink)'}else if(W.ph==='work')enterStep()};
+$('#stopB').onclick=()=>{vstop();if(history.state&&history.state.kz==='pl'){history.back()}else{closePl();render()}toast('Session stopped. Finish a session to earn XP')};
 $('#nextB').onclick=()=>{if(W.i<W.list.length-1)loadEx(W.i+1);else finish()};
 $('#prevB').onclick=()=>loadEx(Math.max(0,W.ph==='ready'&&W.t<2?W.i-1:W.i));
 $('#voiceB').onclick=()=>{S.settings.voice=!S.settings.voice;if(S.settings.voice)S.settings.discreet=false;save();$('#voiceB').setAttribute('aria-pressed',voiceOn());if(!voiceOn())try{speechSynthesis.cancel()}catch(e){}toast(voiceOn()?'Voice coach on':'Voice coach off')};
 $('#quitB').onclick=()=>{if(history.state&&history.state.kz==='pl'){history.back()}else{closePl();render()}toast('Session ended. Finish a session to earn XP')};
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&$('#pl').classList.contains('on')&&!W.paused){W.paused=true;$('#playB').textContent='Resume';$('#phase').textContent='Paused';vstop();}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&$('#pl').classList.contains('on')&&!W.paused){W.paused=true;$('#playB').textContent='Continue';$('#phase').textContent='Paused';vstop();}});
 
 /* ================= LOOP ================= */
 let heroF=Fig('lying'),finF=Fig('standing'),last=0;
@@ -284,7 +297,7 @@ mvInit();mvDraw(0,0);$('#voiceB').setAttribute('aria-pressed',voiceOn());
 checkVerified();
 const h=location.hash.slice(1),exH=h.startsWith('ex-')?Object.keys(EXMETA).find(k=>'ex-'+EXMETA[k].slug===h):null;
 go(VIEWS.includes(h)?h:'today');
-if(!S.ob.done){S.seenW=1;save();if(exH)PENDING=exH;ob()}else if(exH)startSession([exH],'single');
+if((()=>{try{return localStorage.getItem('kegzo.u18')==='1'}catch(e){return false}})()){OB.step=99;ob();$('#ob').querySelectorAll('[data-ob]').forEach(x=>x.remove())}else if(S.ob.done&&!(S.prof&&S.prof.age)){OB.step=1;OB.ageOnly=1;ob();$('#ob').querySelectorAll('[data-ob=back]').forEach(x=>x.remove())}else if(!S.ob.done){S.seenW=1;save();if(exH)PENDING=exH;ob()}else if(exH)startSession([exH],'single');
 requestAnimationFrame(frame);ping('app_open');
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('/sw.js').catch(()=>{});
 window.addEventListener('hashchange',()=>{const x=location.hash.slice(1);if(VIEWS.includes(x)&&x!==cur)go(x)});
