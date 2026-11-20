@@ -959,7 +959,7 @@ mvInit();mvDraw(0,0);$('#voiceB').setAttribute('aria-pressed',voiceOn());
 checkVerified();
 const h=location.hash.slice(1),exH=h.startsWith('ex-')?Object.keys(EXMETA).find(k=>'ex-'+EXMETA[k].slug===h):null;
 go(VIEWS.includes(h)?h:'today');
-if(!S.ob.done){if(exH)PENDING=exH;ob()}else if(exH)startSession([exH],'single');
+if(!S.ob.done){S.seenW=1;save();if(exH)PENDING=exH;ob()}else if(!S.seenW&&!exH){S.seenW=1;save();OB.step=0;OB.replay=1;ob()}else if(exH)startSession([exH],'single');
 requestAnimationFrame(frame);ping('app_open');
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('/sw.js').catch(()=>{});
 window.addEventListener('hashchange',()=>{const x=location.hash.slice(1);if(VIEWS.includes(x)&&x!==cur)go(x)});
