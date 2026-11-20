@@ -13,16 +13,16 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml"><link rel="icon" href="/assets/icons/icon-96.png" sizes="96x96" type="image/png"><link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<link rel="preload" href="/assets/fonts/outfit-700.woff2?v=8" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/inter-400.woff2?v=8" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/outfit-700.woff2?v=10" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/inter-400.woff2?v=10" as="font" type="font/woff2" crossorigin>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://kegzo.com/#org","name":"Kegzo","url":"https://kegzo.com/","logo":"https://kegzo.com/assets/icons/icon-512.png"},{"@type":"WebSite","@id":"https://kegzo.com/#site","name":"Kegzo","url":"https://kegzo.com/","publisher":{"@id":"https://kegzo.com/#org"},"inLanguage":"en"},{"@type":"WebApplication","name":"Kegzo Trainer","url":"https://kegzo.com/app.html","applicationCategory":"HealthApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"publisher":{"@id":"https://kegzo.com/#org"}}]}</script>
 <style>
-@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2?v=8) format('woff2')}
-@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2?v=8) format('woff2')}
-@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2?v=8) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/outfit-600.woff2?v=8) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/outfit-700.woff2?v=8) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/outfit-800.woff2?v=8) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2?v=10) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2?v=10) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2?v=10) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/outfit-600.woff2?v=10) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/outfit-700.woff2?v=10) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/outfit-800.woff2?v=10) format('woff2')}
 /* VOICE: a coach in a game; direct, plain, never explicit, never a medical promise
    IDEA: a fitness game's training screen for one muscle you cannot see from outside
    PICTURE: a glowing figure holds the position while a close-up shows the pelvic floor lifting, holding and dropping
@@ -299,7 +299,7 @@ function fit(cv,C){const r=cv.getBoundingClientRect(),d=Math.min(2,window.device
 /* ================= POSITIONS ================= */
 const side=o=>Object.assign({v:'side'},o);
 const POS={
- lying:{n:'Lying down',img:'pos-lying.webp',pt:[.335,.64],cam:[186,232,1.75],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+ lying:{n:'Lying down',sprite:'lie-sprite.webp',frames:4,fw:717,fh:358,c:[360,195],idle:.7,pts:[[400,258],[400,257],[400,256]],img0:'pos-lying.webp',pt:[.335,.64],cam:[186,232,1.75],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat. The easiest position because gravity helps.'},
  seated:{n:'Seated',img:'pos-seated.webp',chair:1,cam:[194,200,1.4],keys:[side({p:[182,198],t:180,h:180,L:{a:[226,255],f:90,k:-1,hd:[212,196],e:1},R:{a:[230,255],f:90,k:-1,hd:[216,198],e:1}})],
   how:'Sit upright on a firm chair, feet flat, weight spread across both sit bones.'},
@@ -311,6 +311,8 @@ const POS={
   how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'},
  fours:{n:'On all fours',sprite:'fours-sprite.webp',frames:4,fw:439,fh:439,c:[212,250],pts:[[165,255],[158,246],[178,238]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Hands under shoulders, knees under hips, back flat. Lift your knees into a plank when the coach says.'},
+ gbridge:{n:'Lying down',sprite:'gbridge-sprite.webp',frames:4,fw:718,fh:355,c:[360,195],pts:[[400,255],[396,238],[390,212]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+  how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'},
  tilt:{n:'Lying down',sprite:'tilt-sprite.webp',frames:4,fw:720,fh:405,c:[360,220],pts:[[392,272],[392,270],[392,268]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat, arms by your sides. Keep your shoulders and head relaxed on the floor.'},
  breath:{n:'Lying down',sprite:'breath-sprite.webp',frames:4,fw:716,fh:358,c:[360,190],pts:[[420,252],[420,250],[420,248]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
@@ -324,7 +326,7 @@ function Fig(posId){const P=POS[posId];return{P,t:0,pose:P.keys[0],
  step(dt){this.t+=dt;if(P.walk){const u=(Math.sin(this.t*Math.PI/.55)+1)/2;this.pose=lerpP(P.keys[0],P.keys[1],u);this.pose.p=[200,168-Math.abs(Math.cos(this.t*Math.PI/.55))*3]}
   else{const b=Math.sin(this.t*1.4)*.8;this.pose=Object.assign({},P.keys[0],{t:P.keys[0].t+b*.6})}},
  render(cv,pf,z=1,lift=0){const now=performance.now()/1000,dt=Math.min(.1,now-(this.lt||now));this.lt=now;
-  if(P.sprite){if(cv._h)cv._h.w.style.display='none';spriteDraw(cv,P,pf,lift,this.t,dt,this);return}
+  if(P.sprite){if(cv._h)cv._h.w.style.display='none';const lv=P.idle?(.5-.5*Math.cos(now*Math.PI*2/5))*P.idle:lift;spriteDraw(cv,P,pf,lv,this.t,dt,this);return}
   if(P.img){if(!cv._h)cv._h=Holo(cv);const c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);cv._h.w.style.display='block';holoDraw(cv._h,posOf(P),pf,this.t,dt,lift)}
   else{if(cv._h)cv._h.w.style.display='none';const C=P.cam;const[c,s]=fit(cv,[C[0],C[1],C[2]*z]);draw(c,solve(this.pose),{g:s,pf,chair:P.chair})}}}}
 const posOf=P=>Object.keys(POS).find(k=>POS[k]===P);
@@ -454,7 +456,7 @@ const EX={
   steps:()=>times(4,()=>[S_('squeeze',.6,.8),S_('relax',.6,.1),S_('squeeze',.6,.8),S_('relax',.6,.1),S_('squeeze',.6,1),S_('hold',3,1),S_('relax',2,0),S_('rest',3,0)]),
   how:['Two quick squeezes and releases.','On the third, squeeze fully and hold.','Let go completely, rest, and repeat the wave.'],
   feel:'Fast control followed by a strong hold.',avoid:['Blurring the quick squeezes together','Not fully releasing between waves','Tensing your thighs'],tip:'Keep the rhythm even: pulse, pulse, hold.'},
- bridgek:{n:'Bridge + kegel',type:'Bonus',wk:0,ic:'bridge',pos:'bridge',
+ bridgek:{n:'Bridge + kegel',type:'Bonus',wk:0,ic:'bridge',pos:'gbridge',
   steps:()=>times(6,()=>[S_('bridge',2,0,{lift:1}),S_('squeeze',1,1,{lift:1}),S_('hold',4,1,{lift:1}),S_('relax',1.5,0,{lift:1}),S_('lower',2,0,{lift:0}),S_('rest',3,0,{lift:0})]),
   how:['Lie on your back, knees bent, feet flat and hip-width apart.','Press through your heels and lift your hips into a bridge.','At the top, do a strong kegel: draw up and in and hold.','Release the kegel fully, then lower your hips slowly.'],
   feel:'Glutes lift the hips, then the pelvic floor does its own separate squeeze at the top.',avoid:['Letting the bridge replace the kegel','Arching your lower back','Holding your breath'],tip:'Two jobs: your glutes lift you, then the kegel is its own squeeze.'},
@@ -552,7 +554,7 @@ function mvDraw(L,prog){const y=196,cy=y+30-L*62,lx=104,rx=196,ly=y-L*14,d=`M${l
  $('#mvRing').setAttribute('stroke',col);$('#mvRing').setAttribute('stroke-dashoffset',804*(1-prog))}
 
 
-Object.assign(IMG,{'bridge-sprite.webp':'/assets/img/bridge-sprite.webp','fours-sprite.webp':'/assets/img/fours-sprite.webp','seatopen-sprite.webp':'/assets/img/seatopen-sprite.webp','tilt-sprite.webp':'/assets/img/tilt-sprite.webp','breath-sprite.webp':'/assets/img/breath-sprite.webp','climber-sprite.webp':'/assets/img/climber-sprite.webp','pos-lying.webp':'/assets/img/pos-lying.webp','pos-seated.webp':'/assets/img/pos-seated.webp','pos-standing.webp':'/assets/img/pos-standing.webp','pos-walking.webp':'/assets/img/pos-walking.webp'});
+Object.assign(IMG,{'bridge-sprite.webp':'/assets/img/bridge-sprite.webp','fours-sprite.webp':'/assets/img/fours-sprite.webp','seatopen-sprite.webp':'/assets/img/seatopen-sprite.webp','tilt-sprite.webp':'/assets/img/tilt-sprite.webp','lie-sprite.webp':'/assets/img/lie-sprite.webp','gbridge-sprite.webp':'/assets/img/gbridge-sprite.webp','breath-sprite.webp':'/assets/img/breath-sprite.webp','climber-sprite.webp':'/assets/img/climber-sprite.webp','pos-lying.webp':'/assets/img/pos-lying.webp','pos-seated.webp':'/assets/img/pos-seated.webp','pos-standing.webp':'/assets/img/pos-standing.webp','pos-walking.webp':'/assets/img/pos-walking.webp'});
 /* ================= STORE (versioned, portable to a future native app) ================= */
 const KEY='kegzo.v1';
 const dk=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');

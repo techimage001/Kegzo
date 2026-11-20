@@ -30,7 +30,7 @@ function fit(cv,C){const r=cv.getBoundingClientRect(),d=Math.min(2,window.device
 /* ================= POSITIONS ================= */
 const side=o=>Object.assign({v:'side'},o);
 const POS={
- lying:{n:'Lying down',img:'pos-lying.webp',pt:[.335,.64],cam:[186,232,1.75],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+ lying:{n:'Lying down',sprite:'lie-sprite.webp',frames:4,fw:717,fh:358,c:[360,195],idle:.7,pts:[[400,258],[400,257],[400,256]],img0:'pos-lying.webp',pt:[.335,.64],cam:[186,232,1.75],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat. The easiest position because gravity helps.'},
  seated:{n:'Seated',img:'pos-seated.webp',chair:1,cam:[194,200,1.4],keys:[side({p:[182,198],t:180,h:180,L:{a:[226,255],f:90,k:-1,hd:[212,196],e:1},R:{a:[230,255],f:90,k:-1,hd:[216,198],e:1}})],
   how:'Sit upright on a firm chair, feet flat, weight spread across both sit bones.'},
@@ -42,6 +42,8 @@ const POS={
   how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'},
  fours:{n:'On all fours',sprite:'fours-sprite.webp',frames:4,fw:439,fh:439,c:[212,250],pts:[[165,255],[158,246],[178,238]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Hands under shoulders, knees under hips, back flat. Lift your knees into a plank when the coach says.'},
+ gbridge:{n:'Lying down',sprite:'gbridge-sprite.webp',frames:4,fw:718,fh:355,c:[360,195],pts:[[400,255],[396,238],[390,212]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+  how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'},
  tilt:{n:'Lying down',sprite:'tilt-sprite.webp',frames:4,fw:720,fh:405,c:[360,220],pts:[[392,272],[392,270],[392,268]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat, arms by your sides. Keep your shoulders and head relaxed on the floor.'},
  breath:{n:'Lying down',sprite:'breath-sprite.webp',frames:4,fw:716,fh:358,c:[360,190],pts:[[420,252],[420,250],[420,248]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
@@ -55,7 +57,7 @@ function Fig(posId){const P=POS[posId];return{P,t:0,pose:P.keys[0],
  step(dt){this.t+=dt;if(P.walk){const u=(Math.sin(this.t*Math.PI/.55)+1)/2;this.pose=lerpP(P.keys[0],P.keys[1],u);this.pose.p=[200,168-Math.abs(Math.cos(this.t*Math.PI/.55))*3]}
   else{const b=Math.sin(this.t*1.4)*.8;this.pose=Object.assign({},P.keys[0],{t:P.keys[0].t+b*.6})}},
  render(cv,pf,z=1,lift=0){const now=performance.now()/1000,dt=Math.min(.1,now-(this.lt||now));this.lt=now;
-  if(P.sprite){if(cv._h)cv._h.w.style.display='none';spriteDraw(cv,P,pf,lift,this.t,dt,this);return}
+  if(P.sprite){if(cv._h)cv._h.w.style.display='none';const lv=P.idle?(.5-.5*Math.cos(now*Math.PI*2/5))*P.idle:lift;spriteDraw(cv,P,pf,lv,this.t,dt,this);return}
   if(P.img){if(!cv._h)cv._h=Holo(cv);const c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);cv._h.w.style.display='block';holoDraw(cv._h,posOf(P),pf,this.t,dt,lift)}
   else{if(cv._h)cv._h.w.style.display='none';const C=P.cam;const[c,s]=fit(cv,[C[0],C[1],C[2]*z]);draw(c,solve(this.pose),{g:s,pf,chair:P.chair})}}}}
 const posOf=P=>Object.keys(POS).find(k=>POS[k]===P);

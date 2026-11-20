@@ -5,8 +5,8 @@ const fs=require('fs'),path=require('path');
 const ROOT=path.resolve(__dirname,'..'),SRC=path.join(ROOT,'src');
 const {EX,EXMETA,DAYPLAN,ICONS}=require(path.join(SRC,'exercises.js'));
 const {GUIDES,STUDY}=require(path.join(SRC,'guides.js'));
-const SITE='https://kegzo.com',V='8',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
-const POSN={tilt:'Lying down',breath:'Lying down',seatopen:'Seated',fours:'On all fours',climber:'Plank',bridge:'Lying down',lying:'Lying down',seated:'Seated',standing:'Standing',walking:'Walking'},PORDER=['lying','seated','standing','walking'],VID={tilt:'tilt',breath:'breath',seatopen:'seatopen',bridge:'bridge',fours:'fours',climber:'climber'};
+const SITE='https://kegzo.com',V='10',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
+const POSN={gbridge:'Lying down',tilt:'Lying down',breath:'Lying down',seatopen:'Seated',fours:'On all fours',climber:'Plank',bridge:'Lying down',lying:'Lying down',seated:'Seated',standing:'Standing',walking:'Walking'},PORDER=['lying','seated','standing','walking'],VID={gbridge:'gbridge',tilt:'tilt',breath:'breath',seatopen:'seatopen',bridge:'bridge',fours:'fours',climber:'climber'};
 const BONUS=()=>Object.keys(EX).filter(id=>!EX[id].wk&&VID[EX[id].pos]);
 const bcard=id=>{const e=EX[id],m=EXMETA[id];return `<a class="wkc bc" href="/exercises/${m.slug}.html"><span class="vbox fit"><video data-lazy="/assets/video/${VID[e.pos]}.mp4?v=${V}" poster="/assets/img/pos-${e.pos}.webp" muted loop playsinline preload="none" aria-label="Hologram figure doing ${e.n.toLowerCase()}, looping"></video></span><b>${e.n}</b><span>${m.short}</span></a>`};
 
@@ -104,7 +104,7 @@ ${faqHTML(HF)}${cta('Start Day 1 now')}`;
   const rel=ids.filter(x=>x!==id).slice(0,4);
   const body=`<article class="art"><p class="eyebrow">${e.type} · ${esc(m.sets)}</p><h1>${e.n}: how to do it</h1>
 <p class="lead answer">${m.why}</p>
-<figure class="exfig">${VID[pos]?`<span class="vbox${(pos==='climber'||pos==='tilt'||pos==='breath')?' wide':pos==='seatopen'?' sq':''}"><video class="xvid" src="/assets/video/${VID[pos]}.mp4?v=${V}" poster="/assets/img/pos-${pos}.webp" autoplay muted loop playsinline preload="metadata" aria-label="Hologram figure, ${POSN[pos].toLowerCase()}, looping"></video></span>`:`<img src="/assets/img/pos-${pos}.webp" width="1448" height="1086" alt="Hologram figure ${POSN[pos].toLowerCase()}, the position for ${e.n.toLowerCase()}" loading="lazy">`}<figcaption>${POSN[pos]}: ${esc(m.sets)}</figcaption></figure>
+<figure class="exfig">${VID[pos]?`<span class="vbox${(pos==='climber'||pos==='tilt'||pos==='breath'||pos==='gbridge')?' wide':pos==='seatopen'?' sq':''}"><video class="xvid" src="/assets/video/${VID[pos]}.mp4?v=${V}" poster="/assets/img/pos-${pos}.webp" autoplay muted loop playsinline preload="metadata" aria-label="Hologram figure, ${POSN[pos].toLowerCase()}, looping"></video></span>`:`<img src="/assets/img/pos-${pos}.webp" width="1448" height="1086" alt="Hologram figure ${POSN[pos].toLowerCase()}, the position for ${e.n.toLowerCase()}" loading="lazy">`}<figcaption>${POSN[pos]}: ${esc(m.sets)}</figcaption></figure>
 ${cta('Try '+e.n+' with the coach','/app.html#ex-'+m.slug)}
 <h2>How do you do ${e.n.toLowerCase()}?</h2><ol>${e.how.map(s=>`<li>${s}</li>`).join('')}</ol>
 <h2>What should you feel?</h2><p>${e.feel}</p>
