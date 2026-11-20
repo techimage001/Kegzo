@@ -47,6 +47,10 @@ const EX={
   steps:()=>times(5,()=>[S_('plankup',2,0,{lift:1}),S_('squeeze',1,1,{lift:1}),S_('hold',5,1,{lift:1}),S_('relax',1.5,0,{lift:1}),S_('kneel',2,0,{lift:0}),S_('rest',4,0,{lift:0})]),
   how:['Start on all fours, hands under shoulders, knees under hips.','Tuck your toes and lift your knees into a plank.','In the plank, do a strong kegel: draw up and in and hold.','Let the kegel go fully, then lower your knees back down.'],
   feel:'Your arms and belly hold the plank while the pelvic floor does its own squeeze.',avoid:['Letting your hips sag','Holding your breath','Squeezing your glutes instead of the pelvic floor'],tip:'If the plank is too hard, stay on your knees and just do the kegel.'},
+ squatk:{n:'Squat kegel',type:'Bonus',wk:0,ic:'squat',pos:'squat',
+  steps:()=>times(6,()=>[S_('squeeze',1,1,{lift:0}),S_('squatdown',2,1,{lift:1}),S_('squatup',2,1,{lift:0}),S_('relax',1.5,0,{lift:0}),S_('rest',3,0,{lift:0})]),
+  how:['Stand tall, feet hip-width apart, arms reaching forward.','Squeeze and lift your pelvic floor.','Keep the squeeze on as you bend your knees into a small squat, then stand back up.','Let the squeeze go fully at the top and rest.'],
+  feel:'The lift inside staying on while your legs do the work.',avoid:['Squatting too low','Letting the squeeze fade as you move','Holding your breath'],tip:'Small squats are enough. The squeeze is what you are training.'},
  tiltk:{n:'Pelvic tilt kegel',type:'Bonus',wk:0,ic:'tilt',pos:'tilt',
   steps:()=>times(6,()=>[S_('tilt',2,0,{lift:1}),S_('squeeze',1,1,{lift:1}),S_('hold',4,1,{lift:1}),S_('relax',1.5,0,{lift:1}),S_('untilt',2,0,{lift:0}),S_('rest',3,0,{lift:0})]),
   how:['Lie on your back, knees bent, feet flat, arms by your sides.','Gently tilt your pelvis so your lower back flattens towards the floor.','Holding the tilt, do a kegel: draw up and in and hold.','Let the kegel go fully, then roll your pelvis back to neutral.'],
@@ -63,7 +67,7 @@ const EX={
   steps:()=>times(8,()=>[S_('kneein',1.5,1,{lift:1}),S_('hold',2,1,{lift:1}),S_('legback',1.5,0,{lift:0}),S_('rest',2.5,0,{lift:0})]),
   how:['Start in a high plank, body in a straight line.','Slowly draw one knee towards your chest and squeeze your pelvic floor as it comes in.','Hold the squeeze for two seconds.','Take the leg back and let the squeeze go. Switch legs each time.'],
   feel:'A lift inside as the knee comes in, and a full release as the leg goes back.',avoid:['Rushing like a cardio move','Letting your hips bounce','Holding your breath'],tip:'Slow is the point. One knee, one squeeze, one release.'}};
-const ICONS={tilt:'<path d="M3 18h18M5 15c3-4 6-5 9-3l5-4"/><circle cx="5" cy="13" r="2"/>',breath:'<circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="8" opacity=".5"/>',open:'<circle cx="12" cy="5" r="2"/><path d="M12 8v6M6 21l2-7h8l2 7M5 14h14"/>',plank:'<path d="M3 17h18M5 17l4-6h8l2 6"/><circle cx="18" cy="8" r="2"/>',knee:'<path d="M4 18l5-7 4 3 4-6"/><circle cx="18" cy="6" r="2"/><path d="M3 20h18"/>',find:'<circle cx="12" cy="12" r="7"/><path d="M12 9v6M9 12l3-3 3 3"/>',hold:'<rect x="6" y="6" width="12" height="12" rx="3"/><path d="M9 12h6"/>',flick:'<path d="M3 15l3-6 3 6 3-6 3 6 3-6 3 6"/>',drop:'<path d="M12 4v13M7 12l5 5 5-5M5 20h14"/>',endure:'<circle cx="12" cy="13" r="7"/><path d="M12 9v4l3 2M10 3h4"/>',elev:'<path d="M7 20V4h10v16M7 9h10M7 14h10"/>',pyr:'<path d="M3 20h18M6 20V14M10 20V9M14 20V5M18 20v-6"/>',wave:'<path d="M2 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/>',bridge:'<path d="M2 19h20M5 19l3-6h8l3 6"/><path d="M12 13V8M9 10l3-3 3 3"/>',walk:'<circle cx="13" cy="4" r="2"/><path d="M13 7l-2 6 3 3v5M11 13l-3 8M11 9l-4 2M13 9l4 3"/>'};
+const ICONS={squat:'<circle cx="12" cy="4" r="2"/><path d="M12 7v5l-4 3v5M12 12l4 3v5M8 9h10"/>',tilt:'<path d="M3 18h18M5 15c3-4 6-5 9-3l5-4"/><circle cx="5" cy="13" r="2"/>',breath:'<circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="8" opacity=".5"/>',open:'<circle cx="12" cy="5" r="2"/><path d="M12 8v6M6 21l2-7h8l2 7M5 14h14"/>',plank:'<path d="M3 17h18M5 17l4-6h8l2 6"/><circle cx="18" cy="8" r="2"/>',knee:'<path d="M4 18l5-7 4 3 4-6"/><circle cx="18" cy="6" r="2"/><path d="M3 20h18"/>',find:'<circle cx="12" cy="12" r="7"/><path d="M12 9v6M9 12l3-3 3 3"/>',hold:'<rect x="6" y="6" width="12" height="12" rx="3"/><path d="M9 12h6"/>',flick:'<path d="M3 15l3-6 3 6 3-6 3 6 3-6 3 6"/>',drop:'<path d="M12 4v13M7 12l5 5 5-5M5 20h14"/>',endure:'<circle cx="12" cy="13" r="7"/><path d="M12 9v4l3 2M10 3h4"/>',elev:'<path d="M7 20V4h10v16M7 9h10M7 14h10"/>',pyr:'<path d="M3 20h18M6 20V14M10 20V9M14 20V5M18 20v-6"/>',wave:'<path d="M2 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/>',bridge:'<path d="M2 19h20M5 19l3-6h8l3 6"/><path d="M12 13V8M9 10l3-3 3 3"/>',walk:'<circle cx="13" cy="4" r="2"/><path d="M13 7l-2 6 3 3v5M11 13l-3 8M11 9l-4 2M13 9l4 3"/>'};
 const icon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg>`;
 const secOf=id=>EX[id].steps().reduce((a,s)=>a+s.d,0);
 const repsOf=id=>EX[id].steps().filter(s=>s.r).length;
@@ -105,6 +109,9 @@ const EXMETA={
  plankk:{slug:'plank-lift-kegel',sets:'5 plank lifts with a kegel hold',short:'Lift from all fours into a plank, then add a strong kegel.',
   why:'This bonus exercise lifts you from all fours into a plank and adds a kegel hold at the top. Your arms and belly hold the plank while the pelvic floor does its own separate squeeze, which trains it to stay switched on while the rest of your body is working hard.',
   faq:[['Is the plank part of the kegel?','No. The plank uses your arms and belly. The kegel is a separate squeeze you add once you are up.'],['What if I cannot hold a plank?','Stay on your knees and do the kegel on all fours. That still counts.']]},
+ squatk:{slug:'squat-kegel',sets:'6 small squats with a kegel',short:'Squeeze, do a small squat and stand back up, then let go.',
+  why:'This bonus exercise keeps a kegel switched on through a small squat. It trains the pelvic floor to hold while your legs and hips move, the way it needs to when you bend, lift or get up from a chair.',
+  faq:[['How low should I squat?','Only a little, about a quarter of the way down. Stop well before it feels like hard work.'],['What if I lose the squeeze?','Squat less deep or more slowly, and keep breathing.']]},
  tiltk:{slug:'pelvic-tilt-kegel',sets:'6 pelvic tilts with a kegel hold',short:'Tilt your pelvis gently, then add a strong kegel.',
   why:'This bonus exercise pairs a small pelvic tilt with a kegel. The tilt brings the lower back and hips into a steady position, and the kegel stays its own separate squeeze, which helps you learn to isolate the pelvic floor from the muscles around it.',
   faq:[['How big should the tilt be?','Small. Just enough for your lower back to flatten towards the floor.'],['Should my hips lift?','No. Your hips stay on the floor. If they lift, it becomes a bridge.']]},
@@ -117,6 +124,23 @@ const EXMETA={
  kneek:{slug:'knee-drive-kegel',sets:'8 slow knee drives with a kegel',short:'From a plank, draw one knee in slowly and squeeze as it comes in.',
   why:'This bonus exercise pairs a slow knee drive with a kegel. You squeeze as the knee comes in and let go as the leg goes back, which links the pelvic floor to movement and trains a full release after every squeeze.',
   faq:[['Is this a cardio move?','No. Go slowly. Each knee drive is one controlled squeeze and one full release.'],['Can I do it with my knees down?','Yes. From all fours, slide one knee forward a little and squeeze as it moves.']]}};
+const BEN={find:'It teaches you the exact feeling of the right muscle, so every other exercise trains the right thing.',
+ power:'Long, firm holds build strength in the pelvic floor, the base of everything else in the programme.',
+ flicks:'Quick squeezes train the fast muscle fibres that react in a split second, like when you cough or lift.',
+ drop:'Learning to fully let go keeps the muscle healthy, relaxed and ready to work when you need it.',
+ endure:'A light, steady hold builds stamina, so the muscle keeps working for longer through the day.',
+ elevator:'Lifting in stages builds fine control, and the slow lowering is the most useful part.',
+ pyramid:'Holds that grow longer, then shorter, build strength and stamina in one set.',
+ wave:'Switching from quick pulses to a full hold trains speed and strength together.',
+ bridgek:'Adding a kegel to a bridge teaches you to use the pelvic floor on its own while bigger muscles are working.',
+ walk:'Holding a squeeze while you walk takes your training into everyday life.',
+ plankk:'Squeezing while you hold a plank trains the pelvic floor to stay switched on when your whole body is working hard.',
+ squatk:'Holding a squeeze through a squat trains the pelvic floor for bending, lifting and getting up from a chair.',
+ tiltk:'The small tilt steadies your hips, which helps you feel the pelvic floor working on its own.',
+ breathk:'Slow belly breathing teaches the pelvic floor to soften and let go, which helps it squeeze better later.',
+ openk:'With your knees open, your thighs cannot help, so the squeeze has to come from the pelvic floor.',
+ kneek:'Squeezing as the knee comes in links the pelvic floor to movement and trains a full release every time.'};
+const INTRO=id=>{const e=EX[id];return e.n+'. How to do it. '+e.how.join(' ')+' Why it helps. '+BEN[id]};
 const DAYPLAN={strength:[['find','power','flicks','drop','endure'],['power','elevator','flicks','pyramid','drop'],['power','wave','elevator','endure','drop'],['walk','power','wave','pyramid','drop']],
  relax:[['find','drop','endure','drop'],['drop','elevator','drop','endure'],['drop','flicks','drop','endure'],['walk','drop','endure','drop']]};
-if(typeof module!=='undefined')module.exports={EX,EXMETA,DAYPLAN,ICONS,S_,times};
+if(typeof module!=='undefined')module.exports={EX,EXMETA,DAYPLAN,ICONS,S_,times,BEN,INTRO};

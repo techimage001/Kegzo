@@ -13,16 +13,16 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml"><link rel="icon" href="/assets/icons/icon-96.png" sizes="96x96" type="image/png"><link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<link rel="preload" href="/assets/fonts/outfit-700.woff2?v=10" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/inter-400.woff2?v=10" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/outfit-700.woff2?v=12" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/inter-400.woff2?v=12" as="font" type="font/woff2" crossorigin>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://kegzo.com/#org","name":"Kegzo","url":"https://kegzo.com/","logo":"https://kegzo.com/assets/icons/icon-512.png"},{"@type":"WebSite","@id":"https://kegzo.com/#site","name":"Kegzo","url":"https://kegzo.com/","publisher":{"@id":"https://kegzo.com/#org"},"inLanguage":"en"},{"@type":"WebApplication","name":"Kegzo Trainer","url":"https://kegzo.com/app.html","applicationCategory":"HealthApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"publisher":{"@id":"https://kegzo.com/#org"}}]}</script>
 <style>
-@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2?v=10) format('woff2')}
-@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2?v=10) format('woff2')}
-@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2?v=10) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/outfit-600.woff2?v=10) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/outfit-700.woff2?v=10) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/outfit-800.woff2?v=10) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2?v=12) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2?v=12) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2?v=12) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/outfit-600.woff2?v=12) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/outfit-700.woff2?v=12) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/outfit-800.woff2?v=12) format('woff2')}
 /* VOICE: a coach in a game; direct, plain, never explicit, never a medical promise
    IDEA: a fitness game's training screen for one muscle you cannot see from outside
    PICTURE: a glowing figure holds the position while a close-up shows the pelvic floor lifting, holding and dropping
@@ -233,7 +233,7 @@ main.app{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
       </div>
       <div class="live">
         <div><p class="mvlab">Inside view</p><div class="mv" id="mv"></div></div>
-        <div><div class="phase" id="phase" aria-live="assertive">Get ready</div><p class="cue" id="cue" aria-live="polite"></p></div>
+        <div><div class="phase" id="phase" aria-live="assertive">Get ready</div><p class="cue" id="cue" aria-live="polite"></p><button class="btn ghost" id="skipB" type="button" hidden style="margin-top:8px;padding:8px 14px;font-size:14px">Skip intro</button></div>
       </div>
       <div class="bars" id="bars"></div>
       <div class="ctrl">
@@ -301,11 +301,11 @@ const side=o=>Object.assign({v:'side'},o);
 const POS={
  lying:{n:'Lying down',sprite:'lie-sprite.webp',frames:4,fw:717,fh:358,c:[360,195],idle:.7,pts:[[400,258],[400,257],[400,256]],img0:'pos-lying.webp',pt:[.335,.64],cam:[186,232,1.75],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat. The easiest position because gravity helps.'},
- seated:{n:'Seated',img:'pos-seated.webp',chair:1,cam:[194,200,1.4],keys:[side({p:[182,198],t:180,h:180,L:{a:[226,255],f:90,k:-1,hd:[212,196],e:1},R:{a:[230,255],f:90,k:-1,hd:[216,198],e:1}})],
+ seated:{n:'Seated',sprite:'sit-sprite.webp',zh:.96,cy:.5,frames:4,fw:480,fh:480,c:[240,250],idle:1,ip:6,pts:[[160,285],[160,285],[160,285]],chair:1,cam:[194,200,1.4],keys:[side({p:[182,198],t:180,h:180,L:{a:[226,255],f:90,k:-1,hd:[212,196],e:1},R:{a:[230,255],f:90,k:-1,hd:[216,198],e:1}})],
   how:'Sit upright on a firm chair, feet flat, weight spread across both sit bones.'},
- standing:{n:'Standing',img:'pos-standing.webp',cam:[200,192,1.3],keys:[side({p:[200,167],t:180,h:180,L:{a:[198,255],f:90,k:-1,hd:[199,172],e:1},R:{a:[202,255],f:90,k:-1,hd:[203,172],e:1}})],
+ standing:{n:'Standing',sprite:'stand-sprite.webp',zh:.96,cy:.5,frames:4,fw:480,fh:480,c:[220,240],idle:1,ip:6,pts:[[215,232],[215,232],[215,232]],cam:[200,192,1.3],keys:[side({p:[200,167],t:180,h:180,L:{a:[198,255],f:90,k:-1,hd:[199,172],e:1},R:{a:[202,255],f:90,k:-1,hd:[203,172],e:1}})],
   how:'Stand tall, feet hip-width apart, knees soft. Harder, because the muscle works against gravity.'},
- walking:{n:'Walking',img:'pos-walking.webp',walk:1,cam:[200,192,1.3],keys:[side({p:[200,168],t:178,h:180,L:{a:[226,255],f:90,k:-1,hd:[186,170],e:1},R:{a:[176,250],f:112,k:-1,hd:[218,166],e:1}}),side({p:[200,168],t:178,h:180,L:{a:[176,250],f:112,k:-1,hd:[218,166],e:1},R:{a:[226,255],f:90,k:-1,hd:[186,170],e:1}})],
+ walking:{n:'Walking',sprite:'walk-sprite.webp',zh:.96,cy:.5,frames:12,fw:356,fh:357,c:[178,180],cyc:5.4,pts:[[176,168],[176,168],[176,168]],walk:1,cam:[200,192,1.3],keys:[side({p:[200,168],t:178,h:180,L:{a:[226,255],f:90,k:-1,hd:[186,170],e:1},R:{a:[176,250],f:112,k:-1,hd:[218,166],e:1}}),side({p:[200,168],t:178,h:180,L:{a:[176,250],f:112,k:-1,hd:[218,166],e:1},R:{a:[226,255],f:90,k:-1,hd:[186,170],e:1}})],
   how:'Walk at an easy pace and hold the squeeze for a few steps. This trains the muscle for everyday life.'},
  bridge:{n:'Lying down',sprite:'bridge-sprite.webp',frames:5,fw:439,pts:[[125,300],[138,276],[146,252]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'},
@@ -313,11 +313,13 @@ const POS={
   how:'Hands under shoulders, knees under hips, back flat. Lift your knees into a plank when the coach says.'},
  gbridge:{n:'Lying down',sprite:'gbridge-sprite.webp',frames:4,fw:718,fh:355,c:[360,195],pts:[[400,255],[396,238],[390,212]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'},
+ squat:{n:'Standing',sprite:'squat-sprite.webp',zh:.96,cy:.5,frames:4,fw:437,fh:438,c:[200,215],pts:[[186,205],[181,222],[175,240]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+  how:'Stand tall, feet hip-width apart, arms reaching forward at shoulder height for balance.'},
  tilt:{n:'Lying down',sprite:'tilt-sprite.webp',frames:4,fw:720,fh:405,c:[360,220],pts:[[392,272],[392,270],[392,268]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat, arms by your sides. Keep your shoulders and head relaxed on the floor.'},
  breath:{n:'Lying down',sprite:'breath-sprite.webp',frames:4,fw:716,fh:358,c:[360,190],pts:[[420,252],[420,250],[420,248]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat, hands resting on your belly so you can feel it rise and fall.'},
- seatopen:{n:'Seated',sprite:'seatopen-sprite.webp',frames:4,fw:439,fh:439,c:[220,212],pts:[[220,236],[220,244],[220,248]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+ seatopen:{n:'Seated',sprite:'seatopen-sprite.webp',zh:.96,cy:.5,frames:4,fw:439,fh:439,c:[220,212],pts:[[220,236],[220,244],[220,248]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Sit tall on the front half of a chair, feet flat, hands resting on your knees. Open your knees when the coach says.'},
  climber:{n:'Plank',sprite:'climber-sprite.webp',frames:4,fw:720,fh:358,c:[330,200],pts:[[310,187],[318,191],[324,195]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Start in a high plank, hands under shoulders, body in a straight line. Move slowly, this is about control, not speed.'}};
@@ -326,7 +328,7 @@ function Fig(posId){const P=POS[posId];return{P,t:0,pose:P.keys[0],
  step(dt){this.t+=dt;if(P.walk){const u=(Math.sin(this.t*Math.PI/.55)+1)/2;this.pose=lerpP(P.keys[0],P.keys[1],u);this.pose.p=[200,168-Math.abs(Math.cos(this.t*Math.PI/.55))*3]}
   else{const b=Math.sin(this.t*1.4)*.8;this.pose=Object.assign({},P.keys[0],{t:P.keys[0].t+b*.6})}},
  render(cv,pf,z=1,lift=0){const now=performance.now()/1000,dt=Math.min(.1,now-(this.lt||now));this.lt=now;
-  if(P.sprite){if(cv._h)cv._h.w.style.display='none';const lv=P.idle?(.5-.5*Math.cos(now*Math.PI*2/5))*P.idle:lift;spriteDraw(cv,P,pf,lv,this.t,dt,this);return}
+  if(P.sprite){if(cv._h)cv._h.w.style.display='none';const lv=P.cyc?(now/P.cyc)%1:P.idle?(.5-.5*Math.cos(now*Math.PI*2/(P.ip||5)))*P.idle:lift;spriteDraw(cv,P,pf,lv,this.t,dt,this);return}
   if(P.img){if(!cv._h)cv._h=Holo(cv);const c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);cv._h.w.style.display='block';holoDraw(cv._h,posOf(P),pf,this.t,dt,lift)}
   else{if(cv._h)cv._h.w.style.display='none';const C=P.cam;const[c,s]=fit(cv,[C[0],C[1],C[2]*z]);draw(c,solve(this.pose),{g:s,pf,chair:P.chair})}}}}
 const posOf=P=>Object.keys(POS).find(k=>POS[k]===P);
@@ -335,10 +337,10 @@ const SPR={};
 function spriteDraw(cv,P,pf,lift,t,dt,st){const src=IMG[P.sprite]||P.sprite;let im=SPR[src];if(!im){im=SPR[src]=new Image();im.src=src}
  const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),W=Math.max(1,Math.round(r.width*d)),H=Math.max(1,Math.round(r.height*d));if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}
  const c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.globalCompositeOperation='source-over';c.globalAlpha=1;c.clearRect(0,0,W,H);if(!im.complete||!im.naturalWidth)return;
- const fw=P.fw,fh=P.fh||P.fw,C=P.c||[219,255],sw=Math.min(W*.98,H*1.3*fw/fh),k=sw/fw,sh=fh*k,s=Math.min(sw,sh*1.25),ox=W/2-C[0]*k,oy=H*.6-C[1]*k;
- const fi=Math.max(0,Math.min(P.frames-1,lift*(P.frames-1))),a=Math.floor(fi),b=Math.min(P.frames-1,a+1),u=fi-a;
+ const fw=P.fw,fh=P.fh||P.fw,C=P.c||[219,255],sw=Math.min(W*.98,H*(P.zh||1.3)*fw/fh),k=sw/fw,sh=fh*k,s=Math.min(sw,sh*1.25),ox=W/2-C[0]*k,oy=H*(P.cy||.6)-C[1]*k;
+ let fi,a,b,u;if(P.cyc){fi=(lift%1)*P.frames;a=Math.floor(fi)%P.frames;b=(a+1)%P.frames;u=fi-Math.floor(fi)}else{fi=Math.max(0,Math.min(P.frames-1,lift*(P.frames-1)));a=Math.floor(fi);b=Math.min(P.frames-1,a+1);u=fi-a}
  c.drawImage(im,a*fw,0,fw,fh,ox,oy,sw,sh);if(u>0){c.globalAlpha=u;c.drawImage(im,b*fw,0,fw,fh,ox,oy,sw,sh);c.globalAlpha=1}
- c.globalCompositeOperation='destination-in';const rg=c.createRadialGradient(W/2,H*.6,Math.max(sw,sh)*.3,W/2,H*.6,Math.max(sw,sh)*.56);rg.addColorStop(0,'#000');rg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=rg;c.fillRect(0,0,W,H);
+ c.globalCompositeOperation='destination-in';const rg=c.createRadialGradient(W/2,H*(P.cy||.6),Math.max(sw,sh)*.3,W/2,H*(P.cy||.6),Math.max(sw,sh)*.56);rg.addColorStop(0,'#000');rg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=rg;c.fillRect(0,0,W,H);
  c.globalCompositeOperation='lighter';
  const p=P.pts,q=lift<=.5?p[0].map((v,i)=>v+(p[1][i]-v)*lift*2):p[1].map((v,i)=>v+(p[2][i]-v)*(lift-.5)*2),x=ox+q[0]*k,y=oy+q[1]*k;
  const A=Math.abs(pf),hot=pf>=0,col=hot?'61,220,132':'111,183,255',R=s*(.07+.06*A);
@@ -468,6 +470,10 @@ const EX={
   steps:()=>times(5,()=>[S_('plankup',2,0,{lift:1}),S_('squeeze',1,1,{lift:1}),S_('hold',5,1,{lift:1}),S_('relax',1.5,0,{lift:1}),S_('kneel',2,0,{lift:0}),S_('rest',4,0,{lift:0})]),
   how:['Start on all fours, hands under shoulders, knees under hips.','Tuck your toes and lift your knees into a plank.','In the plank, do a strong kegel: draw up and in and hold.','Let the kegel go fully, then lower your knees back down.'],
   feel:'Your arms and belly hold the plank while the pelvic floor does its own squeeze.',avoid:['Letting your hips sag','Holding your breath','Squeezing your glutes instead of the pelvic floor'],tip:'If the plank is too hard, stay on your knees and just do the kegel.'},
+ squatk:{n:'Squat kegel',type:'Bonus',wk:0,ic:'squat',pos:'squat',
+  steps:()=>times(6,()=>[S_('squeeze',1,1,{lift:0}),S_('squatdown',2,1,{lift:1}),S_('squatup',2,1,{lift:0}),S_('relax',1.5,0,{lift:0}),S_('rest',3,0,{lift:0})]),
+  how:['Stand tall, feet hip-width apart, arms reaching forward.','Squeeze and lift your pelvic floor.','Keep the squeeze on as you bend your knees into a small squat, then stand back up.','Let the squeeze go fully at the top and rest.'],
+  feel:'The lift inside staying on while your legs do the work.',avoid:['Squatting too low','Letting the squeeze fade as you move','Holding your breath'],tip:'Small squats are enough. The squeeze is what you are training.'},
  tiltk:{n:'Pelvic tilt kegel',type:'Bonus',wk:0,ic:'tilt',pos:'tilt',
   steps:()=>times(6,()=>[S_('tilt',2,0,{lift:1}),S_('squeeze',1,1,{lift:1}),S_('hold',4,1,{lift:1}),S_('relax',1.5,0,{lift:1}),S_('untilt',2,0,{lift:0}),S_('rest',3,0,{lift:0})]),
   how:['Lie on your back, knees bent, feet flat, arms by your sides.','Gently tilt your pelvis so your lower back flattens towards the floor.','Holding the tilt, do a kegel: draw up and in and hold.','Let the kegel go fully, then roll your pelvis back to neutral.'],
@@ -484,7 +490,7 @@ const EX={
   steps:()=>times(8,()=>[S_('kneein',1.5,1,{lift:1}),S_('hold',2,1,{lift:1}),S_('legback',1.5,0,{lift:0}),S_('rest',2.5,0,{lift:0})]),
   how:['Start in a high plank, body in a straight line.','Slowly draw one knee towards your chest and squeeze your pelvic floor as it comes in.','Hold the squeeze for two seconds.','Take the leg back and let the squeeze go. Switch legs each time.'],
   feel:'A lift inside as the knee comes in, and a full release as the leg goes back.',avoid:['Rushing like a cardio move','Letting your hips bounce','Holding your breath'],tip:'Slow is the point. One knee, one squeeze, one release.'}};
-const ICONS={tilt:'<path d="M3 18h18M5 15c3-4 6-5 9-3l5-4"/><circle cx="5" cy="13" r="2"/>',breath:'<circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="8" opacity=".5"/>',open:'<circle cx="12" cy="5" r="2"/><path d="M12 8v6M6 21l2-7h8l2 7M5 14h14"/>',plank:'<path d="M3 17h18M5 17l4-6h8l2 6"/><circle cx="18" cy="8" r="2"/>',knee:'<path d="M4 18l5-7 4 3 4-6"/><circle cx="18" cy="6" r="2"/><path d="M3 20h18"/>',find:'<circle cx="12" cy="12" r="7"/><path d="M12 9v6M9 12l3-3 3 3"/>',hold:'<rect x="6" y="6" width="12" height="12" rx="3"/><path d="M9 12h6"/>',flick:'<path d="M3 15l3-6 3 6 3-6 3 6 3-6 3 6"/>',drop:'<path d="M12 4v13M7 12l5 5 5-5M5 20h14"/>',endure:'<circle cx="12" cy="13" r="7"/><path d="M12 9v4l3 2M10 3h4"/>',elev:'<path d="M7 20V4h10v16M7 9h10M7 14h10"/>',pyr:'<path d="M3 20h18M6 20V14M10 20V9M14 20V5M18 20v-6"/>',wave:'<path d="M2 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/>',bridge:'<path d="M2 19h20M5 19l3-6h8l3 6"/><path d="M12 13V8M9 10l3-3 3 3"/>',walk:'<circle cx="13" cy="4" r="2"/><path d="M13 7l-2 6 3 3v5M11 13l-3 8M11 9l-4 2M13 9l4 3"/>'};
+const ICONS={squat:'<circle cx="12" cy="4" r="2"/><path d="M12 7v5l-4 3v5M12 12l4 3v5M8 9h10"/>',tilt:'<path d="M3 18h18M5 15c3-4 6-5 9-3l5-4"/><circle cx="5" cy="13" r="2"/>',breath:'<circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="8" opacity=".5"/>',open:'<circle cx="12" cy="5" r="2"/><path d="M12 8v6M6 21l2-7h8l2 7M5 14h14"/>',plank:'<path d="M3 17h18M5 17l4-6h8l2 6"/><circle cx="18" cy="8" r="2"/>',knee:'<path d="M4 18l5-7 4 3 4-6"/><circle cx="18" cy="6" r="2"/><path d="M3 20h18"/>',find:'<circle cx="12" cy="12" r="7"/><path d="M12 9v6M9 12l3-3 3 3"/>',hold:'<rect x="6" y="6" width="12" height="12" rx="3"/><path d="M9 12h6"/>',flick:'<path d="M3 15l3-6 3 6 3-6 3 6 3-6 3 6"/>',drop:'<path d="M12 4v13M7 12l5 5 5-5M5 20h14"/>',endure:'<circle cx="12" cy="13" r="7"/><path d="M12 9v4l3 2M10 3h4"/>',elev:'<path d="M7 20V4h10v16M7 9h10M7 14h10"/>',pyr:'<path d="M3 20h18M6 20V14M10 20V9M14 20V5M18 20v-6"/>',wave:'<path d="M2 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/>',bridge:'<path d="M2 19h20M5 19l3-6h8l3 6"/><path d="M12 13V8M9 10l3-3 3 3"/>',walk:'<circle cx="13" cy="4" r="2"/><path d="M13 7l-2 6 3 3v5M11 13l-3 8M11 9l-4 2M13 9l4 3"/>'};
 const icon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg>`;
 const secOf=id=>EX[id].steps().reduce((a,s)=>a+s.d,0);
 const repsOf=id=>EX[id].steps().filter(s=>s.r).length;
@@ -526,6 +532,9 @@ const EXMETA={
  plankk:{slug:'plank-lift-kegel',sets:'5 plank lifts with a kegel hold',short:'Lift from all fours into a plank, then add a strong kegel.',
   why:'This bonus exercise lifts you from all fours into a plank and adds a kegel hold at the top. Your arms and belly hold the plank while the pelvic floor does its own separate squeeze, which trains it to stay switched on while the rest of your body is working hard.',
   faq:[['Is the plank part of the kegel?','No. The plank uses your arms and belly. The kegel is a separate squeeze you add once you are up.'],['What if I cannot hold a plank?','Stay on your knees and do the kegel on all fours. That still counts.']]},
+ squatk:{slug:'squat-kegel',sets:'6 small squats with a kegel',short:'Squeeze, do a small squat and stand back up, then let go.',
+  why:'This bonus exercise keeps a kegel switched on through a small squat. It trains the pelvic floor to hold while your legs and hips move, the way it needs to when you bend, lift or get up from a chair.',
+  faq:[['How low should I squat?','Only a little, about a quarter of the way down. Stop well before it feels like hard work.'],['What if I lose the squeeze?','Squat less deep or more slowly, and keep breathing.']]},
  tiltk:{slug:'pelvic-tilt-kegel',sets:'6 pelvic tilts with a kegel hold',short:'Tilt your pelvis gently, then add a strong kegel.',
   why:'This bonus exercise pairs a small pelvic tilt with a kegel. The tilt brings the lower back and hips into a steady position, and the kegel stays its own separate squeeze, which helps you learn to isolate the pelvic floor from the muscles around it.',
   faq:[['How big should the tilt be?','Small. Just enough for your lower back to flatten towards the floor.'],['Should my hips lift?','No. Your hips stay on the floor. If they lift, it becomes a bridge.']]},
@@ -538,6 +547,23 @@ const EXMETA={
  kneek:{slug:'knee-drive-kegel',sets:'8 slow knee drives with a kegel',short:'From a plank, draw one knee in slowly and squeeze as it comes in.',
   why:'This bonus exercise pairs a slow knee drive with a kegel. You squeeze as the knee comes in and let go as the leg goes back, which links the pelvic floor to movement and trains a full release after every squeeze.',
   faq:[['Is this a cardio move?','No. Go slowly. Each knee drive is one controlled squeeze and one full release.'],['Can I do it with my knees down?','Yes. From all fours, slide one knee forward a little and squeeze as it moves.']]}};
+const BEN={find:'It teaches you the exact feeling of the right muscle, so every other exercise trains the right thing.',
+ power:'Long, firm holds build strength in the pelvic floor, the base of everything else in the programme.',
+ flicks:'Quick squeezes train the fast muscle fibres that react in a split second, like when you cough or lift.',
+ drop:'Learning to fully let go keeps the muscle healthy, relaxed and ready to work when you need it.',
+ endure:'A light, steady hold builds stamina, so the muscle keeps working for longer through the day.',
+ elevator:'Lifting in stages builds fine control, and the slow lowering is the most useful part.',
+ pyramid:'Holds that grow longer, then shorter, build strength and stamina in one set.',
+ wave:'Switching from quick pulses to a full hold trains speed and strength together.',
+ bridgek:'Adding a kegel to a bridge teaches you to use the pelvic floor on its own while bigger muscles are working.',
+ walk:'Holding a squeeze while you walk takes your training into everyday life.',
+ plankk:'Squeezing while you hold a plank trains the pelvic floor to stay switched on when your whole body is working hard.',
+ squatk:'Holding a squeeze through a squat trains the pelvic floor for bending, lifting and getting up from a chair.',
+ tiltk:'The small tilt steadies your hips, which helps you feel the pelvic floor working on its own.',
+ breathk:'Slow belly breathing teaches the pelvic floor to soften and let go, which helps it squeeze better later.',
+ openk:'With your knees open, your thighs cannot help, so the squeeze has to come from the pelvic floor.',
+ kneek:'Squeezing as the knee comes in links the pelvic floor to movement and trains a full release every time.'};
+const INTRO=id=>{const e=EX[id];return e.n+'. How to do it. '+e.how.join(' ')+' Why it helps. '+BEN[id]};
 const DAYPLAN={strength:[['find','power','flicks','drop','endure'],['power','elevator','flicks','pyramid','drop'],['power','wave','elevator','endure','drop'],['walk','power','wave','pyramid','drop']],
  relax:[['find','drop','endure','drop'],['drop','elevator','drop','endure'],['drop','flicks','drop','endure'],['walk','drop','endure','drop']]};
 
@@ -554,7 +580,9 @@ function mvDraw(L,prog){const y=196,cy=y+30-L*62,lx=104,rx=196,ly=y-L*14,d=`M${l
  $('#mvRing').setAttribute('stroke',col);$('#mvRing').setAttribute('stroke-dashoffset',804*(1-prog))}
 
 
-Object.assign(IMG,{'bridge-sprite.webp':'/assets/img/bridge-sprite.webp','fours-sprite.webp':'/assets/img/fours-sprite.webp','seatopen-sprite.webp':'/assets/img/seatopen-sprite.webp','tilt-sprite.webp':'/assets/img/tilt-sprite.webp','lie-sprite.webp':'/assets/img/lie-sprite.webp','gbridge-sprite.webp':'/assets/img/gbridge-sprite.webp','breath-sprite.webp':'/assets/img/breath-sprite.webp','climber-sprite.webp':'/assets/img/climber-sprite.webp','pos-lying.webp':'/assets/img/pos-lying.webp','pos-seated.webp':'/assets/img/pos-seated.webp','pos-standing.webp':'/assets/img/pos-standing.webp','pos-walking.webp':'/assets/img/pos-walking.webp'});
+Object.assign(IMG,{'bridge-sprite.webp':'/assets/img/bridge-sprite.webp','fours-sprite.webp':'/assets/img/fours-sprite.webp','seatopen-sprite.webp':'/assets/img/seatopen-sprite.webp','tilt-sprite.webp':'/assets/img/tilt-sprite.webp','lie-sprite.webp':'/assets/img/lie-sprite.webp','sit-sprite.webp':'/assets/img/sit-sprite.webp','stand-sprite.webp':'/assets/img/stand-sprite.webp','walk-sprite.webp':'/assets/img/walk-sprite.webp','squat-sprite.webp':'/assets/img/squat-sprite.webp','gbridge-sprite.webp':'/assets/img/gbridge-sprite.webp','breath-sprite.webp':'/assets/img/breath-sprite.webp','climber-sprite.webp':'/assets/img/climber-sprite.webp','pos-lying.webp':'/assets/img/pos-lying.webp','pos-seated.webp':'/assets/img/pos-seated.webp','pos-standing.webp':'/assets/img/pos-standing.webp','pos-walking.webp':'/assets/img/pos-walking.webp'});
+const VBASE="/assets/voice/",VDUR={}
+;
 /* ================= STORE (versioned, portable to a future native app) ================= */
 const KEY='kegzo.v1';
 const dk=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
@@ -565,7 +593,7 @@ const fresh=()=>({v:1,created:dk(new Date()),ob:{done:false,track:'strength',fla
 let mem=null;
 function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);return Object.assign(fresh(),o,{settings:Object.assign(fresh().settings,o.settings||{}),gate:Object.assign(fresh().gate,o.gate||{})})}}catch(e){}return mem||fresh()}
 function save(){mem=S;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-let S=load();S.settings=Object.assign({voice:true,snd:true,count:true,vib:true,discreet:false},S.settings||{});
+let S=load();S.settings=Object.assign({voice:true,intro:true,snd:true,count:true,vib:true,discreet:false},S.settings||{});
 function ping(e){try{const b=JSON.stringify({e});if(navigator.sendBeacon)navigator.sendBeacon('/api/hit.php',new Blob([b],{type:'application/json'}));else fetch('/api/hit.php',{method:'POST',body:b,keepalive:true}).catch(()=>{})}catch(_){}}
 
 /* ================= GAME ================= */
@@ -715,7 +743,7 @@ function learn(){const G=[['kegel-exercises-for-men','Kegel exercises for men','
 function me(){const s=S.settings,sw=(k,t,d)=>`<div class="switch"><div><b>${t}</b><p class="tiny mut">${d}</p></div><button class="tg" role="switch" aria-checked="${!!s[k]}" data-set="${k}" aria-label="${t}"></button></div>`;
  return`<h1>Me</h1><div class="grid two" style="margin-top:16px">
  <div class="card"><h3>Training</h3><div class="switch"><div><b>Track</b><p class="tiny mut">${S.ob.track==='relax'?'Relax: letting go first':'Strength: lift and release'}</p></div><div class="seg2" id="trk"><button data-t="strength" aria-pressed="${S.ob.track!=='relax'}">Strength</button><button data-t="relax" aria-pressed="${S.ob.track==='relax'}">Relax</button></div></div>
-  ${sw('voice','Voice coach','Speaks each step out loud')}${sw('snd','Sound cues','A rising beep to squeeze, a falling beep to let go')}${sw('count','Count out loud','The coach counts down every hold and rest, so you never need to look')}<button class="btn ghost" id="testSnd" type="button" style="margin-top:10px">Test sound</button><p class="tiny mut" id="sndNote">On iPhone, turn the volume up and check the silent switch on the side is off.</p>${sw('vib','Vibration cues','Buzzes on each squeeze and drop (Android)')}${sw('discreet','Discreet mode','Silent, no voice, vibration only')}</div>
+  ${sw('voice','Voice coach','A friendly voice talks you through every step')}${sw('intro','Explain each exercise','Before each exercise, hear how to do it and why it helps')}${sw('snd','Sound cues','A rising beep to squeeze, a falling beep to let go')}${sw('count','Count out loud','The coach counts down every hold and rest, so you never need to look')}<button class="btn ghost" id="testSnd" type="button" style="margin-top:10px">Test sound</button><p class="tiny mut" id="sndNote">On iPhone, turn the volume up and check the silent switch on the side is off.</p>${sw('vib','Vibration cues','Buzzes on each squeeze and drop (Android)')}${sw('discreet','Discreet mode','Silent, no voice, vibration only')}</div>
  <div class="card grid"><h3>Account</h3>${S.gate.email?`<p class="small">${S.gate.state==='verified'?'Signed in as':'Waiting for you to confirm'} <b>${esc(S.gate.email)}</b>.</p>`:`<p class="small mut">Sign up to keep your progress across devices. <b>100% free, no payment or card details.</b></p>`}<button class="btn ${S.gate.email?'ghost':'hot'}" id="meG">${S.gate.email?'Manage':'Sign up or sign in'}</button>
   <h3 style="margin-top:6px">Your data</h3><p class="small mut">Your training is stored in this browser on this device. Nothing about your sessions is sent anywhere. Only your email is stored on our server if you sign up.</p>
   <div class="row"><button class="btn ghost danger" id="delB">Delete everything</button></div><p class="tiny mut" id="delM"></p></div>
@@ -752,12 +780,12 @@ $('.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(
 /* ================= PLAYER ================= */
 const W={list:[],kind:'day',i:0,ph:'ready',t:0,si:0,st:0,rep:0,L:0,from:0,lift:0,liftFrom:0,paused:false,fig:null,pos:'lying',cueI:0,sq:0};
 let STEPS=[],CUM=[];
-const WORD={squeeze:'Squeeze',hold:'Hold',relax:'Relax',rest:'Rest',drop:'Drop',out:'Return',up:'Up a floor',down:'Down a floor',bridge:'Lift hips',lower:'Lower hips',plankup:'Lift knees',kneel:'Knees down',kneein:'Knee in, squeeze',kneesopen:'Open your knees',tilt:'Tilt',untilt:'Roll back',inhale:'Breathe in',exhale:'Breathe out',kneesclose:'Knees together',legback:'Leg back, let go'};
-const CUES={squeeze:'Draw up and in',hold:['Keep breathing','Bum stays soft','Belly relaxed','Thighs loose'],relax:'Let go completely',rest:'Rest. Nothing to do',drop:'Breathe in, let it soften and drop',out:'Breathe out, back to neutral',up:'Lift a little more',down:'Lower slowly, stay in control',bridge:'Press through your heels, hips up',lower:'Lower slowly and let everything go',plankup:'Tuck your toes and lift your knees',kneesopen:'Slowly open your knees wide',tilt:'Flatten your lower back to the floor',untilt:'Roll your pelvis back to neutral',inhale:'Belly rises, pelvic floor softens and drops',exhale:'Let everything settle, no squeezing',kneesclose:'Bring your knees back together',kneel:'Lower your knees gently',kneein:'Draw the knee in slowly and squeeze',legback:'Take the leg back and release fully'};
+const WORD={squeeze:'Squeeze',hold:'Hold',relax:'Relax',rest:'Rest',drop:'Drop',out:'Return',up:'Up a floor',down:'Down a floor',bridge:'Lift hips',lower:'Lower hips',plankup:'Lift knees',kneel:'Knees down',kneein:'Knee in, squeeze',kneesopen:'Open your knees',squatdown:'Squat down',squatup:'Stand up',tilt:'Tilt',untilt:'Roll back',inhale:'Breathe in',exhale:'Breathe out',kneesclose:'Knees together',legback:'Leg back, let go'};
+const CUES={squeeze:'Draw up and in',hold:['Keep breathing','Bum stays soft','Belly relaxed','Thighs loose'],relax:'Let go completely',rest:'Rest. Nothing to do',drop:'Breathe in, let it soften and drop',out:'Breathe out, back to neutral',up:'Lift a little more',down:'Lower slowly, stay in control',bridge:'Press through your heels, hips up',lower:'Lower slowly and let everything go',plankup:'Tuck your toes and lift your knees',kneesopen:'Slowly open your knees wide',squatdown:'Keep squeezing as you bend your knees',squatup:'Keep squeezing as you stand tall',tilt:'Flatten your lower back to the floor',untilt:'Roll your pelvis back to neutral',inhale:'Belly rises, pelvic floor softens and drops',exhale:'Let everything settle, no squeezing',kneesclose:'Bring your knees back together',kneel:'Lower your knees gently',kneein:'Draw the knee in slowly and squeeze',legback:'Take the leg back and release fully'};
 function voiceOn(){return S.settings.voice&&!S.settings.discreet}
 let AC=null,AU=false,UTT=null,VOICE=null;
 function sndOn(){return S.settings.snd!==false&&!S.settings.discreet}
-function pickVoice(){try{const vs=speechSynthesis.getVoices();VOICE=vs.find(v=>/en-GB/i.test(v.lang)&&/natural|google|daniel|serena|libby|ryan/i.test(v.name))||vs.find(v=>/en-GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null}catch(e){}}
+function pickVoice(){try{const vs=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang)),F=/female|woman|samantha|serena|kate|stephanie|martha|karen|moira|tessa|fiona|victoria|libby|sonia|maisie|hazel|susan|zira|aria|jenny|emma|amy|ava|allison/i,M=/\bmale\b|daniel|arthur|oliver|ryan|george|thomas|fred|alex|aaron|rishi|guy|david|mark/i;const sc=v=>(F.test(v.name)?10:0)-(M.test(v.name)?10:0)+(/en-GB/i.test(v.lang)?3:0)+(/natural|neural|online|enhanced|premium/i.test(v.name)?4:0)+(v.localService?1:0);VOICE=vs.sort((a,b)=>sc(b)-sc(a))[0]||null}catch(e){}}
 if('speechSynthesis' in window){pickVoice();try{speechSynthesis.addEventListener('voiceschanged',pickVoice)}catch(e){}}
 function unlockAudio(){try{if(navigator.audioSession)navigator.audioSession.type='playback'}catch(e){}
  try{if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(C)AC=new C()}if(AC){if(AC.state!=='running')AC.resume();const b=AC.createBuffer(1,1,22050),src=AC.createBufferSource();src.buffer=b;src.connect(AC.destination);src.start(0)}}catch(e){}
@@ -767,7 +795,15 @@ function tone(f1,f2,d,vol){if(!sndOn()||!AC)return;try{if(AC.state!=='running')A
 const SFX={up:()=>tone(520,880,.22),down:()=>tone(620,330,.28,.3),tick:()=>tone(900,900,.08,.25),done:()=>{tone(660,660,.15);setTimeout(()=>tone(880,880,.15),160);setTimeout(()=>tone(1320,1320,.35),320)}};
 function countOn(){return S.settings.count!==false&&!S.settings.discreet}
 function cnt(n){if(!countOn())return;n<=3?tone(1180,1180,.09,.3):tone(880,880,.06,.18);if(voiceOn())say(String(n))}
-function say(t){if(!voiceOn()||!('speechSynthesis' in window))return;try{const go=()=>{UTT=new SpeechSynthesisUtterance(t);if(VOICE){UTT.voice=VOICE;UTT.lang=VOICE.lang}else UTT.lang='en-GB';UTT.rate=1;UTT.volume=1;speechSynthesis.speak(UTT)};if(speechSynthesis.speaking||speechSynthesis.pending){speechSynthesis.cancel();setTimeout(go,90)}else go();speechSynthesis.resume()}catch(e){}}
+const VH=t=>{let x=0x811c9dc5;for(let i=0;i<t.length;i++){x^=t.charCodeAt(i);x=Math.imul(x,0x01000193)>>>0}return x.toString(16).padStart(8,'0')};
+const VBUF={};let VSRC=null,VTOK=0;
+function vload(t){const h=VH(t);if(!VDUR[h]||!AC)return Promise.resolve(null);if(!VBUF[h])VBUF[h]=fetch(VBASE+h+'.mp3').then(r=>r.arrayBuffer()).then(b=>new Promise((ok,no)=>AC.decodeAudioData(b,ok,no))).catch(()=>{delete VBUF[h];return null});return VBUF[h]}
+function vstop(){VTOK++;try{VSRC&&VSRC.stop()}catch(e){}VSRC=null;try{speechSynthesis.cancel()}catch(e){}}
+function vdur(t){const h=VDUR[VH(t)];return h||t.split(' ').length/2.6}
+function vprep(list){if(!AC)return;list.forEach(t=>vload(t))}
+function tts(t){if(!('speechSynthesis' in window))return;try{const go=()=>{UTT=new SpeechSynthesisUtterance(t);if(VOICE){UTT.voice=VOICE;UTT.lang=VOICE.lang}else UTT.lang='en-GB';UTT.rate=1;UTT.pitch=1.05;UTT.volume=1;speechSynthesis.speak(UTT)};if(speechSynthesis.speaking||speechSynthesis.pending){speechSynthesis.cancel();setTimeout(go,90)}else go();speechSynthesis.resume()}catch(e){}}
+function say(t){if(!voiceOn()||!t)return;const tok=++VTOK;try{VSRC&&VSRC.stop()}catch(e){}VSRC=null;try{speechSynthesis.cancel()}catch(e){}
+ if(AC&&VDUR[VH(t)]){if(AC.state!=='running')AC.resume();vload(t).then(b=>{if(tok!==VTOK)return;if(!b){tts(t);return}const src=AC.createBufferSource(),g=AC.createGain();g.gain.value=1;src.buffer=b;src.connect(g);g.connect(AC.destination);src.start(0);VSRC=src}).catch(()=>tts(t))}else tts(t)}
 function buzz(p){if(p&&S.settings.vib&&navigator.vibrate)try{navigator.vibrate(p)}catch(e){}}
 const RC=276.5;function ring(left,tot,lab,col){$('#ringT').textContent=Math.max(0,Math.ceil(left));$('#ringL').textContent=lab;const p=$('#ringP');p.setAttribute('stroke',col);p.setAttribute('stroke-dashoffset',RC*(1-Math.max(0,left)/tot))}
 function howHTML(id,i){const e=EX[id],m=EXMETA[id],p=POS[W.pos];return`<div><p class="tiny mut" style="font-weight:600">${String(i+1).padStart(2,'0')} · ${e.type} · ${m.sets}</p><h2>${e.n}</h2></div><ol>${e.how.map(s=>`<li>${s}</li>`).join('')}</ol>
@@ -779,27 +815,27 @@ function loadEx(i){W.i=i;W.ph='ready';W.t=0;W.si=0;W.st=0;W.rep=0;W.lift=0;W.fro
  $('#exN').textContent=String(i+1).padStart(2,'0');$('#exT').textContent=e.n;$('#exS').textContent=EXMETA[id].sets;$('#pos').textContent=POS[W.pos].n;
  $('#how').innerHTML=howHTML(id,i);$('#stage').classList.remove('rest');updReps();$('#phase').textContent='Get ready';$('#phase').style.color='var(--ink)';$('#cue').textContent=POS[W.pos].how;
  const nx=W.list[i+1];$('#nextUp').innerHTML=nx?`${ico(EX[nx].ic,EX[nx].rel?'c':'')}<span>Next: <b style="color:var(--ink)">${EX[nx].n}</b></span>`:'<span>Last exercise of the session</span>';
- $$('#bars i').forEach((b,j)=>b.firstChild.style.width=j<i?'100%':'0%');say((W.list.length>1?(i===W.list.length-1?'Last one. ':'Exercise '+(i+1)+'. '):'')+e.n+'. '+EXMETA[id].short)}
+ $$('#bars i').forEach((b,j)=>b.firstChild.style.width=j<i?'100%':'0%');W.rdy=voiceOn()&&S.settings.intro!==false?Math.max(READY,vdur(INTRO(id))+4.2):READY;$('#skipB').style.display=W.rdy>READY?'':'none';if(W.rdy>READY)say(INTRO(id));else say(e.n)}
 function enterStep(){const s=STEPS[W.si];W.from=W.L;W.liftFrom=W.lift;W.st=0;const ph=$('#phase');ph.textContent=WORD[s.k];
- ph.style.color=s.to<0||s.k==='drop'||s.k==='inhale'?'#6FB7FF':(s.k==='squeeze'||s.k==='up'||s.k==='hold'||s.k==='kneein')?'#3DDC84':'var(--ink)';
+ ph.style.color=s.to<0||s.k==='drop'||s.k==='inhale'?'#6FB7FF':(s.k==='squeeze'||s.k==='up'||s.k==='hold'||s.k==='kneein'||s.k==='squatdown'||s.k==='squatup')?'#3DDC84':'var(--ink)';
  const c=CUES[s.k];$('#cue').textContent=Array.isArray(c)?c[W.cueI++%c.length]:c;
- W.mid=0;const V={squeeze:s.d>=1?'Squeeze':'',up:'Up a floor',down:'Down a floor',drop:'Breathe in and drop',bridge:'Lift your hips',lower:'Lower your hips and let go',plankup:'Lift your knees into the plank',kneesopen:'Slowly open your knees',tilt:'Tilt your pelvis',untilt:'Roll back to neutral',inhale:'Breathe in, belly rises, let it drop',exhale:'Breathe out slowly',kneesclose:'Knees back together',kneel:'Knees down',kneein:'Knee in, and squeeze',legback:'Leg back, let it go',relax:s.d>=1.5?'Relax':'',hold:s.d>=3?'Hold':''};
+ W.mid=0;const V={squeeze:s.d>=1?'Squeeze':'',up:'Up a floor',down:'Down a floor',drop:'Breathe in and drop',bridge:'Lift your hips',lower:'Lower your hips and let go',plankup:'Lift your knees into the plank',kneesopen:'Slowly open your knees',squatdown:'Keep squeezing, squat down',squatup:'And stand back up',tilt:'Tilt your pelvis',untilt:'Roll back to neutral',inhale:'Breathe in, belly rises, let it drop',exhale:'Breathe out slowly',kneesclose:'Knees back together',kneel:'Knees down',kneein:'Knee in, and squeeze',legback:'Leg back, let it go',relax:s.d>=1.5?'Relax':'',hold:s.d>=3?'Hold':''};
  if(s.k==='squeeze'||s.k==='up'||s.k==='kneein'){buzz([50]);SFX.up()}else if(s.k==='drop'){buzz([25,40,25]);SFX.down()}else if(s.k==='bridge'||s.k==='plankup'||s.k==='kneesopen'||s.k==='tilt'){buzz([40]);SFX.up()}else if(s.k==='inhale'){buzz([25,40,25]);SFX.down()}else if(s.k==='lower'||s.k==='kneel'||s.k==='kneesclose'||s.k==='untilt'||s.k==='legback'||s.k==='relax'||s.k==='down'){SFX.down()}
  if(V[s.k])say(V[s.k])}
 const easeF=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
 function startSession(list,kind){unlockAudio();W.list=list;W.kind=kind;W.basePos=kind==='day'?todayInfo().pos:(EX[list[0]].pos||PORDER[Math.max(0,Math.min(3,(EX[list[0]].wk||1)-1))]);
  W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').textContent=kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise';
  $('#bars').innerHTML=list.map(id=>`<i class="${EX[id].rel?'c':''}"><b></b></i>`).join('');$('#pl').classList.add('on');$('#pl').scrollTop=0;document.body.style.overflow='hidden';
- if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');loadEx(0)}
+ if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');vprep([...list.map(id=>INTRO(id)),...list.map(id=>'Nice work. Rest and breathe. Next up, '+EX[id].n),'Squeeze','Hold','Relax','1','2','3','4','5','6','7','8','9','10','Session complete. Great work.']);loadEx(0)}
 function nextEx(){if(W.i>=W.list.length-1){finish();return}W.ph='rest';W.t=0;$('#stage').classList.add('rest');$$('#bars i')[W.i].firstChild.style.width='100%';$('#phase').textContent='Rest';$('#phase').style.color='var(--cool)';$('#cue').textContent='Breathe easy. Next up: '+EX[W.list[W.i+1]].n;say('Nice work. Rest and breathe. Next up, '+EX[W.list[W.i+1]].n)}
 function tick(dt){const tot=CUM[CUM.length-1];
- if(W.ph==='ready'){const pv=Math.ceil(READY-W.t);W.t+=dt;const nv=Math.ceil(READY-W.t);if(nv<pv&&nv>=1&&nv<=3){countOn()?cnt(nv):SFX.tick()}ring(READY-W.t,READY,'Get ready','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*4);W.lift+=(0-W.lift)*Math.min(1,dt*4);mvDraw(W.L,0);if(W.t>=READY){W.ph='work';W.si=0;enterStep()}}
+ if(W.ph==='ready'){const RD=W.rdy||READY;const pv=Math.ceil(RD-W.t);W.t+=dt;const nv=Math.ceil(RD-W.t);if(nv<pv&&nv>=1&&nv<=3){countOn()?cnt(nv):SFX.tick()}ring(RD-W.t,RD,'Get ready','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*4);W.lift+=(0-W.lift)*Math.min(1,dt*4);mvDraw(W.L,0);if(W.t>=RD){$('#skipB').style.display='none';W.ph='work';W.si=0;enterStep()}}
  else if(W.ph==='work'){const s=STEPS[W.si];W.st+=dt;const ramp=s.k==='hold'||s.k==='rest'?.3:s.d*.8;W.L=W.from+(s.to-W.from)*easeF(Math.min(1,W.st/ramp));if(s.lift!=null)W.lift=W.liftFrom+(s.lift-W.liftFrom)*easeF(Math.min(1,W.st/s.d));
   const e=CUM[W.si]+W.st;ring(tot-e,tot,'Seconds',EX[W.list[W.i]].rel?'#6FB7FF':'#FF6B4A');mvDraw(W.L,Math.min(1,W.st/s.d));$$('#bars i')[W.i].firstChild.style.width=Math.min(100,e/tot*100)+'%';
   {const left=Math.ceil(s.d-W.st);if(countOn()&&s.d>=3){if(left>=1&&left<Math.ceil(s.d)&&W.mid!==100+left){W.mid=100+left;cnt(left)}}else if(s.k==='hold'){if(s.d>=8&&W.mid===0&&W.st>=s.d*.4){W.mid=1;say($('#cue').textContent)}if(s.d>=5&&left<=3&&left>=1&&W.mid!==10+left){W.mid=10+left;say(String(left))}}}
   if(W.st>=s.d){if(s.k==='squeeze'||s.k==='up'||s.k==='kneein')W.sq++;if(s.r){W.rep++;updReps()}W.si++;if(W.si>=STEPS.length)nextEx();else enterStep()}}
  else if(W.ph==='rest'){const pr=Math.ceil(REST-W.t);W.t+=dt;const nr=Math.ceil(REST-W.t);if(nr<pr&&nr>=1&&nr<=5)cnt(nr);ring(REST-W.t,REST,'Rest','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*3);mvDraw(W.L,0);if(W.t>=REST)loadEx(W.i+1)}}
-function closePl(){$('#pl').classList.remove('on');document.body.style.overflow='';try{speechSynthesis.cancel()}catch(e){}try{W.lock&&W.lock.release()}catch(e){}W.ph='off'}
+function closePl(){$('#pl').classList.remove('on');document.body.style.overflow='';vstop();try{W.lock&&W.lock.release()}catch(e){}W.ph='off'}
 function finish(){const min=Math.max(.5,Math.round((performance.now()-W.started)/6000)/10),today_=dk(new Date()),firstDay=W.kind==='day'&&!dayDates().includes(today_);
  const before=lvl(),xp=W.sq*2+(W.kind==='day'?30:10)+(firstDay?20:0);S.sessions.push({d:today_,kind:W.kind,ids:W.list,min,sq:W.sq,xp});S.xp+=xp;const nb=newBadges();save();closePl();ping('session_done');
  const after=lvl();$('#fMin').textContent=Math.max(1,Math.round(min));$('#fSq').textContent=W.sq;$('#fXp').textContent='+'+xp;
@@ -807,12 +843,13 @@ function finish(){const min=Math.max(.5,Math.round((performance.now()-W.started)
  $('#finExtra').innerHTML=(after>before?`<div class="note">${NOTE}<p><b>Level ${after}: ${title(after)}.</b> Your holds just got a little longer.</p></div>`:'')+(nb.length?`<div class="note">${NOTE}<p>New badge${nb.length>1?'s':''}: <b>${nb.map(esc).join(', ')}</b></p></div>`:'')+`<p class="mut small">Streak: <b>${streak().n} day${streak().n===1?'':'s'}</b>. Most programmes take around 3 months of steady practice, so consistency beats intensity.</p>`;
  $('#fin').classList.add('on');SFX.done();say('Session complete. Great work.');finF=Fig(W.pos)}
 $('#finB').onclick=()=>{$('#fin').classList.remove('on');go('today');maybeGate()};
-$('#playB').onclick=()=>{W.paused=!W.paused;$('#playB').textContent=W.paused?'Resume':'Pause';if(W.paused){try{speechSynthesis.cancel()}catch(e){}$('#phase').textContent='Paused';$('#phase').style.color='var(--ink)'}else if(W.ph==='work')enterStep()};
+$('#skipB').onclick=()=>{if(W.ph==='ready'){vstop();W.t=Math.max(W.t,(W.rdy||READY)-3.05);$('#skipB').style.display='none'}};
+$('#playB').onclick=()=>{W.paused=!W.paused;$('#playB').textContent=W.paused?'Resume':'Pause';if(W.paused){vstop();$('#phase').textContent='Paused';$('#phase').style.color='var(--ink)'}else if(W.ph==='work')enterStep()};
 $('#nextB').onclick=()=>{if(W.i<W.list.length-1)loadEx(W.i+1);else finish()};
 $('#prevB').onclick=()=>loadEx(Math.max(0,W.ph==='ready'&&W.t<2?W.i-1:W.i));
 $('#voiceB').onclick=()=>{S.settings.voice=!S.settings.voice;if(S.settings.voice)S.settings.discreet=false;save();$('#voiceB').setAttribute('aria-pressed',voiceOn());if(!voiceOn())try{speechSynthesis.cancel()}catch(e){}toast(voiceOn()?'Voice coach on':'Voice coach off')};
 $('#quitB').onclick=()=>{closePl();render();toast('Session ended. Finish a session to earn XP')};
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&$('#pl').classList.contains('on')&&!W.paused){W.paused=true;$('#playB').textContent='Resume';$('#phase').textContent='Paused';try{speechSynthesis.cancel()}catch(e){}}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&$('#pl').classList.contains('on')&&!W.paused){W.paused=true;$('#playB').textContent='Resume';$('#phase').textContent='Paused';vstop();}});
 
 /* ================= LOOP ================= */
 let heroF=Fig('lying'),finF=Fig('standing'),last=0;

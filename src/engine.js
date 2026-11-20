@@ -32,11 +32,11 @@ const side=o=>Object.assign({v:'side'},o);
 const POS={
  lying:{n:'Lying down',sprite:'lie-sprite.webp',frames:4,fw:717,fh:358,c:[360,195],idle:.7,pts:[[400,258],[400,257],[400,256]],img0:'pos-lying.webp',pt:[.335,.64],cam:[186,232,1.75],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat. The easiest position because gravity helps.'},
- seated:{n:'Seated',img:'pos-seated.webp',chair:1,cam:[194,200,1.4],keys:[side({p:[182,198],t:180,h:180,L:{a:[226,255],f:90,k:-1,hd:[212,196],e:1},R:{a:[230,255],f:90,k:-1,hd:[216,198],e:1}})],
+ seated:{n:'Seated',sprite:'sit-sprite.webp',zh:.96,cy:.5,frames:4,fw:480,fh:480,c:[240,250],idle:1,ip:6,pts:[[160,285],[160,285],[160,285]],chair:1,cam:[194,200,1.4],keys:[side({p:[182,198],t:180,h:180,L:{a:[226,255],f:90,k:-1,hd:[212,196],e:1},R:{a:[230,255],f:90,k:-1,hd:[216,198],e:1}})],
   how:'Sit upright on a firm chair, feet flat, weight spread across both sit bones.'},
- standing:{n:'Standing',img:'pos-standing.webp',cam:[200,192,1.3],keys:[side({p:[200,167],t:180,h:180,L:{a:[198,255],f:90,k:-1,hd:[199,172],e:1},R:{a:[202,255],f:90,k:-1,hd:[203,172],e:1}})],
+ standing:{n:'Standing',sprite:'stand-sprite.webp',zh:.96,cy:.5,frames:4,fw:480,fh:480,c:[220,240],idle:1,ip:6,pts:[[215,232],[215,232],[215,232]],cam:[200,192,1.3],keys:[side({p:[200,167],t:180,h:180,L:{a:[198,255],f:90,k:-1,hd:[199,172],e:1},R:{a:[202,255],f:90,k:-1,hd:[203,172],e:1}})],
   how:'Stand tall, feet hip-width apart, knees soft. Harder, because the muscle works against gravity.'},
- walking:{n:'Walking',img:'pos-walking.webp',walk:1,cam:[200,192,1.3],keys:[side({p:[200,168],t:178,h:180,L:{a:[226,255],f:90,k:-1,hd:[186,170],e:1},R:{a:[176,250],f:112,k:-1,hd:[218,166],e:1}}),side({p:[200,168],t:178,h:180,L:{a:[176,250],f:112,k:-1,hd:[218,166],e:1},R:{a:[226,255],f:90,k:-1,hd:[186,170],e:1}})],
+ walking:{n:'Walking',sprite:'walk-sprite.webp',zh:.96,cy:.5,frames:12,fw:356,fh:357,c:[178,180],cyc:5.4,pts:[[176,168],[176,168],[176,168]],walk:1,cam:[200,192,1.3],keys:[side({p:[200,168],t:178,h:180,L:{a:[226,255],f:90,k:-1,hd:[186,170],e:1},R:{a:[176,250],f:112,k:-1,hd:[218,166],e:1}}),side({p:[200,168],t:178,h:180,L:{a:[176,250],f:112,k:-1,hd:[218,166],e:1},R:{a:[226,255],f:90,k:-1,hd:[186,170],e:1}})],
   how:'Walk at an easy pace and hold the squeeze for a few steps. This trains the muscle for everyday life.'},
  bridge:{n:'Lying down',sprite:'bridge-sprite.webp',frames:5,fw:439,pts:[[125,300],[138,276],[146,252]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'},
@@ -44,11 +44,13 @@ const POS={
   how:'Hands under shoulders, knees under hips, back flat. Lift your knees into a plank when the coach says.'},
  gbridge:{n:'Lying down',sprite:'gbridge-sprite.webp',frames:4,fw:718,fh:355,c:[360,195],pts:[[400,255],[396,238],[390,212]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'},
+ squat:{n:'Standing',sprite:'squat-sprite.webp',zh:.96,cy:.5,frames:4,fw:437,fh:438,c:[200,215],pts:[[186,205],[181,222],[175,240]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+  how:'Stand tall, feet hip-width apart, arms reaching forward at shoulder height for balance.'},
  tilt:{n:'Lying down',sprite:'tilt-sprite.webp',frames:4,fw:720,fh:405,c:[360,220],pts:[[392,272],[392,270],[392,268]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat, arms by your sides. Keep your shoulders and head relaxed on the floor.'},
  breath:{n:'Lying down',sprite:'breath-sprite.webp',frames:4,fw:716,fh:358,c:[360,190],pts:[[420,252],[420,250],[420,248]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat, hands resting on your belly so you can feel it rise and fall.'},
- seatopen:{n:'Seated',sprite:'seatopen-sprite.webp',frames:4,fw:439,fh:439,c:[220,212],pts:[[220,236],[220,244],[220,248]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+ seatopen:{n:'Seated',sprite:'seatopen-sprite.webp',zh:.96,cy:.5,frames:4,fw:439,fh:439,c:[220,212],pts:[[220,236],[220,244],[220,248]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Sit tall on the front half of a chair, feet flat, hands resting on your knees. Open your knees when the coach says.'},
  climber:{n:'Plank',sprite:'climber-sprite.webp',frames:4,fw:720,fh:358,c:[330,200],pts:[[310,187],[318,191],[324,195]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Start in a high plank, hands under shoulders, body in a straight line. Move slowly, this is about control, not speed.'}};
@@ -57,7 +59,7 @@ function Fig(posId){const P=POS[posId];return{P,t:0,pose:P.keys[0],
  step(dt){this.t+=dt;if(P.walk){const u=(Math.sin(this.t*Math.PI/.55)+1)/2;this.pose=lerpP(P.keys[0],P.keys[1],u);this.pose.p=[200,168-Math.abs(Math.cos(this.t*Math.PI/.55))*3]}
   else{const b=Math.sin(this.t*1.4)*.8;this.pose=Object.assign({},P.keys[0],{t:P.keys[0].t+b*.6})}},
  render(cv,pf,z=1,lift=0){const now=performance.now()/1000,dt=Math.min(.1,now-(this.lt||now));this.lt=now;
-  if(P.sprite){if(cv._h)cv._h.w.style.display='none';const lv=P.idle?(.5-.5*Math.cos(now*Math.PI*2/5))*P.idle:lift;spriteDraw(cv,P,pf,lv,this.t,dt,this);return}
+  if(P.sprite){if(cv._h)cv._h.w.style.display='none';const lv=P.cyc?(now/P.cyc)%1:P.idle?(.5-.5*Math.cos(now*Math.PI*2/(P.ip||5)))*P.idle:lift;spriteDraw(cv,P,pf,lv,this.t,dt,this);return}
   if(P.img){if(!cv._h)cv._h=Holo(cv);const c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);cv._h.w.style.display='block';holoDraw(cv._h,posOf(P),pf,this.t,dt,lift)}
   else{if(cv._h)cv._h.w.style.display='none';const C=P.cam;const[c,s]=fit(cv,[C[0],C[1],C[2]*z]);draw(c,solve(this.pose),{g:s,pf,chair:P.chair})}}}}
 const posOf=P=>Object.keys(POS).find(k=>POS[k]===P);
@@ -66,10 +68,10 @@ const SPR={};
 function spriteDraw(cv,P,pf,lift,t,dt,st){const src=IMG[P.sprite]||P.sprite;let im=SPR[src];if(!im){im=SPR[src]=new Image();im.src=src}
  const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),W=Math.max(1,Math.round(r.width*d)),H=Math.max(1,Math.round(r.height*d));if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}
  const c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.globalCompositeOperation='source-over';c.globalAlpha=1;c.clearRect(0,0,W,H);if(!im.complete||!im.naturalWidth)return;
- const fw=P.fw,fh=P.fh||P.fw,C=P.c||[219,255],sw=Math.min(W*.98,H*1.3*fw/fh),k=sw/fw,sh=fh*k,s=Math.min(sw,sh*1.25),ox=W/2-C[0]*k,oy=H*.6-C[1]*k;
- const fi=Math.max(0,Math.min(P.frames-1,lift*(P.frames-1))),a=Math.floor(fi),b=Math.min(P.frames-1,a+1),u=fi-a;
+ const fw=P.fw,fh=P.fh||P.fw,C=P.c||[219,255],sw=Math.min(W*.98,H*(P.zh||1.3)*fw/fh),k=sw/fw,sh=fh*k,s=Math.min(sw,sh*1.25),ox=W/2-C[0]*k,oy=H*(P.cy||.6)-C[1]*k;
+ let fi,a,b,u;if(P.cyc){fi=(lift%1)*P.frames;a=Math.floor(fi)%P.frames;b=(a+1)%P.frames;u=fi-Math.floor(fi)}else{fi=Math.max(0,Math.min(P.frames-1,lift*(P.frames-1)));a=Math.floor(fi);b=Math.min(P.frames-1,a+1);u=fi-a}
  c.drawImage(im,a*fw,0,fw,fh,ox,oy,sw,sh);if(u>0){c.globalAlpha=u;c.drawImage(im,b*fw,0,fw,fh,ox,oy,sw,sh);c.globalAlpha=1}
- c.globalCompositeOperation='destination-in';const rg=c.createRadialGradient(W/2,H*.6,Math.max(sw,sh)*.3,W/2,H*.6,Math.max(sw,sh)*.56);rg.addColorStop(0,'#000');rg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=rg;c.fillRect(0,0,W,H);
+ c.globalCompositeOperation='destination-in';const rg=c.createRadialGradient(W/2,H*(P.cy||.6),Math.max(sw,sh)*.3,W/2,H*(P.cy||.6),Math.max(sw,sh)*.56);rg.addColorStop(0,'#000');rg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=rg;c.fillRect(0,0,W,H);
  c.globalCompositeOperation='lighter';
  const p=P.pts,q=lift<=.5?p[0].map((v,i)=>v+(p[1][i]-v)*lift*2):p[1].map((v,i)=>v+(p[2][i]-v)*(lift-.5)*2),x=ox+q[0]*k,y=oy+q[1]*k;
  const A=Math.abs(pf),hot=pf>=0,col=hot?'61,220,132':'111,183,255',R=s*(.07+.06*A);
