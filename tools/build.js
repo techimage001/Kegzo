@@ -5,7 +5,7 @@ const fs=require('fs'),path=require('path');
 const ROOT=path.resolve(__dirname,'..'),SRC=path.join(ROOT,'src');
 const {EX,EXMETA,DAYPLAN,ICONS}=require(path.join(SRC,'exercises.js'));
 const {GUIDES,STUDY}=require(path.join(SRC,'guides.js'));
-const SITE='https://kegzo.com',V='20',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
+const SITE='https://kegzo.com',V='21',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
 const POSN={hbaby:'Lying down',dsquat:'Deep squat',child:'Kneeling',side:'Side-lying',cough:'Standing',boxlift:'Standing',lunge:'Standing',sts:'Seated',squat:'Standing',gbridge:'Lying down',tilt:'Lying down',breath:'Lying down',seatopen:'Seated',fours:'On all fours',climber:'Plank',bridge:'Lying down',lying:'Lying down',seated:'Seated',standing:'Standing',walking:'Walking'},PORDER=['lying','seated','standing','walking'],VID={hbaby:'hbaby',dsquat:'dsquat',child:'child',side:'side',cough:'cough',boxlift:'boxlift',lunge:'lunge',sts:'sts',squat:'squat',lying:'lying',seated:'seated',standing:'standing',walking:'walking',gbridge:'gbridge',tilt:'tilt',breath:'breath',seatopen:'seatopen',bridge:'bridge',fours:'fours',climber:'climber'};
 const BONUS=()=>Object.keys(EX).filter(id=>!EX[id].wk&&VID[EX[id].pos]);
 const bcard=id=>{const e=EX[id],m=EXMETA[id];return `<a class="wkc bc" href="/exercises/${m.slug}.html"><span class="vbox fit"><video src="/assets/video/${VID[e.pos]}.mp4?v=${V}" poster="/assets/img/pos-${e.pos}.webp" autoplay muted loop playsinline preload="metadata" aria-label="Hologram figure doing ${e.n.toLowerCase()}, looping"></video></span><b>${e.n}</b><span>${m.short}</span></a>`};
@@ -57,7 +57,7 @@ const FOOT=`<footer class="foot"><div class="wrap">
 function page({url,title,desc,schema,body,crumb,img}){
  const bc=crumb?`<nav class="bc" aria-label="Breadcrumb">${crumb.map(([n,u],i)=>i<crumb.length-1?`<a href="${u}">${esc(n)}</a><span aria-hidden="true">›</span>`:`<span aria-current="page">${esc(n)}</span>`).join('')}</nav>`:'';
  return`<!DOCTYPE html><html lang="en"><head>${head({title,desc,url,img,schema:[...(schema||[]),...(crumb?[crumbs(crumb)]:[])]})}
-<link rel="stylesheet" href="/assets/site.css?v=${V}">${url==='/'?`<script>try{if(!localStorage.getItem('kegzo.welcomed')&&!/bot|crawl|spider|slurp|lighthouse|preview/i.test(navigator.userAgent)&&!/[?&]home/.test(location.search))location.replace('/welcome.html')}catch(e){}</script>`:''}</head><body>${NAV}<main class="wrap">${bc}${body}</main>${FOOT}</body></html>`}
+<link rel="stylesheet" href="/assets/site.css?v=${V}">${url==='/'?`<script>try{if(!localStorage.getItem('kegzo.welcomed')&&!/bot|crawl|spider|slurp|lighthouse|preview/i.test(navigator.userAgent)&&!/[?&]home/.test(location.search))location.replace('/welcome.html')}catch(e){}</script>`:''}</head><body>${NAV}<main class="wrap">${bc}${body}</main>${FOOT}<a class="wfab" href="/welcome.html" aria-label="Welcome: meet your coach"><img src="/assets/img/coach-face.webp?v=${V}" width="40" height="40" alt=""><span>Welcome</span></a></body></html>`}
 const cta=(t='Start training now',href='/app.html')=>`<p class="ctar"><a class="btn hot" href="${href}">${t}</a><span class="tiny mut">Currently free. Start straight away on any phone.</span></p>`;
 const faqHTML=faq=>`<section class="faq"><h2>Frequently asked questions</h2>${faq.map(([q,a])=>`<details><summary>${esc(q)}</summary><p>${a}</p></details>`).join('')}</section>`;
 
@@ -195,6 +195,7 @@ h1{font-size:clamp(32px,7vw,52px);margin:.3em 0 .35em}h2{font-size:clamp(23px,4.
 :focus-visible{outline:3px solid var(--cool);outline-offset:2px;border-radius:8px}
 .eyebrow{font-size:14px;font-weight:600;color:var(--hot);margin:28px 0 0}.lead{font-size:clamp(18px,2.4vw,20px);color:#E6E1FF}.mut{color:var(--mut)}.tiny{font-size:14px}
 .ctar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:22px 0}
+.wfab{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:30;display:flex;align-items:center;gap:8px;padding:6px 16px 6px 6px;border-radius:999px;background:rgba(30,18,60,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.16);color:#fff;font-weight:600;font-size:15px;text-decoration:none;box-shadow:0 8px 28px rgba(0,0,0,.45),0 0 24px rgba(140,70,255,.45)}.wfab img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #3DDC84;box-shadow:0 0 12px rgba(61,220,132,.6)}.wfab:hover{transform:translateY(-2px)}.foot{padding-bottom:84px}
 .wel{min-height:100dvh;display:grid;place-items:center;background:radial-gradient(70% 50% at 50% 35%,rgba(140,70,255,.28),transparent 70%),var(--bg,#14112A)}
 .welw{position:relative;width:100%;max-width:440px;padding:24px 18px calc(28px + env(safe-area-inset-bottom));display:grid;gap:16px;justify-items:center;text-align:center}
 .welw .welb{justify-self:center;width:auto;margin:0 auto;font-size:22px}
