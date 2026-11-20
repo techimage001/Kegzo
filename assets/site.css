@@ -26,7 +26,8 @@ h1{font-size:clamp(32px,7vw,52px);margin:.3em 0 .35em}h2{font-size:clamp(23px,4.
 .ctar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:22px 0}
 .hero{display:grid;gap:10px;align-items:center;padding:6px 0 10px}
 .hfig{position:relative;border-radius:24px;overflow:hidden;background:#100C28;border:1px solid var(--line)}
-.pulse{position:absolute;left:33%;top:63%;width:22%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,107,74,.75),rgba(255,107,74,0) 68%);mix-blend-mode:screen;animation:pul 3s ease-in-out infinite}
+video{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;background:#12012B}.hfig video{aspect-ratio:4/3}.wkc video{aspect-ratio:4/3}.exfig video{aspect-ratio:4/3}
+.pulse{position:absolute;left:33%;top:56%;width:20%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(61,220,132,.8),rgba(61,220,132,0) 68%);mix-blend-mode:screen;animation:pul 4s ease-in-out infinite}
 @keyframes pul{0%,100%{opacity:.25;transform:translate(-50%,-50%) scale(.75)}45%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}}
 .cards3{display:grid;gap:12px}.c{background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:18px}.c p{margin:.4em 0 0;color:var(--mut);font-size:16px}
 .weeks4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.wkc{background:var(--surf);border:1px solid var(--line);border-radius:18px;overflow:hidden;font-size:15px}.wkc img{background:#100C28}.wkc b,.wkc span{display:block;padding:0 14px}.wkc b{padding-top:12px}.wkc span{color:var(--mut);padding-bottom:14px;font-size:14px}

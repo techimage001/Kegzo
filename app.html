@@ -602,7 +602,7 @@ function selfTest(){const T={hold:0,flicks:0,relax:0};ping('test_start');
 /* ================= ONBOARDING + SAFETY CHECK ================= */
 const QS=[['Do you feel pain or aching in your pelvis, groin, lower back or when sitting?','pain'],['Is it hard to fully relax down there, or do you often feel you need to pee urgently?','tight'],['Do you feel tense or sore after tightening those muscles?','sore'],['Have you had surgery in the pelvic area in the last few months?','surg']];
 let OB={step:0,ans:{},checks:[false,false,false],track:'strength'};
-const obFig=Fig('lying');
+const obFig=Fig('bridge');
 function ob(){const o=$('#ob');o.classList.add('on');const s=OB.step,dots=n=>`<div class="dots">${Array.from({length:7},(_,i)=>`<i class="${i===n?'on':''}"></i>`).join('')}</div>`;let h='';
  if(s===0)h=`<div class="hero2"><canvas id="obCv" aria-label="Animated pelvic floor guide"></canvas></div><h1>Kegel training, built like a game.</h1><p class="mut">A 28-day programme of short guided kegel sessions with levels, streaks and a progress dashboard. Start straight away. Your training stays on this device.</p><button class="btn hot wide" data-ob="next">Let's start</button><p class="tiny mut" style="text-align:center">General fitness information, not medical advice.</p>`;
  else if(s>=1&&s<=4){const[q,k]=QS[s-1];h=`${dots(s-1)}<p class="tiny mut">Safety check ${s} of 4</p><h2>${q}</h2><div class="yn"><button class="opt" data-a="yes" aria-pressed="${OB.ans[k]===true}"><span class="dot"></span>Yes</button><button class="opt" data-a="no" aria-pressed="${OB.ans[k]===false}"><span class="dot"></span>No</button></div><p class="tiny mut">This picks your starting track. It is not a diagnosis.</p><button class="btn ghost" data-ob="back">Back</button>`}
@@ -689,7 +689,7 @@ const VIEWS=['today','progress','learn','me'];let cur='today',PENDING=null;
 function go(v){if(!VIEWS.includes(v))v='today';cur=v;VIEWS.forEach(x=>$('#v-'+x).classList.toggle('on',x===v));$$('.tabs button').forEach(b=>b.dataset.v===v?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));
  if(location.hash.slice(1)!==v)try{history.replaceState(null,'','#'+v)}catch(e){}render();window.scrollTo(0,0)}
 function render(){$('#topLv').textContent='Lv '+lvl();const st=streak().n;$('#topSt').textContent=st+' day'+(st===1?'':'s');acct();
- if(cur==='today'){$('#v-today').innerHTML=today();$('#goDay').onclick=()=>{const T=todayInfo();startSession(T.list,'day')};$('#testB').onclick=selfTest;heroF=Fig(todayInfo().pos)}
+ if(cur==='today'){$('#v-today').innerHTML=today();$('#goDay').onclick=()=>{const T=todayInfo();startSession(T.list,'day')};$('#testB').onclick=selfTest;{const hp=todayInfo().pos;heroF=Fig(hp==='lying'?'bridge':hp)}}
  if(cur==='progress'){$('#v-progress').innerHTML=progress();$('#testB2').onclick=selfTest;chart()}
  if(cur==='learn'){$('#v-learn').innerHTML=learn();$('#retake').onclick=()=>{OB={step:1,ans:{},checks:[false,false,false],track:'strength'};ob()}}
  if(cur==='me'){$('#v-me').innerHTML=me();bindMe()}}
@@ -754,11 +754,11 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden&&$('#pl').c
 
 /* ================= LOOP ================= */
 let heroF=Fig('lying'),finF=Fig('standing'),last=0;
-function frame(ts){const dt=Math.min(.1,(ts-(last||ts))/1000);last=ts;const u=(ts/1000%3)/3,pf=u<.15?u/.15:u<.55?1:u<.7?1-(u-.55)/.15:u<.85?-(u-.7)/.15*.7:-.7+(u-.85)/.15*.7;
- if($('#ob').classList.contains('on')){const c=$('#obCv');if(c){obFig.step(dt);obFig.render(c,pf)}}
+function frame(ts){const dt=Math.min(.1,(ts-(last||ts))/1000);last=ts;const lf=.5-.5*Math.cos(ts/1000*Math.PI*2/3.4),lpf=lf>.72?Math.min(1,(lf-.72)/.2):0;const u=(ts/1000%3)/3,pf=u<.15?u/.15:u<.55?1:u<.7?1-(u-.55)/.15:u<.85?-(u-.7)/.15*.7:-.7+(u-.85)/.15*.7;
+ if($('#ob').classList.contains('on')){const c=$('#obCv');if(c){obFig.step(dt);obFig.render(c,lpf,1,lf)}}
  else if($('#pl').classList.contains('on')){if(!W.paused&&W.ph!=='off'){tick(dt);W.fig.step(dt)}W.fig.render($('#cv'),W.L,1,W.lift)}
  else if($('#fin').classList.contains('on')){finF.step(dt);finF.render($('#finCv'),.5+.5*Math.sin(ts/600))}
- else if(cur==='today'){const c=$('#heroCv');if(c){heroF.step(dt);heroF.render(c,pf)}}
+ else if(cur==='today'){const c=$('#heroCv');if(c){heroF.step(dt);heroF.P.sprite?heroF.render(c,lpf,1,lf):heroF.render(c,pf)}}
  requestAnimationFrame(frame)}
 
 /* ================= BOOT ================= */
