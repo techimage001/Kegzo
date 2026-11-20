@@ -8,7 +8,7 @@ const {GUIDES,STUDY}=require(path.join(SRC,'guides.js'));
 const SITE='https://kegzo.com',V='5',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
 const POSN={seatopen:'Seated',fours:'On all fours',climber:'Plank',bridge:'Lying down',lying:'Lying down',seated:'Seated',standing:'Standing',walking:'Walking'},PORDER=['lying','seated','standing','walking'],VID={seatopen:'seatopen',bridge:'bridge',fours:'fours',climber:'climber'};
 const BONUS=()=>Object.keys(EX).filter(id=>!EX[id].wk&&VID[EX[id].pos]);
-const bcard=id=>{const e=EX[id],m=EXMETA[id];return `<a class="wkc bc" href="/exercises/${m.slug}.html"><span class="vbox fit"><video src="/assets/video/${VID[e.pos]}.mp4?v=${V}" poster="/assets/img/pos-${e.pos}.webp" autoplay muted loop playsinline preload="metadata" aria-label="Hologram figure doing ${e.n.toLowerCase()}, looping"></video></span><b>${e.n}</b><span>${m.short}</span></a>`};
+const bcard=id=>{const e=EX[id],m=EXMETA[id];return `<a class="wkc bc" href="/exercises/${m.slug}.html"><span class="vbox fit"><video data-lazy="/assets/video/${VID[e.pos]}.mp4?v=${V}" poster="/assets/img/pos-${e.pos}.webp" muted loop playsinline preload="none" aria-label="Hologram figure doing ${e.n.toLowerCase()}, looping"></video></span><b>${e.n}</b><span>${m.short}</span></a>`};
 
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const strip=h=>String(h).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
@@ -53,7 +53,7 @@ const FOOT=`<footer class="foot"><div class="wrap">
 </div>
 <p class="fdisc">General fitness information, not medical advice. Kegzo is a training game for the pelvic floor and does not diagnose or treat any condition. If you have pain or a health concern, speak to a qualified professional.</p>
 <p class="fdisc">© Kegzo</p></div></footer>
-<script>{const b=document.getElementById('menuB'),n=document.getElementById('nav');b&&b.addEventListener('click',()=>{const o=n.classList.toggle('open');b.setAttribute('aria-expanded',o)})}</script>`;
+<script>{const b=document.getElementById('menuB'),n=document.getElementById('nav');b&&b.addEventListener('click',()=>{const o=n.classList.toggle('open');b.setAttribute('aria-expanded',o)})}{const vs=[...document.querySelectorAll('video[data-lazy]')];if(vs.length&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;if(e.isIntersecting){if(!v.src)v.src=v.dataset.lazy;v.play().catch(()=>{})}else v.pause()}),{rootMargin:'200px'});vs.forEach(v=>io.observe(v))}else vs.forEach(v=>{v.src=v.dataset.lazy})}</script>`;
 function page({url,title,desc,schema,body,crumb,img}){
  const bc=crumb?`<nav class="bc" aria-label="Breadcrumb">${crumb.map(([n,u],i)=>i<crumb.length-1?`<a href="${u}">${esc(n)}</a><span aria-hidden="true">›</span>`:`<span aria-current="page">${esc(n)}</span>`).join('')}</nav>`:'';
  return`<!DOCTYPE html><html lang="en"><head>${head({title,desc,url,img,schema:[...(schema||[]),...(crumb?[crumbs(crumb)]:[])]})}
