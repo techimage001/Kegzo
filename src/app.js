@@ -213,7 +213,7 @@ function loadEx(i){W.i=i;W.ph='ready';W.t=0;W.si=0;W.st=0;W.rep=0;W.lift=0;W.fro
  const nx=W.list[i+1];$('#nextUp').innerHTML=nx?`${ico(EX[nx].ic,EX[nx].rel?'c':'')}<span>Next: <b style="color:var(--ink)">${EX[nx].n}</b></span>`:'<span>Last exercise of the session</span>';
  $$('#bars i').forEach((b,j)=>b.firstChild.style.width=j<i?'100%':'0%');say(e.n)}
 function enterStep(){const s=STEPS[W.si];W.from=W.L;W.liftFrom=W.lift;W.st=0;const ph=$('#phase');ph.textContent=WORD[s.k];
- ph.style.color=s.to<0||s.k==='drop'?'var(--cool)':(s.k==='squeeze'||s.k==='up'||s.k==='hold')?'var(--hot)':'var(--ink)';
+ ph.style.color=s.to<0||s.k==='drop'?'#6FB7FF':(s.k==='squeeze'||s.k==='up'||s.k==='hold')?'#3DDC84':'var(--ink)';
  const c=CUES[s.k];$('#cue').textContent=Array.isArray(c)?c[W.cueI++%c.length]:c;
  if(s.k==='squeeze'||s.k==='up'){buzz([50]);if(s.d>=1)say(WORD[s.k])}else if(s.k==='drop'){buzz([25,40,25]);say('Drop')}else if(s.k==='bridge'){buzz([40]);say('Lift your hips')}else if(s.k==='lower'){say('Lower')}else if(s.k==='relax'&&s.d>=1.5){say('Relax')}else if(s.k==='hold'&&s.d>=3){say('Hold')}}
 const easeF=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
@@ -223,11 +223,11 @@ function startSession(list,kind){W.list=list;W.kind=kind;W.basePos=kind==='day'?
  if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');loadEx(0)}
 function nextEx(){if(W.i>=W.list.length-1){finish();return}W.ph='rest';W.t=0;$('#stage').classList.add('rest');$$('#bars i')[W.i].firstChild.style.width='100%';$('#phase').textContent='Rest';$('#phase').style.color='var(--cool)';$('#cue').textContent='Breathe easy. Next up: '+EX[W.list[W.i+1]].n;say('Rest')}
 function tick(dt){const tot=CUM[CUM.length-1];
- if(W.ph==='ready'){W.t+=dt;ring(READY-W.t,READY,'Get ready','#5BD6C9');W.L+=(0-W.L)*Math.min(1,dt*4);W.lift+=(0-W.lift)*Math.min(1,dt*4);mvDraw(W.L,0);if(W.t>=READY){W.ph='work';W.si=0;enterStep()}}
+ if(W.ph==='ready'){W.t+=dt;ring(READY-W.t,READY,'Get ready','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*4);W.lift+=(0-W.lift)*Math.min(1,dt*4);mvDraw(W.L,0);if(W.t>=READY){W.ph='work';W.si=0;enterStep()}}
  else if(W.ph==='work'){const s=STEPS[W.si];W.st+=dt;const ramp=s.k==='hold'||s.k==='rest'?.3:s.d*.8;W.L=W.from+(s.to-W.from)*easeF(Math.min(1,W.st/ramp));if(s.lift!=null)W.lift=W.liftFrom+(s.lift-W.liftFrom)*easeF(Math.min(1,W.st/s.d));
-  const e=CUM[W.si]+W.st;ring(tot-e,tot,'Seconds',EX[W.list[W.i]].rel?'#5BD6C9':'#FF6B4A');mvDraw(W.L,Math.min(1,W.st/s.d));$$('#bars i')[W.i].firstChild.style.width=Math.min(100,e/tot*100)+'%';
+  const e=CUM[W.si]+W.st;ring(tot-e,tot,'Seconds',EX[W.list[W.i]].rel?'#6FB7FF':'#FF6B4A');mvDraw(W.L,Math.min(1,W.st/s.d));$$('#bars i')[W.i].firstChild.style.width=Math.min(100,e/tot*100)+'%';
   if(W.st>=s.d){if(s.k==='squeeze'||s.k==='up')W.sq++;if(s.r){W.rep++;updReps()}W.si++;if(W.si>=STEPS.length)nextEx();else enterStep()}}
- else if(W.ph==='rest'){W.t+=dt;ring(REST-W.t,REST,'Rest','#5BD6C9');W.L+=(0-W.L)*Math.min(1,dt*3);mvDraw(W.L,0);if(W.t>=REST)loadEx(W.i+1)}}
+ else if(W.ph==='rest'){W.t+=dt;ring(REST-W.t,REST,'Rest','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*3);mvDraw(W.L,0);if(W.t>=REST)loadEx(W.i+1)}}
 function closePl(){$('#pl').classList.remove('on');document.body.style.overflow='';try{speechSynthesis.cancel()}catch(e){}try{W.lock&&W.lock.release()}catch(e){}W.ph='off'}
 function finish(){const min=Math.max(.5,Math.round((performance.now()-W.started)/6000)/10),today_=dk(new Date()),firstDay=W.kind==='day'&&!dayDates().includes(today_);
  const before=lvl(),xp=W.sq*2+(W.kind==='day'?30:10)+(firstDay?20:0);S.sessions.push({d:today_,kind:W.kind,ids:W.list,min,sq:W.sq,xp});S.xp+=xp;const nb=newBadges();save();closePl();ping('session_done');

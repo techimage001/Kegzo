@@ -289,10 +289,10 @@ function draw(c,S,o={}){const g=o.g||1,pf=o.pf||0;c.lineCap='round';c.lineJoin='
  const arm=(s,far)=>{const col=B(far),A=S[s];line(c,S.N,A.el,11,col);line(c,A.el,A.hd,9,col);c.fillStyle=col;c.beginPath();c.arc(A.hd[0],A.hd[1],5.5,0,7);c.fill()};
  const torso=()=>{const col=B(),mid=lerpP(S.P,S.N,.55);line(c,S.P,mid,24,col);line(c,mid,S.N,28,col);line(c,S.N,lerpP(S.N,S.H,.55),10,col);c.fillStyle=col;c.beginPath();c.arc(S.H[0],S.H[1],12.5,0,7);c.fill()};
  arm('L',true);leg('L',true);torso();leg('R');arm('R');
- /* pelvic floor glow: coral = squeeze, aqua = drop */
+ /* pelvic floor glow: green = squeeze, blue = drop */
  const a=Math.abs(pf),hot=pf>=0,p=add(S.P,dir(S.P===S.N?0:0),0),r=18+a*20;c.shadowBlur=0;
- const rg2=c.createRadialGradient(p[0],p[1],1,p[0],p[1],r);rg2.addColorStop(0,hot?`rgba(255,107,74,${.25+.65*a})`:`rgba(91,214,201,${.25+.65*a})`);rg2.addColorStop(1,hot?'rgba(255,107,74,0)':'rgba(91,214,201,0)');c.fillStyle=rg2;c.beginPath();c.arc(p[0],p[1],r,0,7);c.fill();
- c.fillStyle=hot?'#FF6B4A':'#5BD6C9';c.globalAlpha=.6+.4*a;c.beginPath();c.arc(p[0],p[1],4+a*3,0,7);c.fill();c.globalAlpha=1}
+ const rg2=c.createRadialGradient(p[0],p[1],1,p[0],p[1],r);rg2.addColorStop(0,hot?`rgba(61,220,132,${.25+.65*a})`:`rgba(111,183,255,${.25+.65*a})`);rg2.addColorStop(1,hot?'rgba(61,220,132,0)':'rgba(111,183,255,0)');c.fillStyle=rg2;c.beginPath();c.arc(p[0],p[1],r,0,7);c.fill();
+ c.fillStyle=hot?'#3DDC84':'#6FB7FF';c.globalAlpha=.6+.4*a;c.beginPath();c.arc(p[0],p[1],4+a*3,0,7);c.fill();c.globalAlpha=1}
 function fit(cv,C){const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d));if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h}
  const c=cv.getContext('2d'),s=Math.min(w/400,h/300)*C[2];c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,w,h);c.setTransform(s,0,0,s,w/2-C[0]*s,h*(h>w*.8?.62:.58)-C[1]*s);return[c,s]}
 
@@ -306,15 +306,35 @@ const POS={
  standing:{n:'Standing',img:'pos-standing.webp',cam:[200,192,1.3],keys:[side({p:[200,167],t:180,h:180,L:{a:[198,255],f:90,k:-1,hd:[199,172],e:1},R:{a:[202,255],f:90,k:-1,hd:[203,172],e:1}})],
   how:'Stand tall, feet hip-width apart, knees soft. Harder, because the muscle works against gravity.'},
  walking:{n:'Walking',img:'pos-walking.webp',walk:1,cam:[200,192,1.3],keys:[side({p:[200,168],t:178,h:180,L:{a:[226,255],f:90,k:-1,hd:[186,170],e:1},R:{a:[176,250],f:112,k:-1,hd:[218,166],e:1}}),side({p:[200,168],t:178,h:180,L:{a:[176,250],f:112,k:-1,hd:[218,166],e:1},R:{a:[226,255],f:90,k:-1,hd:[186,170],e:1}})],
-  how:'Walk at an easy pace and hold the squeeze for a few steps. This trains the muscle for everyday life.'}};
+  how:'Walk at an easy pace and hold the squeeze for a few steps. This trains the muscle for everyday life.'},
+ bridge:{n:'Lying down',sprite:'bridge-sprite.webp',frames:5,fw:439,pts:[[125,300],[138,276],[146,252]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+  how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'}};
 const IMG={};const PORDER=['lying','seated','standing','walking'];
 function Fig(posId){const P=POS[posId];return{P,t:0,pose:P.keys[0],
  step(dt){this.t+=dt;if(P.walk){const u=(Math.sin(this.t*Math.PI/.55)+1)/2;this.pose=lerpP(P.keys[0],P.keys[1],u);this.pose.p=[200,168-Math.abs(Math.cos(this.t*Math.PI/.55))*3]}
   else{const b=Math.sin(this.t*1.4)*.8;this.pose=Object.assign({},P.keys[0],{t:P.keys[0].t+b*.6})}},
  render(cv,pf,z=1,lift=0){const now=performance.now()/1000,dt=Math.min(.1,now-(this.lt||now));this.lt=now;
+  if(P.sprite){if(cv._h)cv._h.w.style.display='none';spriteDraw(cv,P,pf,lift,this.t,dt,this);return}
   if(P.img){if(!cv._h)cv._h=Holo(cv);const c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);cv._h.w.style.display='block';holoDraw(cv._h,posOf(P),pf,this.t,dt,lift)}
   else{if(cv._h)cv._h.w.style.display='none';const C=P.cam;const[c,s]=fit(cv,[C[0],C[1],C[2]*z]);draw(c,solve(this.pose),{g:s,pf,chair:P.chair})}}}}
 const posOf=P=>Object.keys(POS).find(k=>POS[k]===P);
+/* frame-based figure (real bridge frames), crossfaded and driven by the session's lift value */
+const SPR={};
+function spriteDraw(cv,P,pf,lift,t,dt,st){const src=IMG[P.sprite]||P.sprite;let im=SPR[src];if(!im){im=SPR[src]=new Image();im.src=src}
+ const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),W=Math.max(1,Math.round(r.width*d)),H=Math.max(1,Math.round(r.height*d));if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}
+ const c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.globalCompositeOperation='source-over';c.globalAlpha=1;c.clearRect(0,0,W,H);if(!im.complete||!im.naturalWidth)return;
+ const fw=P.fw,s=Math.min(W*.98,H*1.3),k=s/fw,ox=W/2-219*k,oy=H*.6-255*k;
+ const fi=Math.max(0,Math.min(P.frames-1,lift*(P.frames-1))),a=Math.floor(fi),b=Math.min(P.frames-1,a+1),u=fi-a;
+ c.drawImage(im,a*fw,0,fw,fw,ox,oy,s,s);if(u>0){c.globalAlpha=u;c.drawImage(im,b*fw,0,fw,fw,ox,oy,s,s);c.globalAlpha=1}
+ c.globalCompositeOperation='destination-in';const rg=c.createRadialGradient(W/2,H*.6,s*.3,W/2,H*.6,s*.56);rg.addColorStop(0,'#000');rg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=rg;c.fillRect(0,0,W,H);
+ c.globalCompositeOperation='lighter';
+ const p=P.pts,q=lift<=.5?p[0].map((v,i)=>v+(p[1][i]-v)*lift*2):p[1].map((v,i)=>v+(p[2][i]-v)*(lift-.5)*2),x=ox+q[0]*k,y=oy+q[1]*k;
+ const A=Math.abs(pf),hot=pf>=0,col=hot?'61,220,132':'111,183,255',R=s*(.07+.06*A);
+ const g=c.createRadialGradient(x,y,1,x,y,R);g.addColorStop(0,`rgba(${col},${.25+.7*A})`);g.addColorStop(.45,`rgba(${col},${.12+.25*A})`);g.addColorStop(1,`rgba(${col},0)`);c.fillStyle=g;c.beginPath();c.arc(x,y,R,0,7);c.fill();
+ c.fillStyle=`rgba(${col},${.6+.4*A})`;c.beginPath();c.arc(x,y,s*.008*(1+A),0,7);c.fill();
+ if(A>.12){const ph=(t*1.6)%1,dir=hot?-1:1,sz=s*.018;c.lineWidth=Math.max(2,s*.005);c.lineCap='round';
+  for(let j=0;j<3;j++){const qq=(ph+j/3)%1,dy=dir*s*(.03+.07*qq),al=Math.sin(qq*Math.PI)*Math.min(1,A*1.5);c.strokeStyle=`rgba(${hot?'120,240,170':'140,200,255'},${al})`;c.beginPath();c.moveTo(x-sz,y+dy-dir*sz*.8);c.lineTo(x,y+dy);c.lineTo(x+sz,y+dy-dir*sz*.8);c.stroke()}}
+ c.globalCompositeOperation='source-over'}
 /* ================= HOLOGRAM RENDERER (WebGL warp + x-ray pelvic floor + particles) ================= */
 const IW=1448,IH=1086;
 const RIG={
@@ -332,7 +352,7 @@ void main(){vec2 uv=v,d=vec2(0.);
  d.y+=bob;
  vec4 c=texture2D(tx,uv-d);vec3 bg=vec3(.065,.04,.17);
  float a=smoothstep(.03,.17,length(c.rgb-bg)),lum=dot(c.rgb,vec3(.3,.5,.2));
- float pg=g((uv-P)*K,.075);vec3 tint=L>=0.?vec3(1.,.42,.29):vec3(.36,.84,.79);
+ float pg=g((uv-P)*K,.075);vec3 tint=L>=0.?vec3(.24,.86,.52):vec3(.44,.72,1.);
  c.rgb=mix(c.rgb,tint*(.35+lum*1.5),clamp(pg*abs(L)*.62,0.,1.)*a);
  c.rgb+=a*.03*sin(uv.y*1100.+t*8.);
  float sw=exp(-pow((uv.x-(fract(t*.16)*1.8-.4))/.03,2.));c.rgb+=a*sw*.18*vec3(.85,.8,1.);
@@ -366,7 +386,7 @@ function holoDraw(H,posId,L,t,dt,lift=0){holoSet(H,posId);const R=RIG[posId],nx=
  /* --- overlay: x-ray pelvic floor sling, particles, pulse rings, treadmill --- */
  const [w,h]=sizeC(H.fx),c=H.fx.getContext('2d');c.clearRect(0,0,w,h);
  const hpn=R.HP?nx(R.HP):null,X=p=>{let dy=0;if(hpn&&lift){const dx=(p[0]-hpn[0])*1.3333,dd=p[1]-hpn[1];dy=-.075*lift*Math.exp(-(dx*dx+dd*dd)/(.17*.17))*(1-Math.min(1,Math.max(0,(p[1]-.8)/.08)))}return[p[0]*w,(p[1]+bob+dy)*h]},a=X(A),b=X(B),m=[(a[0]+b[0])/2,(a[1]+b[1])/2],U=R.U,sag=w*(.026-.03*L),cp=[m[0]-U[0]*sag,m[1]-U[1]*sag];
- const hot=L>=0,k=Math.abs(L),col=hot?[255,107,74]:[91,214,201],mix=(x,y,u)=>Math.round(x+(y-x)*u),base=[214,205,255];
+ const hot=L>=0,k=Math.abs(L),col=hot?[61,220,132]:[111,183,255],mix=(x,y,u)=>Math.round(x+(y-x)*u),base=[214,205,255];
  const rgb=`${mix(base[0],col[0],Math.min(1,k*1.4))},${mix(base[1],col[1],Math.min(1,k*1.4))},${mix(base[2],col[2],Math.min(1,k*1.4))}`;
  const len=Math.hypot(b[0]-a[0],b[1]-a[1]),nrm=[-(b[1]-a[1])/len,(b[0]-a[0])/len],lw=Math.max(2,w*.0075);
  c.lineCap='round';c.globalCompositeOperation='lighter';
@@ -374,15 +394,15 @@ function holoDraw(H,posId,L,t,dt,lift=0){holoSet(H,posId);const R=RIG[posId],nx=
   c.beginPath();c.moveTo(a[0]+nrm[0]*o,a[1]+nrm[1]*o);c.quadraticCurveTo(cp[0]+nrm[0]*o*1.6,cp[1]+nrm[1]*o*1.6,b[0]+nrm[0]*o,b[1]+nrm[1]*o);c.stroke()}
  c.shadowBlur=0;[a,b].forEach(p=>{c.fillStyle=`rgba(${rgb},.9)`;c.beginPath();c.arc(p[0],p[1],lw*.9,0,7);c.fill()});
  const sc=[(a[0]+2*cp[0]+b[0])/4,(a[1]+2*cp[1]+b[1])/4];
- if(L>.45&&H.lastL<=.45)H.rings.push({r:0,a:1,c:'255,107,74'});if(L<-.35&&H.lastL>=-.35)H.rings.push({r:0,a:.8,c:'91,214,201'});H.lastL=L;
+ if(L>.45&&H.lastL<=.45)H.rings.push({r:0,a:1,c:'61,220,132'});if(L<-.35&&H.lastL>=-.35)H.rings.push({r:0,a:.8,c:'111,183,255'});H.lastL=L;
  H.rings=H.rings.filter(r=>(r.r+=dt*w*.12,r.a-=dt*1.1)>0);H.rings.forEach(r=>{c.strokeStyle=`rgba(${r.c},${r.a*.7})`;c.lineWidth=lw*.6;c.beginPath();c.arc(sc[0],sc[1],r.r+lw,0,7);c.stroke()});
  const n=Math.random()<k*1.1?1:0;
  for(let i=0;i<n;i++){const ang=Math.random()*6.283;if(hot){const R0=w*(.07+Math.random()*.05);H.parts.push({x:sc[0]+Math.cos(ang)*R0,y:sc[1]+Math.sin(ang)*R0,tx:sc[0],ty:sc[1],life:0,max:.7,hot:1})}
   else H.parts.push({x:sc[0]+(Math.random()-.5)*len*.6,y:sc[1],vx:(-U[0]+(Math.random()-.5)*.8)*w*.05,vy:(-U[1]+(Math.random()-.5)*.8)*w*.05,life:0,max:1.2,hot:0})}
  H.parts=H.parts.filter(p=>(p.life+=dt)<p.max);
  H.parts.forEach(p=>{const u=p.life/p.max;if(p.hot){p.x+=(p.tx-p.x)*Math.min(1,dt*5);p.y+=(p.ty-p.y)*Math.min(1,dt*5)}else{p.x+=p.vx*dt;p.y+=p.vy*dt}
-  const al=Math.sin(u*Math.PI),rr=lw*(p.hot?.55:.7);c.fillStyle=p.hot?`rgba(255,150,120,${al})`:`rgba(120,230,215,${al*.8})`;c.beginPath();c.arc(p.x,p.y,rr,0,7);c.fill()});
- if(k>.12){c.globalCompositeOperation='lighter';const dirv=hot?[U[0],U[1]]:[-U[0],-U[1]],pr=[-dirv[1],dirv[0]],ph=(t*1.6)%1;for(let j=0;j<3;j++){const q=(ph+j/3)%1,dist=w*(.035+.07*q),al=Math.sin(q*Math.PI)*Math.min(1,k*1.5),cx=sc[0]+dirv[0]*dist,cy=sc[1]+dirv[1]*dist,sz=w*.016;c.strokeStyle=`rgba(${hot?'255,140,110':'110,225,210'},${al})`;c.lineWidth=Math.max(2,w*.005);c.shadowColor=c.strokeStyle;c.shadowBlur=lw*2;c.beginPath();c.moveTo(cx-pr[0]*sz-dirv[0]*sz*.8,cy-pr[1]*sz-dirv[1]*sz*.8);c.lineTo(cx,cy);c.lineTo(cx+pr[0]*sz-dirv[0]*sz*.8,cy+pr[1]*sz-dirv[1]*sz*.8);c.stroke()}c.shadowBlur=0}
+  const al=Math.sin(u*Math.PI),rr=lw*(p.hot?.55:.7);c.fillStyle=p.hot?`rgba(150,248,190,${al})`:`rgba(160,205,255,${al*.8})`;c.beginPath();c.arc(p.x,p.y,rr,0,7);c.fill()});
+ if(k>.12){c.globalCompositeOperation='lighter';const dirv=hot?[U[0],U[1]]:[-U[0],-U[1]],pr=[-dirv[1],dirv[0]],ph=(t*1.6)%1;for(let j=0;j<3;j++){const q=(ph+j/3)%1,dist=w*(.035+.07*q),al=Math.sin(q*Math.PI)*Math.min(1,k*1.5),cx=sc[0]+dirv[0]*dist,cy=sc[1]+dirv[1]*dist,sz=w*.016;c.strokeStyle=`rgba(${hot?'120,240,170':'140,200,255'},${al})`;c.lineWidth=Math.max(2,w*.005);c.shadowColor=c.strokeStyle;c.shadowBlur=lw*2;c.beginPath();c.moveTo(cx-pr[0]*sz-dirv[0]*sz*.8,cy-pr[1]*sz-dirv[1]*sz*.8);c.lineTo(cx,cy);c.lineTo(cx+pr[0]*sz-dirv[0]*sz*.8,cy+pr[1]*sz-dirv[1]*sz*.8);c.stroke()}c.shadowBlur=0}
  if(R.walk){const fy=R.floor*h,sp=w*.06,off=(t*w*.12)%sp;c.strokeStyle='rgba(160,140,255,.35)';c.lineWidth=Math.max(1,w*.002);for(let x=-off;x<w;x+=sp){c.beginPath();c.moveTo(x,fy+h*.012);c.lineTo(x+sp*.45,fy+h*.012);c.stroke()}}
  c.globalCompositeOperation='source-over'}
 
@@ -424,7 +444,7 @@ const EX={
   steps:()=>times(4,()=>[S_('squeeze',.6,.8),S_('relax',.6,.1),S_('squeeze',.6,.8),S_('relax',.6,.1),S_('squeeze',.6,1),S_('hold',3,1),S_('relax',2,0),S_('rest',3,0)]),
   how:['Two quick squeezes and releases.','On the third, squeeze fully and hold.','Let go completely, rest, and repeat the wave.'],
   feel:'Fast control followed by a strong hold.',avoid:['Blurring the quick squeezes together','Not fully releasing between waves','Tensing your thighs'],tip:'Keep the rhythm even: pulse, pulse, hold.'},
- bridgek:{n:'Bridge + kegel',type:'Bonus',wk:0,ic:'bridge',pos:'lying',
+ bridgek:{n:'Bridge + kegel',type:'Bonus',wk:0,ic:'bridge',pos:'bridge',
   steps:()=>times(6,()=>[S_('bridge',2,0,{lift:1}),S_('squeeze',1,1,{lift:1}),S_('hold',4,1,{lift:1}),S_('relax',1.5,0,{lift:1}),S_('lower',2,0,{lift:0}),S_('rest',3,0,{lift:0})]),
   how:['Lie on your back, knees bent, feet flat and hip-width apart.','Press through your heels and lift your hips into a bridge.','At the top, do a strong kegel: draw up and in and hold.','Release the kegel fully, then lower your hips slowly.'],
   feel:'Glutes lift the hips, then the pelvic floor does its own separate squeeze at the top.',avoid:['Letting the bridge replace the kegel','Arching your lower back','Holding your breath'],tip:'Two jobs: your glutes lift you, then the kegel is its own squeeze.'},
@@ -476,18 +496,18 @@ const DAYPLAN={strength:[['find','power','flicks','drop','endure'],['power','ele
 
 /* ================= INSIDE VIEW (close-up of the pelvic floor) ================= */
 function mvInit(){$('#mv').innerHTML=`<svg viewBox="0 0 300 300" aria-hidden="true">
-<defs><radialGradient id="mg"><stop offset="0" stop-color="#FF6B4A" stop-opacity=".18"/><stop offset="1" stop-color="#FF6B4A" stop-opacity="0"/></radialGradient></defs>
+<defs><radialGradient id="mg"><stop offset="0" stop-color="#3DDC84" stop-opacity=".18"/><stop offset="1" stop-color="#3DDC84" stop-opacity="0"/></radialGradient></defs>
 <circle cx="150" cy="150" r="146" fill="url(#mg)"/><circle cx="150" cy="150" r="128" fill="none" stroke="#2A2450" stroke-width="12"/>
-<circle id="mvRing" cx="150" cy="150" r="128" fill="none" stroke="#FF6B4A" stroke-width="12" stroke-linecap="round" transform="rotate(-90 150 150)" stroke-dasharray="804" stroke-dashoffset="804"/>
+<circle id="mvRing" cx="150" cy="150" r="128" fill="none" stroke="#3DDC84" stroke-width="12" stroke-linecap="round" transform="rotate(-90 150 150)" stroke-dasharray="804" stroke-dashoffset="804"/>
 <g fill="none" stroke="#8E84CF" stroke-width="4" stroke-linecap="round" opacity=".7"><path d="M76 92c-6 34 4 62 30 80"/><path d="M224 92c6 34-4 62-30 80"/><path d="M96 108c16 10 34 14 54 14s38-4 54-14" stroke-dasharray="3 9"/></g>
 <path id="mvHalo" fill="none" stroke-width="32" stroke-linecap="round"/><path id="mvBand" fill="none" stroke-width="11" stroke-linecap="round"/><path id="mvArrow" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
-function mvDraw(L,prog){const y=196,cy=y+30-L*62,lx=104,rx=196,ly=y-L*14,d=`M${lx} ${ly}Q150 ${cy} ${rx} ${ly}`,hot=L>=0,col=hot?'#FF6B4A':'#5BD6C9';
+function mvDraw(L,prog){const y=196,cy=y+30-L*62,lx=104,rx=196,ly=y-L*14,d=`M${lx} ${ly}Q150 ${cy} ${rx} ${ly}`,hot=L>=0,col=hot?'#3DDC84':'#6FB7FF';
  const b=$('#mvBand'),h=$('#mvHalo'),a=$('#mvArrow');b.setAttribute('d',d);b.setAttribute('stroke',col);h.setAttribute('d',d);h.setAttribute('stroke',col);h.style.opacity=.12+Math.abs(L)*.25;
  const ay=cy-30;if(Math.abs(L)>.08){a.setAttribute('stroke',col);a.setAttribute('d',hot?`M138 ${ay+2}l12-12 12 12`:`M138 ${ay+48}l12 12 12-12`);a.style.opacity=Math.min(1,Math.abs(L)*1.6)}else a.style.opacity=0;
  $('#mvRing').setAttribute('stroke',col);$('#mvRing').setAttribute('stroke-dashoffset',804*(1-prog))}
 
 
-Object.assign(IMG,{'pos-lying.webp':'/assets/img/pos-lying.webp','pos-seated.webp':'/assets/img/pos-seated.webp','pos-standing.webp':'/assets/img/pos-standing.webp','pos-walking.webp':'/assets/img/pos-walking.webp'});
+Object.assign(IMG,{'bridge-sprite.webp':'/assets/img/bridge-sprite.webp','pos-lying.webp':'/assets/img/pos-lying.webp','pos-seated.webp':'/assets/img/pos-seated.webp','pos-standing.webp':'/assets/img/pos-standing.webp','pos-walking.webp':'/assets/img/pos-walking.webp'});
 /* ================= STORE (versioned, portable to a future native app) ================= */
 const KEY='kegzo.v1';
 const dk=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
@@ -703,7 +723,7 @@ function loadEx(i){W.i=i;W.ph='ready';W.t=0;W.si=0;W.st=0;W.rep=0;W.lift=0;W.fro
  const nx=W.list[i+1];$('#nextUp').innerHTML=nx?`${ico(EX[nx].ic,EX[nx].rel?'c':'')}<span>Next: <b style="color:var(--ink)">${EX[nx].n}</b></span>`:'<span>Last exercise of the session</span>';
  $$('#bars i').forEach((b,j)=>b.firstChild.style.width=j<i?'100%':'0%');say(e.n)}
 function enterStep(){const s=STEPS[W.si];W.from=W.L;W.liftFrom=W.lift;W.st=0;const ph=$('#phase');ph.textContent=WORD[s.k];
- ph.style.color=s.to<0||s.k==='drop'?'var(--cool)':(s.k==='squeeze'||s.k==='up'||s.k==='hold')?'var(--hot)':'var(--ink)';
+ ph.style.color=s.to<0||s.k==='drop'?'#6FB7FF':(s.k==='squeeze'||s.k==='up'||s.k==='hold')?'#3DDC84':'var(--ink)';
  const c=CUES[s.k];$('#cue').textContent=Array.isArray(c)?c[W.cueI++%c.length]:c;
  if(s.k==='squeeze'||s.k==='up'){buzz([50]);if(s.d>=1)say(WORD[s.k])}else if(s.k==='drop'){buzz([25,40,25]);say('Drop')}else if(s.k==='bridge'){buzz([40]);say('Lift your hips')}else if(s.k==='lower'){say('Lower')}else if(s.k==='relax'&&s.d>=1.5){say('Relax')}else if(s.k==='hold'&&s.d>=3){say('Hold')}}
 const easeF=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
@@ -713,11 +733,11 @@ function startSession(list,kind){W.list=list;W.kind=kind;W.basePos=kind==='day'?
  if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');loadEx(0)}
 function nextEx(){if(W.i>=W.list.length-1){finish();return}W.ph='rest';W.t=0;$('#stage').classList.add('rest');$$('#bars i')[W.i].firstChild.style.width='100%';$('#phase').textContent='Rest';$('#phase').style.color='var(--cool)';$('#cue').textContent='Breathe easy. Next up: '+EX[W.list[W.i+1]].n;say('Rest')}
 function tick(dt){const tot=CUM[CUM.length-1];
- if(W.ph==='ready'){W.t+=dt;ring(READY-W.t,READY,'Get ready','#5BD6C9');W.L+=(0-W.L)*Math.min(1,dt*4);W.lift+=(0-W.lift)*Math.min(1,dt*4);mvDraw(W.L,0);if(W.t>=READY){W.ph='work';W.si=0;enterStep()}}
+ if(W.ph==='ready'){W.t+=dt;ring(READY-W.t,READY,'Get ready','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*4);W.lift+=(0-W.lift)*Math.min(1,dt*4);mvDraw(W.L,0);if(W.t>=READY){W.ph='work';W.si=0;enterStep()}}
  else if(W.ph==='work'){const s=STEPS[W.si];W.st+=dt;const ramp=s.k==='hold'||s.k==='rest'?.3:s.d*.8;W.L=W.from+(s.to-W.from)*easeF(Math.min(1,W.st/ramp));if(s.lift!=null)W.lift=W.liftFrom+(s.lift-W.liftFrom)*easeF(Math.min(1,W.st/s.d));
-  const e=CUM[W.si]+W.st;ring(tot-e,tot,'Seconds',EX[W.list[W.i]].rel?'#5BD6C9':'#FF6B4A');mvDraw(W.L,Math.min(1,W.st/s.d));$$('#bars i')[W.i].firstChild.style.width=Math.min(100,e/tot*100)+'%';
+  const e=CUM[W.si]+W.st;ring(tot-e,tot,'Seconds',EX[W.list[W.i]].rel?'#6FB7FF':'#FF6B4A');mvDraw(W.L,Math.min(1,W.st/s.d));$$('#bars i')[W.i].firstChild.style.width=Math.min(100,e/tot*100)+'%';
   if(W.st>=s.d){if(s.k==='squeeze'||s.k==='up')W.sq++;if(s.r){W.rep++;updReps()}W.si++;if(W.si>=STEPS.length)nextEx();else enterStep()}}
- else if(W.ph==='rest'){W.t+=dt;ring(REST-W.t,REST,'Rest','#5BD6C9');W.L+=(0-W.L)*Math.min(1,dt*3);mvDraw(W.L,0);if(W.t>=REST)loadEx(W.i+1)}}
+ else if(W.ph==='rest'){W.t+=dt;ring(REST-W.t,REST,'Rest','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*3);mvDraw(W.L,0);if(W.t>=REST)loadEx(W.i+1)}}
 function closePl(){$('#pl').classList.remove('on');document.body.style.overflow='';try{speechSynthesis.cancel()}catch(e){}try{W.lock&&W.lock.release()}catch(e){}W.ph='off'}
 function finish(){const min=Math.max(.5,Math.round((performance.now()-W.started)/6000)/10),today_=dk(new Date()),firstDay=W.kind==='day'&&!dayDates().includes(today_);
  const before=lvl(),xp=W.sq*2+(W.kind==='day'?30:10)+(firstDay?20:0);S.sessions.push({d:today_,kind:W.kind,ids:W.list,min,sq:W.sq,xp});S.xp+=xp;const nb=newBadges();save();closePl();ping('session_done');

@@ -6,7 +6,7 @@ const ROOT=path.resolve(__dirname,'..'),SRC=path.join(ROOT,'src');
 const {EX,EXMETA,DAYPLAN,ICONS}=require(path.join(SRC,'exercises.js'));
 const {GUIDES,STUDY}=require(path.join(SRC,'guides.js'));
 const SITE='https://kegzo.com',V='1',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
-const POSN={lying:'Lying down',seated:'Seated',standing:'Standing',walking:'Walking'},PORDER=['lying','seated','standing','walking'];
+const POSN={bridge:'Lying down',lying:'Lying down',seated:'Seated',standing:'Standing',walking:'Walking'},PORDER=['lying','seated','standing','walking'];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const strip=h=>String(h).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
 const w=(rel,content)=>{const f=path.join(ROOT,rel);fs.mkdirSync(path.dirname(f),{recursive:true});fs.writeFileSync(f,content)};
@@ -101,7 +101,7 @@ ${faqHTML(HF)}${cta('Start Day 1 now')}`;
   const rel=ids.filter(x=>x!==id).slice(0,4);
   const body=`<article class="art"><p class="eyebrow">${e.type} · ${esc(m.sets)}</p><h1>${e.n}: how to do it</h1>
 <p class="lead answer">${m.why}</p>
-<figure class="exfig"><img src="/assets/img/pos-${pos}.webp" width="1448" height="1086" alt="Hologram figure ${POSN[pos].toLowerCase()}, the position for ${e.n.toLowerCase()}" loading="lazy"><figcaption>${POSN[pos]}: ${esc(m.sets)}</figcaption></figure>
+<figure class="exfig"><img src="/assets/img/pos-${pos}.webp" width="${pos==='bridge'?439:1448}" height="${pos==='bridge'?439:1086}" alt="Hologram figure ${POSN[pos].toLowerCase()}, the position for ${e.n.toLowerCase()}" loading="lazy"><figcaption>${POSN[pos]}: ${esc(m.sets)}</figcaption></figure>
 ${cta('Try '+e.n+' with the coach','/app.html#ex-'+m.slug)}
 <h2>How do you do ${e.n.toLowerCase()}?</h2><ol>${e.how.map(s=>`<li>${s}</li>`).join('')}</ol>
 <h2>What should you feel?</h2><p>${e.feel}</p>

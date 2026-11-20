@@ -20,10 +20,10 @@ function draw(c,S,o={}){const g=o.g||1,pf=o.pf||0;c.lineCap='round';c.lineJoin='
  const arm=(s,far)=>{const col=B(far),A=S[s];line(c,S.N,A.el,11,col);line(c,A.el,A.hd,9,col);c.fillStyle=col;c.beginPath();c.arc(A.hd[0],A.hd[1],5.5,0,7);c.fill()};
  const torso=()=>{const col=B(),mid=lerpP(S.P,S.N,.55);line(c,S.P,mid,24,col);line(c,mid,S.N,28,col);line(c,S.N,lerpP(S.N,S.H,.55),10,col);c.fillStyle=col;c.beginPath();c.arc(S.H[0],S.H[1],12.5,0,7);c.fill()};
  arm('L',true);leg('L',true);torso();leg('R');arm('R');
- /* pelvic floor glow: coral = squeeze, aqua = drop */
+ /* pelvic floor glow: green = squeeze, blue = drop */
  const a=Math.abs(pf),hot=pf>=0,p=add(S.P,dir(S.P===S.N?0:0),0),r=18+a*20;c.shadowBlur=0;
- const rg2=c.createRadialGradient(p[0],p[1],1,p[0],p[1],r);rg2.addColorStop(0,hot?`rgba(255,107,74,${.25+.65*a})`:`rgba(91,214,201,${.25+.65*a})`);rg2.addColorStop(1,hot?'rgba(255,107,74,0)':'rgba(91,214,201,0)');c.fillStyle=rg2;c.beginPath();c.arc(p[0],p[1],r,0,7);c.fill();
- c.fillStyle=hot?'#FF6B4A':'#5BD6C9';c.globalAlpha=.6+.4*a;c.beginPath();c.arc(p[0],p[1],4+a*3,0,7);c.fill();c.globalAlpha=1}
+ const rg2=c.createRadialGradient(p[0],p[1],1,p[0],p[1],r);rg2.addColorStop(0,hot?`rgba(61,220,132,${.25+.65*a})`:`rgba(111,183,255,${.25+.65*a})`);rg2.addColorStop(1,hot?'rgba(61,220,132,0)':'rgba(111,183,255,0)');c.fillStyle=rg2;c.beginPath();c.arc(p[0],p[1],r,0,7);c.fill();
+ c.fillStyle=hot?'#3DDC84':'#6FB7FF';c.globalAlpha=.6+.4*a;c.beginPath();c.arc(p[0],p[1],4+a*3,0,7);c.fill();c.globalAlpha=1}
 function fit(cv,C){const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),w=Math.max(1,Math.round(r.width*d)),h=Math.max(1,Math.round(r.height*d));if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h}
  const c=cv.getContext('2d'),s=Math.min(w/400,h/300)*C[2];c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,w,h);c.setTransform(s,0,0,s,w/2-C[0]*s,h*(h>w*.8?.62:.58)-C[1]*s);return[c,s]}
 
@@ -37,15 +37,35 @@ const POS={
  standing:{n:'Standing',img:'pos-standing.webp',cam:[200,192,1.3],keys:[side({p:[200,167],t:180,h:180,L:{a:[198,255],f:90,k:-1,hd:[199,172],e:1},R:{a:[202,255],f:90,k:-1,hd:[203,172],e:1}})],
   how:'Stand tall, feet hip-width apart, knees soft. Harder, because the muscle works against gravity.'},
  walking:{n:'Walking',img:'pos-walking.webp',walk:1,cam:[200,192,1.3],keys:[side({p:[200,168],t:178,h:180,L:{a:[226,255],f:90,k:-1,hd:[186,170],e:1},R:{a:[176,250],f:112,k:-1,hd:[218,166],e:1}}),side({p:[200,168],t:178,h:180,L:{a:[176,250],f:112,k:-1,hd:[218,166],e:1},R:{a:[226,255],f:90,k:-1,hd:[186,170],e:1}})],
-  how:'Walk at an easy pace and hold the squeeze for a few steps. This trains the muscle for everyday life.'}};
+  how:'Walk at an easy pace and hold the squeeze for a few steps. This trains the muscle for everyday life.'},
+ bridge:{n:'Lying down',sprite:'bridge-sprite.webp',frames:5,fw:439,pts:[[125,300],[138,276],[146,252]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+  how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'}};
 const IMG={};const PORDER=['lying','seated','standing','walking'];
 function Fig(posId){const P=POS[posId];return{P,t:0,pose:P.keys[0],
  step(dt){this.t+=dt;if(P.walk){const u=(Math.sin(this.t*Math.PI/.55)+1)/2;this.pose=lerpP(P.keys[0],P.keys[1],u);this.pose.p=[200,168-Math.abs(Math.cos(this.t*Math.PI/.55))*3]}
   else{const b=Math.sin(this.t*1.4)*.8;this.pose=Object.assign({},P.keys[0],{t:P.keys[0].t+b*.6})}},
  render(cv,pf,z=1,lift=0){const now=performance.now()/1000,dt=Math.min(.1,now-(this.lt||now));this.lt=now;
+  if(P.sprite){if(cv._h)cv._h.w.style.display='none';spriteDraw(cv,P,pf,lift,this.t,dt,this);return}
   if(P.img){if(!cv._h)cv._h=Holo(cv);const c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);cv._h.w.style.display='block';holoDraw(cv._h,posOf(P),pf,this.t,dt,lift)}
   else{if(cv._h)cv._h.w.style.display='none';const C=P.cam;const[c,s]=fit(cv,[C[0],C[1],C[2]*z]);draw(c,solve(this.pose),{g:s,pf,chair:P.chair})}}}}
 const posOf=P=>Object.keys(POS).find(k=>POS[k]===P);
+/* frame-based figure (real bridge frames), crossfaded and driven by the session's lift value */
+const SPR={};
+function spriteDraw(cv,P,pf,lift,t,dt,st){const src=IMG[P.sprite]||P.sprite;let im=SPR[src];if(!im){im=SPR[src]=new Image();im.src=src}
+ const r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),W=Math.max(1,Math.round(r.width*d)),H=Math.max(1,Math.round(r.height*d));if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}
+ const c=cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.globalCompositeOperation='source-over';c.globalAlpha=1;c.clearRect(0,0,W,H);if(!im.complete||!im.naturalWidth)return;
+ const fw=P.fw,s=Math.min(W*.98,H*1.3),k=s/fw,ox=W/2-219*k,oy=H*.6-255*k;
+ const fi=Math.max(0,Math.min(P.frames-1,lift*(P.frames-1))),a=Math.floor(fi),b=Math.min(P.frames-1,a+1),u=fi-a;
+ c.drawImage(im,a*fw,0,fw,fw,ox,oy,s,s);if(u>0){c.globalAlpha=u;c.drawImage(im,b*fw,0,fw,fw,ox,oy,s,s);c.globalAlpha=1}
+ c.globalCompositeOperation='destination-in';const rg=c.createRadialGradient(W/2,H*.6,s*.3,W/2,H*.6,s*.56);rg.addColorStop(0,'#000');rg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=rg;c.fillRect(0,0,W,H);
+ c.globalCompositeOperation='lighter';
+ const p=P.pts,q=lift<=.5?p[0].map((v,i)=>v+(p[1][i]-v)*lift*2):p[1].map((v,i)=>v+(p[2][i]-v)*(lift-.5)*2),x=ox+q[0]*k,y=oy+q[1]*k;
+ const A=Math.abs(pf),hot=pf>=0,col=hot?'61,220,132':'111,183,255',R=s*(.07+.06*A);
+ const g=c.createRadialGradient(x,y,1,x,y,R);g.addColorStop(0,`rgba(${col},${.25+.7*A})`);g.addColorStop(.45,`rgba(${col},${.12+.25*A})`);g.addColorStop(1,`rgba(${col},0)`);c.fillStyle=g;c.beginPath();c.arc(x,y,R,0,7);c.fill();
+ c.fillStyle=`rgba(${col},${.6+.4*A})`;c.beginPath();c.arc(x,y,s*.008*(1+A),0,7);c.fill();
+ if(A>.12){const ph=(t*1.6)%1,dir=hot?-1:1,sz=s*.018;c.lineWidth=Math.max(2,s*.005);c.lineCap='round';
+  for(let j=0;j<3;j++){const qq=(ph+j/3)%1,dy=dir*s*(.03+.07*qq),al=Math.sin(qq*Math.PI)*Math.min(1,A*1.5);c.strokeStyle=`rgba(${hot?'120,240,170':'140,200,255'},${al})`;c.beginPath();c.moveTo(x-sz,y+dy-dir*sz*.8);c.lineTo(x,y+dy);c.lineTo(x+sz,y+dy-dir*sz*.8);c.stroke()}}
+ c.globalCompositeOperation='source-over'}
 /* ================= HOLOGRAM RENDERER (WebGL warp + x-ray pelvic floor + particles) ================= */
 const IW=1448,IH=1086;
 const RIG={
@@ -63,7 +83,7 @@ void main(){vec2 uv=v,d=vec2(0.);
  d.y+=bob;
  vec4 c=texture2D(tx,uv-d);vec3 bg=vec3(.065,.04,.17);
  float a=smoothstep(.03,.17,length(c.rgb-bg)),lum=dot(c.rgb,vec3(.3,.5,.2));
- float pg=g((uv-P)*K,.075);vec3 tint=L>=0.?vec3(1.,.42,.29):vec3(.36,.84,.79);
+ float pg=g((uv-P)*K,.075);vec3 tint=L>=0.?vec3(.24,.86,.52):vec3(.44,.72,1.);
  c.rgb=mix(c.rgb,tint*(.35+lum*1.5),clamp(pg*abs(L)*.62,0.,1.)*a);
  c.rgb+=a*.03*sin(uv.y*1100.+t*8.);
  float sw=exp(-pow((uv.x-(fract(t*.16)*1.8-.4))/.03,2.));c.rgb+=a*sw*.18*vec3(.85,.8,1.);
@@ -97,7 +117,7 @@ function holoDraw(H,posId,L,t,dt,lift=0){holoSet(H,posId);const R=RIG[posId],nx=
  /* --- overlay: x-ray pelvic floor sling, particles, pulse rings, treadmill --- */
  const [w,h]=sizeC(H.fx),c=H.fx.getContext('2d');c.clearRect(0,0,w,h);
  const hpn=R.HP?nx(R.HP):null,X=p=>{let dy=0;if(hpn&&lift){const dx=(p[0]-hpn[0])*1.3333,dd=p[1]-hpn[1];dy=-.075*lift*Math.exp(-(dx*dx+dd*dd)/(.17*.17))*(1-Math.min(1,Math.max(0,(p[1]-.8)/.08)))}return[p[0]*w,(p[1]+bob+dy)*h]},a=X(A),b=X(B),m=[(a[0]+b[0])/2,(a[1]+b[1])/2],U=R.U,sag=w*(.026-.03*L),cp=[m[0]-U[0]*sag,m[1]-U[1]*sag];
- const hot=L>=0,k=Math.abs(L),col=hot?[255,107,74]:[91,214,201],mix=(x,y,u)=>Math.round(x+(y-x)*u),base=[214,205,255];
+ const hot=L>=0,k=Math.abs(L),col=hot?[61,220,132]:[111,183,255],mix=(x,y,u)=>Math.round(x+(y-x)*u),base=[214,205,255];
  const rgb=`${mix(base[0],col[0],Math.min(1,k*1.4))},${mix(base[1],col[1],Math.min(1,k*1.4))},${mix(base[2],col[2],Math.min(1,k*1.4))}`;
  const len=Math.hypot(b[0]-a[0],b[1]-a[1]),nrm=[-(b[1]-a[1])/len,(b[0]-a[0])/len],lw=Math.max(2,w*.0075);
  c.lineCap='round';c.globalCompositeOperation='lighter';
@@ -105,15 +125,15 @@ function holoDraw(H,posId,L,t,dt,lift=0){holoSet(H,posId);const R=RIG[posId],nx=
   c.beginPath();c.moveTo(a[0]+nrm[0]*o,a[1]+nrm[1]*o);c.quadraticCurveTo(cp[0]+nrm[0]*o*1.6,cp[1]+nrm[1]*o*1.6,b[0]+nrm[0]*o,b[1]+nrm[1]*o);c.stroke()}
  c.shadowBlur=0;[a,b].forEach(p=>{c.fillStyle=`rgba(${rgb},.9)`;c.beginPath();c.arc(p[0],p[1],lw*.9,0,7);c.fill()});
  const sc=[(a[0]+2*cp[0]+b[0])/4,(a[1]+2*cp[1]+b[1])/4];
- if(L>.45&&H.lastL<=.45)H.rings.push({r:0,a:1,c:'255,107,74'});if(L<-.35&&H.lastL>=-.35)H.rings.push({r:0,a:.8,c:'91,214,201'});H.lastL=L;
+ if(L>.45&&H.lastL<=.45)H.rings.push({r:0,a:1,c:'61,220,132'});if(L<-.35&&H.lastL>=-.35)H.rings.push({r:0,a:.8,c:'111,183,255'});H.lastL=L;
  H.rings=H.rings.filter(r=>(r.r+=dt*w*.12,r.a-=dt*1.1)>0);H.rings.forEach(r=>{c.strokeStyle=`rgba(${r.c},${r.a*.7})`;c.lineWidth=lw*.6;c.beginPath();c.arc(sc[0],sc[1],r.r+lw,0,7);c.stroke()});
  const n=Math.random()<k*1.1?1:0;
  for(let i=0;i<n;i++){const ang=Math.random()*6.283;if(hot){const R0=w*(.07+Math.random()*.05);H.parts.push({x:sc[0]+Math.cos(ang)*R0,y:sc[1]+Math.sin(ang)*R0,tx:sc[0],ty:sc[1],life:0,max:.7,hot:1})}
   else H.parts.push({x:sc[0]+(Math.random()-.5)*len*.6,y:sc[1],vx:(-U[0]+(Math.random()-.5)*.8)*w*.05,vy:(-U[1]+(Math.random()-.5)*.8)*w*.05,life:0,max:1.2,hot:0})}
  H.parts=H.parts.filter(p=>(p.life+=dt)<p.max);
  H.parts.forEach(p=>{const u=p.life/p.max;if(p.hot){p.x+=(p.tx-p.x)*Math.min(1,dt*5);p.y+=(p.ty-p.y)*Math.min(1,dt*5)}else{p.x+=p.vx*dt;p.y+=p.vy*dt}
-  const al=Math.sin(u*Math.PI),rr=lw*(p.hot?.55:.7);c.fillStyle=p.hot?`rgba(255,150,120,${al})`:`rgba(120,230,215,${al*.8})`;c.beginPath();c.arc(p.x,p.y,rr,0,7);c.fill()});
- if(k>.12){c.globalCompositeOperation='lighter';const dirv=hot?[U[0],U[1]]:[-U[0],-U[1]],pr=[-dirv[1],dirv[0]],ph=(t*1.6)%1;for(let j=0;j<3;j++){const q=(ph+j/3)%1,dist=w*(.035+.07*q),al=Math.sin(q*Math.PI)*Math.min(1,k*1.5),cx=sc[0]+dirv[0]*dist,cy=sc[1]+dirv[1]*dist,sz=w*.016;c.strokeStyle=`rgba(${hot?'255,140,110':'110,225,210'},${al})`;c.lineWidth=Math.max(2,w*.005);c.shadowColor=c.strokeStyle;c.shadowBlur=lw*2;c.beginPath();c.moveTo(cx-pr[0]*sz-dirv[0]*sz*.8,cy-pr[1]*sz-dirv[1]*sz*.8);c.lineTo(cx,cy);c.lineTo(cx+pr[0]*sz-dirv[0]*sz*.8,cy+pr[1]*sz-dirv[1]*sz*.8);c.stroke()}c.shadowBlur=0}
+  const al=Math.sin(u*Math.PI),rr=lw*(p.hot?.55:.7);c.fillStyle=p.hot?`rgba(150,248,190,${al})`:`rgba(160,205,255,${al*.8})`;c.beginPath();c.arc(p.x,p.y,rr,0,7);c.fill()});
+ if(k>.12){c.globalCompositeOperation='lighter';const dirv=hot?[U[0],U[1]]:[-U[0],-U[1]],pr=[-dirv[1],dirv[0]],ph=(t*1.6)%1;for(let j=0;j<3;j++){const q=(ph+j/3)%1,dist=w*(.035+.07*q),al=Math.sin(q*Math.PI)*Math.min(1,k*1.5),cx=sc[0]+dirv[0]*dist,cy=sc[1]+dirv[1]*dist,sz=w*.016;c.strokeStyle=`rgba(${hot?'120,240,170':'140,200,255'},${al})`;c.lineWidth=Math.max(2,w*.005);c.shadowColor=c.strokeStyle;c.shadowBlur=lw*2;c.beginPath();c.moveTo(cx-pr[0]*sz-dirv[0]*sz*.8,cy-pr[1]*sz-dirv[1]*sz*.8);c.lineTo(cx,cy);c.lineTo(cx+pr[0]*sz-dirv[0]*sz*.8,cy+pr[1]*sz-dirv[1]*sz*.8);c.stroke()}c.shadowBlur=0}
  if(R.walk){const fy=R.floor*h,sp=w*.06,off=(t*w*.12)%sp;c.strokeStyle='rgba(160,140,255,.35)';c.lineWidth=Math.max(1,w*.002);for(let x=-off;x<w;x+=sp){c.beginPath();c.moveTo(x,fy+h*.012);c.lineTo(x+sp*.45,fy+h*.012);c.stroke()}}
  c.globalCompositeOperation='source-over'}
 

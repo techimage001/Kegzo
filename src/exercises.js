@@ -35,7 +35,7 @@ const EX={
   steps:()=>times(4,()=>[S_('squeeze',.6,.8),S_('relax',.6,.1),S_('squeeze',.6,.8),S_('relax',.6,.1),S_('squeeze',.6,1),S_('hold',3,1),S_('relax',2,0),S_('rest',3,0)]),
   how:['Two quick squeezes and releases.','On the third, squeeze fully and hold.','Let go completely, rest, and repeat the wave.'],
   feel:'Fast control followed by a strong hold.',avoid:['Blurring the quick squeezes together','Not fully releasing between waves','Tensing your thighs'],tip:'Keep the rhythm even: pulse, pulse, hold.'},
- bridgek:{n:'Bridge + kegel',type:'Bonus',wk:0,ic:'bridge',pos:'lying',
+ bridgek:{n:'Bridge + kegel',type:'Bonus',wk:0,ic:'bridge',pos:'bridge',
   steps:()=>times(6,()=>[S_('bridge',2,0,{lift:1}),S_('squeeze',1,1,{lift:1}),S_('hold',4,1,{lift:1}),S_('relax',1.5,0,{lift:1}),S_('lower',2,0,{lift:0}),S_('rest',3,0,{lift:0})]),
   how:['Lie on your back, knees bent, feet flat and hip-width apart.','Press through your heels and lift your hips into a bridge.','At the top, do a strong kegel: draw up and in and hold.','Release the kegel fully, then lower your hips slowly.'],
   feel:'Glutes lift the hips, then the pelvic floor does its own separate squeeze at the top.',avoid:['Letting the bridge replace the kegel','Arching your lower back','Holding your breath'],tip:'Two jobs: your glutes lift you, then the kegel is its own squeeze.'},
