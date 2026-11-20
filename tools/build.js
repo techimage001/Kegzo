@@ -5,7 +5,7 @@ const fs=require('fs'),path=require('path');
 const ROOT=path.resolve(__dirname,'..'),SRC=path.join(ROOT,'src');
 const {EX,EXMETA,DAYPLAN,ICONS}=require(path.join(SRC,'exercises.js'));
 const {GUIDES,STUDY}=require(path.join(SRC,'guides.js'));
-const SITE='https://kegzo.com',V='18',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
+const SITE='https://kegzo.com',V='19',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
 const POSN={hbaby:'Lying down',dsquat:'Deep squat',child:'Kneeling',side:'Side-lying',cough:'Standing',boxlift:'Standing',lunge:'Standing',sts:'Seated',squat:'Standing',gbridge:'Lying down',tilt:'Lying down',breath:'Lying down',seatopen:'Seated',fours:'On all fours',climber:'Plank',bridge:'Lying down',lying:'Lying down',seated:'Seated',standing:'Standing',walking:'Walking'},PORDER=['lying','seated','standing','walking'],VID={hbaby:'hbaby',dsquat:'dsquat',child:'child',side:'side',cough:'cough',boxlift:'boxlift',lunge:'lunge',sts:'sts',squat:'squat',lying:'lying',seated:'seated',standing:'standing',walking:'walking',gbridge:'gbridge',tilt:'tilt',breath:'breath',seatopen:'seatopen',bridge:'bridge',fours:'fours',climber:'climber'};
 const BONUS=()=>Object.keys(EX).filter(id=>!EX[id].wk&&VID[EX[id].pos]);
 const bcard=id=>{const e=EX[id],m=EXMETA[id];return `<a class="wkc bc" href="/exercises/${m.slug}.html"><span class="vbox fit"><video src="/assets/video/${VID[e.pos]}.mp4?v=${V}" poster="/assets/img/pos-${e.pos}.webp" autoplay muted loop playsinline preload="metadata" aria-label="Hologram figure doing ${e.n.toLowerCase()}, looping"></video></span><b>${e.n}</b><span>${m.short}</span></a>`};
@@ -43,13 +43,13 @@ const crumbs=list=>({'@type':'BreadcrumbList',itemListElement:list.map(([n,u],i)
 const faqSchema=faq=>({'@type':'FAQPage',mainEntity:faq.map(([q,a])=>({'@type':'Question',name:q,acceptedAnswer:{'@type':'Answer',text:strip(a)}}))});
 const MARK=`<svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#FF6B4A"/><path d="M7 19c4 4 14 4 18 0" stroke="#2A0E07" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="16" cy="12" r="3.2" fill="#2A0E07"/></svg>`;
 const NAV=`<header class="top"><div class="wrap topin"><a class="brand" href="/">${MARK}Kegzo</a><button class="menu" id="menuB" aria-expanded="false" aria-controls="nav" aria-label="Menu"><span></span><span></span><span></span></button>
-<nav id="nav" aria-label="Main"><a href="/exercises/">Exercises</a><a href="/guides/">Guides</a><a href="/about.html">About</a><a class="btn hot sm" href="/app.html">Start training</a></nav></div></header>`;
+<nav id="nav" aria-label="Main"><a href="/">Home</a><a href="/exercises/">Exercises</a><a href="/guides/">Guides</a><a href="/about.html">About</a><a class="btn hot sm" href="/app.html">Start training</a></nav></div></header>`;
 const FOOT=`<footer class="foot"><div class="wrap">
 <div class="fcols">
 <div><p class="fh"><a href="/app.html">Programme</a></p><a href="/app.html">Start training</a><a href="/#programme">The 28-day plan</a><a href="/#how">How it works</a></div>
 <div><p class="fh"><a href="/exercises/">Exercises</a></p>${Object.keys(EX).slice(0,6).map(id=>`<a href="/exercises/${EXMETA[id].slug}.html">${EX[id].n}</a>`).join('')}<a href="/exercises/">All exercises</a></div>
 <div><p class="fh"><a href="/guides/">Guides</a></p>${GUIDES.slice(0,5).map(g=>`<a href="/guides/${g.slug}.html">${esc(g.h1.split(':')[0].replace(/,.*$/,''))}</a>`).join('')}<a href="/guides/">All guides</a></div>
-<div><p class="fh">Kegzo</p><a href="/about.html">About</a><a href="/how-we-write.html">How we write</a><a href="/contact.html">Contact</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a></div>
+<div><p class="fh">Kegzo</p><a href="/welcome.html">Welcome: meet your coach</a><a href="/">Home</a><a href="/about.html">About</a><a href="/how-we-write.html">How we write</a><a href="/contact.html">Contact</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a></div>
 </div>
 <p class="fdisc">General fitness information, not medical advice. Kegzo is a training game for the pelvic floor and does not diagnose or treat any condition. If you have pain or a health concern, speak to a qualified professional.</p>
 <p class="fdisc">© Kegzo</p></div></footer>
@@ -57,7 +57,7 @@ const FOOT=`<footer class="foot"><div class="wrap">
 function page({url,title,desc,schema,body,crumb,img}){
  const bc=crumb?`<nav class="bc" aria-label="Breadcrumb">${crumb.map(([n,u],i)=>i<crumb.length-1?`<a href="${u}">${esc(n)}</a><span aria-hidden="true">›</span>`:`<span aria-current="page">${esc(n)}</span>`).join('')}</nav>`:'';
  return`<!DOCTYPE html><html lang="en"><head>${head({title,desc,url,img,schema:[...(schema||[]),...(crumb?[crumbs(crumb)]:[])]})}
-<link rel="stylesheet" href="/assets/site.css?v=${V}"></head><body>${NAV}<main class="wrap">${bc}${body}</main>${FOOT}</body></html>`}
+<link rel="stylesheet" href="/assets/site.css?v=${V}">${url==='/'?`<script>try{if(!localStorage.getItem('kegzo.welcomed')&&!/bot|crawl|spider|slurp|lighthouse|preview/i.test(navigator.userAgent)&&!/[?&]home/.test(location.search))location.replace('/welcome.html')}catch(e){}</script>`:''}</head><body>${NAV}<main class="wrap">${bc}${body}</main>${FOOT}</body></html>`}
 const cta=(t='Start training now',href='/app.html')=>`<p class="ctar"><a class="btn hot" href="${href}">${t}</a><span class="tiny mut">Currently free. Start straight away on any phone.</span></p>`;
 const faqHTML=faq=>`<section class="faq"><h2>Frequently asked questions</h2>${faq.map(([q,a])=>`<details><summary>${esc(q)}</summary><p>${a}</p></details>`).join('')}</section>`;
 
@@ -97,7 +97,20 @@ const faqHTML=faq=>`<section class="faq"><h2>Frequently asked questions</h2>${fa
 ${[['Safety check before you start','Rarely','Yes, with a Relax track'],['Reverse kegels in every session','Often missing','Yes'],['Real progress tests','Session counts','Weekly max hold, flicks and relax score'],['Start training straight away','Often a long quiz first','Yes'],['Your training stays on your device','Varies','Yes'],['Live animated coach','Timers and sounds','Moving figure and inside view']].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td><b>${r[2]}</b></td></tr>`).join('')}
 </tbody></table></div></section>
 ${faqHTML(HF)}${cta('Start Day 1 now')}`;
- w('index.html',page({url:'/',title:'Kegzo: Kegel Exercises for Men, Built Like a Game',desc:'A 28-day kegel programme for men with a live animated coach, levels, streaks and real progress tests. Currently free. Start on any phone, no download.',body,schema:[faqSchema(HF),{'@type':'WebApplication',name:'Kegzo Trainer',url:SITE+'/app.html',applicationCategory:'HealthApplication',operatingSystem:'Any (web browser)',isAccessibleForFree:true}]}));pages.push(['/','1.0'])}
+ 
+w('welcome.html',`<!DOCTYPE html><html lang="en"><head>${head({title:'Welcome to Kegzo | Meet Your Coach',desc:'Meet your Kegzo coach. A free kegel trainer for men with a voice that talks you through every step.',url:'/welcome.html',robots:'noindex,follow'})}<link rel="stylesheet" href="/assets/site.css?v=${V}"></head><body class="wel">
+<main class="welw"><a class="brand welb" href="/">${MARK}Kegzo</a>
+<div class="welglow" aria-hidden="true"></div>
+<div class="welv"><video id="wV" src="/assets/video/coach-welcome.mp4?v=${V}" poster="/assets/img/coach-poster.webp?v=${V}" playsinline preload="auto" aria-label="Your Kegzo coach welcoming you"></video><button class="welp" id="wP" type="button"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Tap to meet your coach</span></button></div>
+<p class="welc" id="wC" aria-live="polite">Hi, I'm your Kegzo coach. Tap play to hear me.</p>
+<div class="wela"><a class="btn hot" id="wGo" href="/">Continue to Kegzo</a><a class="welskip" href="/" id="wSkip">Skip</a></div>
+<p class="weld">Free. No subscription. General fitness information, not medical advice.</p></main>
+<script>{const v=document.getElementById('wV'),b=document.getElementById('wP'),c=document.getElementById('wC'),C=[[0,"Hi, I'm your Kegzo coach. Welcome to Kegzo, your free kegel exercise trainer for men."],[6.5,"Kegel exercises strengthen your pelvic floor muscles, which help support your bladder and bowel control."],[12.2,"Just a few minutes a day can make a difference."]];
+const seen=()=>{try{localStorage.setItem('kegzo.welcomed','1')}catch(e){}};document.getElementById('wGo').addEventListener('click',seen);document.getElementById('wSkip').addEventListener('click',seen);
+const go=()=>{v.muted=false;v.currentTime=0;v.play().then(()=>b.classList.add('gone')).catch(()=>{})};b.onclick=go;v.onclick=()=>{if(v.paused)go();else{v.pause();b.classList.remove('gone')}};
+v.ontimeupdate=()=>{let t='';C.forEach(x=>{if(v.currentTime>=x[0])t=x[1]});if(t)c.textContent=t};
+v.onended=()=>{seen();c.textContent='Taking you to Kegzo...';setTimeout(()=>location.href='/',1400)}}</script></body></html>`);
+w('index.html',page({url:'/',title:'Kegzo: Kegel Exercises for Men, Built Like a Game',desc:'A 28-day kegel programme for men with a live animated coach, levels, streaks and real progress tests. Currently free. Start on any phone, no download.',body,schema:[faqSchema(HF),{'@type':'WebApplication',name:'Kegzo Trainer',url:SITE+'/app.html',applicationCategory:'HealthApplication',operatingSystem:'Any (web browser)',isAccessibleForFree:true}]}));pages.push(['/','1.0'])}
 
 /* ---------- exercises ---------- */
 {const ids=Object.keys(EX);
@@ -184,6 +197,17 @@ h1{font-size:clamp(32px,7vw,52px);margin:.3em 0 .35em}h2{font-size:clamp(23px,4.
 :focus-visible{outline:3px solid var(--cool);outline-offset:2px;border-radius:8px}
 .eyebrow{font-size:14px;font-weight:600;color:var(--hot);margin:28px 0 0}.lead{font-size:clamp(18px,2.4vw,20px);color:#E6E1FF}.mut{color:var(--mut)}.tiny{font-size:14px}
 .ctar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:22px 0}
+.wel{min-height:100dvh;display:grid;place-items:center;background:radial-gradient(70% 50% at 50% 35%,rgba(140,70,255,.28),transparent 70%),var(--bg,#14112A)}
+.welw{position:relative;width:100%;max-width:440px;padding:24px 18px calc(28px + env(safe-area-inset-bottom));display:grid;gap:16px;justify-items:center;text-align:center}
+.welw .welb{justify-self:center;width:auto;margin:0 auto;font-size:22px}
+.welglow{position:absolute;top:70px;left:50%;width:min(80vw,360px);height:min(80vw,360px);transform:translateX(-50%);background:radial-gradient(circle,rgba(61,220,132,.22),rgba(140,70,255,.18) 45%,transparent 70%);filter:blur(24px);pointer-events:none}
+.welv{position:relative;width:min(62vw,280px);border-radius:26px;overflow:hidden;background:#2A0E55;border:1px solid rgba(255,255,255,.12);box-shadow:0 0 0 1px rgba(255,255,255,.04),0 20px 60px rgba(90,40,200,.45),0 0 80px rgba(61,220,132,.15)}
+.welv video{display:block;width:100%;height:auto;aspect-ratio:auto;object-fit:contain}
+.welp{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;white-space:nowrap;padding:14px 20px;border-radius:999px;border:0;background:#FF6B4A;color:#fff;font:600 16px/1 inherit;cursor:pointer;min-height:52px;box-shadow:0 0 30px rgba(255,107,74,.55)}
+.welp svg{width:20px;height:20px}.welp.gone{opacity:0;pointer-events:none}
+.welc{min-height:3.4em;font-size:18px;line-height:1.45;color:#fff;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px 16px;width:100%;backdrop-filter:blur(8px)}
+.wela{display:grid;gap:10px;width:100%}.wela .btn{width:100%;justify-content:center;min-height:54px;font-size:17px}.welskip{color:var(--mut,#B6AFD8);padding:8px}
+.weld{font-size:13px;color:var(--mut,#B6AFD8)}
 .meet{display:grid;gap:18px;align-items:center}.meetv{position:relative;border-radius:24px;overflow:hidden;width:min(62vw,300px);margin:0 auto;background:#2A0E55;border:1px solid var(--line)}.meetv video{display:block;width:100%;height:auto;aspect-ratio:auto;max-height:none;object-fit:contain;object-position:50% 50%}.meetp{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;white-space:nowrap;padding:14px 22px;border-radius:999px;border:0;background:#FF6B4A;color:#fff;font:600 17px/1 inherit;cursor:pointer;min-height:52px;box-shadow:0 8px 30px rgba(0,0,0,.45)}.meetp svg{width:22px;height:22px}.mcap{min-height:3em;font-size:18px;color:#fff;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:12px 16px}@media (min-width:760px){.meet{grid-template-columns:1fr 1fr;gap:34px}}
 .hero{display:grid;gap:10px;align-items:center;padding:6px 0 10px}
 .hfig{position:relative;border-radius:24px;overflow:hidden;background:#100C28;border:1px solid var(--line)}

@@ -18,7 +18,7 @@ for(const f of html){const s=fs.readFileSync(f,'utf8'),r=rel(f);
  for(const m of s.matchAll(/href="(\/[^"#?]*)/g)){let u=m[1];if(u.startsWith("/api/")||u.includes("${"))continue;let p=path.join(ROOT,u);if(u.endsWith('/'))p=path.join(p,'index.html');ok(fs.existsSync(p),`${r} broken link ${u}`)}
  for(const m of s.matchAll(/src="(\/[^"?]+)/g))ok(fs.existsSync(path.join(ROOT,m[1])),`${r} missing asset ${m[1]}`);
  const faqVis=(s.match(/<details>/g)||[]).length,faqLd=(s.match(/"@type":"Question"/g)||[]).length;ok(faqVis===faqLd,`${r} FAQ schema ${faqLd} vs visible ${faqVis}`);
- if(r!=='/app.html'&&r!=='/404.html'){ok(/class="lead answer"/.test(s),r+' answer-first block');ok(/General fitness information, not medical advice/.test(s),r+' disclaimer')}
+ if(r!=='/app.html'&&r!=='/404.html'){if(r!=='/welcome.html')ok(/class="lead answer"/.test(s),r+' answer-first block');ok(/General fitness information, not medical advice/.test(s),r+' disclaimer')}
  for(const m of s.matchAll(/<img [^>]*>/g))ok(/alt="[^"]*"/.test(m[0]),r+' img alt')}
 const sm=fs.readFileSync(path.join(ROOT,'sitemap.xml'),'utf8'),locs=[...sm.matchAll(/<loc>https:\/\/kegzo.com([^<]+)<\/loc>/g)].map(m=>m[1]);
 const pages=JSON.parse(fs.readFileSync(path.join(__dirname,'.pages.json'),'utf8'));ok(locs.length===pages.length,'sitemap count');
