@@ -68,7 +68,7 @@ const faqHTML=faq=>`<section class="faq"><h2>Frequently asked questions</h2>${fa
   .replace('{{ENGINE}}',()=>fs.readFileSync(path.join(SRC,'engine.js'),'utf8'))
   .replace('{{EXERCISES}}',()=>fs.readFileSync(path.join(SRC,'exercises.js'),'utf8').replace(/if\(typeof module[^\n]*\n?/,''))
   .replace('{{INSIDE}}',()=>fs.readFileSync(path.join(SRC,'inside.js'),'utf8'))
-  .replace('{{APPJS}}',()=>'const VBASE="/assets/voice/",VDUR='+fs.readFileSync(path.join(SRC,'voices.json'),'utf8')+';\n'+fs.readFileSync(path.join(SRC,'app.js'),'utf8'));
+  .replace('{{APPJS}}',()=>'const VBASE="/assets/voice/",VBASEV="/assets/video/",VDUR='+fs.readFileSync(path.join(SRC,'voices.json'),'utf8')+';\n'+fs.readFileSync(path.join(SRC,'app.js'),'utf8'));
  w('app.html',out);pages.push(['/app.html','0.9'])}
 
 /* ---------- home ---------- */
