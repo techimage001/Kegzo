@@ -8,6 +8,15 @@
 .top .lv{display:flex;gap:6px}
 .acct{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);font-size:14px;font-weight:600}
 .avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--surf2);font-weight:700}
+#acct .btn,#acct button{white-space:nowrap;padding:8px 12px}@media (max-width:380px){#topSt{display:none}}
+.mbtn{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);cursor:pointer;margin-left:6px}.mbtn svg{width:22px;height:22px}
+.smenu{position:fixed;inset:0;z-index:80}.smenu[hidden]{display:none}.smbg{position:absolute;inset:0;background:rgba(5,3,15,.6);backdrop-filter:blur(4px)}
+.smp{position:absolute;top:0;right:0;bottom:0;width:min(86vw,340px);background:rgba(24,18,52,.96);backdrop-filter:blur(18px);border-left:1px solid var(--line);padding:max(14px,env(safe-area-inset-top)) 16px 20px;display:flex;flex-direction:column;gap:4px;box-shadow:-20px 0 60px rgba(0,0,0,.5)}
+.smh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.smh b{font-size:18px}
+.smp a{display:block;padding:14px 12px;border-radius:12px;color:var(--ink);text-decoration:none;font-size:17px}.smp a:hover,.smp a:focus{background:rgba(255,255,255,.07)}
+.pl-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.pl-top .btn{display:inline-flex;align-items:center;gap:6px;min-height:44px}.pl-top svg{width:20px;height:20px}
+.tabs{background:rgba(20,16,49,.82)!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,.1)}
+.tabs button{min-height:60px}.tabs button[aria-current="page"],.tabs button.on{color:#fff}.tabs button[aria-current="page"] svg,.tabs button.on svg{filter:drop-shadow(0 0 8px rgba(255,107,74,.7))}
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);background:var(--surf);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
 .tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 8px;font-size:12px;font-weight:500;color:var(--mut);min-height:58px}
 .tabs button svg{width:24px;height:24px}
@@ -95,7 +104,9 @@ main.app{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
   <span class="sp"></span>
   <span class="lv"><span class="chip num" id="topLv">Lv 1</span><span class="chip num" id="topSt" title="Training streak">0 days</span></span>
   <span id="acct"></span>
+  <button class="mbtn" id="siteMenuB" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="siteMenu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 </header>
+<div class="smenu" id="siteMenu" hidden><div class="smbg" data-close></div><nav class="smp" aria-label="Site menu"><div class="smh"><b>Menu</b><button class="mbtn" data-close aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><a href="/welcome.html">👋 Welcome: meet your coach</a><a href="/">🏠 Home</a><a href="/#how">🧭 How it works</a><a href="/exercises/">💪 All exercises</a><a href="/guides/">📘 Guides</a><a href="/about.html">ℹ️ About</a><a href="/contact.html">✉️ Contact us</a><a href="/privacy.html">🔒 Privacy</a></nav></div>
 <nav class="tabs" aria-label="App sections">
   <button data-v="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z" fill="currentColor"/></svg>Today</button>
   <button data-v="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Progress</button>
@@ -112,7 +123,7 @@ main.app{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
 
 <!-- session player -->
 <div class="overlay" id="pl" role="dialog" aria-modal="true" aria-label="Training session">
-  <div class="pl-top"><span class="chip" id="plLabel">Session</span><button class="btn ghost sm" id="quitB">End session</button></div>
+  <div class="pl-top"><button class="btn ghost sm backb" id="quitB" aria-label="Leave session and go back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>Back</button><span class="chip" id="plLabel">Session</span><a class="btn ghost sm" href="/" id="plHome" aria-label="Kegzo home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V21h-6v-7H9v7H3z"/></svg></a></div>
   <div class="player" style="max-width:1180px;margin:0 auto">
     <div class="left">
       <div class="stage" id="stage">
@@ -146,7 +157,7 @@ main.app{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
     <h1 id="finT">Session complete</h1>
     <div class="kpis"><div class="kpi"><b class="num" id="fMin">0</b><span>Minutes</span></div><div class="kpi"><b class="num" id="fSq">0</b><span>Squeezes</span></div><div class="kpi"><b class="num" id="fXp">+0</b><span>XP</span></div></div>
     <div id="finExtra" class="grid"></div>
-    <button class="btn hot wide" id="finB">Done</button>
+    <button class="btn hot wide" id="finB">Back to Today</button><a class="btn ghost wide" href="/" style="margin-top:8px">Kegzo home</a>
   </div>
 </div>
 

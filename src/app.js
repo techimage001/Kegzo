@@ -1,3 +1,4 @@
+try{localStorage.setItem("kegzo.welcomed","1")}catch(e){}
 /* ================= STORE (versioned, portable to a future native app) ================= */
 const KEY='kegzo.v1';
 const dk=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
@@ -239,9 +240,9 @@ function enterStep(){const s=STEPS[W.si];W.from=W.L;W.liftFrom=W.lift;W.st=0;con
  const c=CUES[s.k];$('#cue').textContent=Array.isArray(c)?c[W.cueI++%c.length]:c;
  W.mid=0;const V={squeeze:s.d>=1?'Squeeze':'',up:'Up a floor',down:'Down a floor',drop:'Breathe in and drop',bridge:'Lift your hips',lower:'Lower your hips and let go',plankup:'Lift your knees into the plank',kneesopen:'Slowly open your knees',squatdown:'Keep squeezing, squat down',standup:'Keep squeezing, and stand up',cough:'Now cough',liftdown:'Bend your knees and grip the box',liftup:'Lift, keep squeezing',setdown:'Set it down slowly',lungedown:'Step forward into a lunge',lungeup:'Push back up',sitdown:'Sit back down slowly',squatup:'And stand back up',tilt:'Tilt your pelvis',untilt:'Roll back to neutral',inhale:'Breathe in, belly rises, let it drop',exhale:'Breathe out slowly',kneesclose:'Knees back together',kneel:'Knees down',kneein:'Knee in, and squeeze',legback:'Leg back, let it go',relax:s.d>=1.5?'Relax':'',hold:s.d>=3?'Hold':''};
  if(s.k==='squeeze'||s.k==='up'||s.k==='kneein'){buzz([50]);SFX.up()}else if(s.k==='drop'){buzz([25,40,25]);SFX.down()}else if(s.k==='bridge'||s.k==='plankup'||s.k==='kneesopen'||s.k==='tilt'){buzz([40]);SFX.up()}else if(s.k==='inhale'){buzz([25,40,25]);SFX.down()}else if(s.k==='lower'||s.k==='kneel'||s.k==='kneesclose'||s.k==='untilt'||s.k==='legback'||s.k==='relax'||s.k==='down'){SFX.down()}
- if(V[s.k])say(V[s.k])}
+ if(W.cheer&&(s.k==='rest'||s.k==='relax'||s.k==='exhale')){say(W.cheer);W.cheer=''}else if(V[s.k])say(V[s.k])}
 const easeF=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
-function startSession(list,kind){unlockAudio();W.list=list;W.kind=kind;W.basePos=kind==='day'?todayInfo().pos:(EX[list[0]].pos||PORDER[Math.max(0,Math.min(3,(EX[list[0]].wk||1)-1))]);
+function startSession(list,kind){unlockAudio();try{history.pushState({kz:'pl'},'')}catch(e){}W.list=list;W.kind=kind;W.basePos=kind==='day'?todayInfo().pos:(EX[list[0]].pos||PORDER[Math.max(0,Math.min(3,(EX[list[0]].wk||1)-1))]);
  W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').textContent=kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise';
  $('#bars').innerHTML=list.map(id=>`<i class="${EX[id].rel?'c':''}"><b></b></i>`).join('');$('#pl').classList.add('on');$('#pl').scrollTop=0;document.body.style.overflow='hidden';
  if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');vprep([...list.map(id=>INTRO(id)),...list.map(id=>'Nice work. Rest and breathe. Next up, '+EX[id].n),'Squeeze','Hold','Relax','1','2','3','4','5','6','7','8','9','10','Session complete. Great work.']);loadEx(0)}
@@ -251,7 +252,7 @@ function tick(dt){const tot=CUM[CUM.length-1];
  else if(W.ph==='work'){const s=STEPS[W.si];W.st+=dt;const ramp=s.k==='hold'||s.k==='rest'?.3:s.d*.8;W.L=W.from+(s.to-W.from)*easeF(Math.min(1,W.st/ramp));if(s.lift!=null)W.lift=W.liftFrom+(s.lift-W.liftFrom)*easeF(Math.min(1,W.st/s.d));
   const e=CUM[W.si]+W.st;ring(tot-e,tot,'Seconds',EX[W.list[W.i]].rel?'#6FB7FF':'#FF6B4A');mvDraw(W.L,Math.min(1,W.st/s.d));$$('#bars i')[W.i].firstChild.style.width=Math.min(100,e/tot*100)+'%';
   {const left=Math.ceil(s.d-W.st);if(countOn()&&s.d>=3){if(left>=1&&left<Math.ceil(s.d)&&W.mid!==100+left){W.mid=100+left;cnt(left)}}else if(s.k==='hold'){if(s.d>=8&&W.mid===0&&W.st>=s.d*.4){W.mid=1;say($('#cue').textContent)}if(s.d>=5&&left<=3&&left>=1&&W.mid!==10+left){W.mid=10+left;say(String(left))}}}
-  if(W.st>=s.d){if(s.k==='squeeze'||s.k==='up'||s.k==='kneein')W.sq++;if(s.r){W.rep++;updReps()}W.si++;if(W.si>=STEPS.length)nextEx();else enterStep()}}
+  if(W.st>=s.d){if(s.k==='squeeze'||s.k==='up'||s.k==='kneein')W.sq++;if(s.r){W.rep++;updReps();{const tot=STEPS.filter(x=>x.r).length;if(tot>=4&&W.rep===Math.floor(tot/2))W.cheer='Halfway there. Great work.';else if(tot>=3&&W.rep===tot-1)W.cheer='Last one. Make it count.'}}W.si++;if(W.si>=STEPS.length)nextEx();else enterStep()}}
  else if(W.ph==='rest'){const pr=Math.ceil(REST-W.t);W.t+=dt;const nr=Math.ceil(REST-W.t);if(nr<pr&&nr>=1&&nr<=5)cnt(nr);ring(REST-W.t,REST,'Rest','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*3);mvDraw(W.L,0);if(W.t>=REST)loadEx(W.i+1)}}
 function closePl(){$('#pl').classList.remove('on');document.body.style.overflow='';vstop();try{W.lock&&W.lock.release()}catch(e){}W.ph='off'}
 function finish(){const min=Math.max(.5,Math.round((performance.now()-W.started)/6000)/10),today_=dk(new Date()),firstDay=W.kind==='day'&&!dayDates().includes(today_);
@@ -266,7 +267,7 @@ $('#playB').onclick=()=>{W.paused=!W.paused;$('#playB').textContent=W.paused?'Re
 $('#nextB').onclick=()=>{if(W.i<W.list.length-1)loadEx(W.i+1);else finish()};
 $('#prevB').onclick=()=>loadEx(Math.max(0,W.ph==='ready'&&W.t<2?W.i-1:W.i));
 $('#voiceB').onclick=()=>{S.settings.voice=!S.settings.voice;if(S.settings.voice)S.settings.discreet=false;save();$('#voiceB').setAttribute('aria-pressed',voiceOn());if(!voiceOn())try{speechSynthesis.cancel()}catch(e){}toast(voiceOn()?'Voice coach on':'Voice coach off')};
-$('#quitB').onclick=()=>{closePl();render();toast('Session ended. Finish a session to earn XP')};
+$('#quitB').onclick=()=>{if(history.state&&history.state.kz==='pl'){history.back()}else{closePl();render()}toast('Session ended. Finish a session to earn XP')};
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&$('#pl').classList.contains('on')&&!W.paused){W.paused=true;$('#playB').textContent='Resume';$('#phase').textContent='Paused';vstop();}});
 
 /* ================= LOOP ================= */
@@ -287,3 +288,8 @@ if(!S.ob.done){S.seenW=1;save();if(exH)PENDING=exH;ob()}else if(exH)startSession
 requestAnimationFrame(frame);ping('app_open');
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('/sw.js').catch(()=>{});
 window.addEventListener('hashchange',()=>{const x=location.hash.slice(1);if(VIEWS.includes(x)&&x!==cur)go(x)});
+
+/* site menu (TapPill-style) */
+{const m=$('#siteMenu'),b=$('#siteMenuB');const close=()=>{m.hidden=true;b.setAttribute('aria-expanded','false');b.focus()};b.onclick=()=>{m.hidden=false;b.setAttribute('aria-expanded','true');m.querySelector('a').focus()};m.addEventListener('click',e=>{if(e.target.closest('[data-close]'))close()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden)close()})}
+/* phone back button closes the session or finish screen instead of leaving the app */
+window.addEventListener('popstate',()=>{if($('#pl').classList.contains('on')){closePl();render()}else if($('#fin').classList.contains('on')){$('#fin').classList.remove('on');render()}});

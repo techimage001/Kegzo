@@ -3,7 +3,7 @@ import json,subprocess,os,sys
 from kokoro_onnx import Kokoro
 import soundfile as sf
 R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)));OUT=os.path.join(R,'assets','voice');os.makedirs(OUT,exist_ok=True)
-VOICE=os.environ.get('KEGZO_VOICE','bf_emma')
+VOICE=os.environ.get('KEGZO_VOICE','bm_george')
 lines=json.loads(subprocess.check_output(['node',os.path.join(R,'tools','voice-lines.js')]))
 k=Kokoro(os.environ.get('KOKORO_MODEL','/home/claude/tts/kokoro-v1.0.onnx'),os.environ.get('KOKORO_VOICES','/home/claude/tts/voices-v1.0.bin'))
 dur={}

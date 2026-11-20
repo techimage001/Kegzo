@@ -5,6 +5,10 @@ const add=t=>{if(t)L.add(t)};
 ['Squeeze','Hold','Relax','Up a floor','Down a floor','Breathe in and drop','Lift your hips','Lower your hips and let go','Lift your knees into the plank','Slowly open your knees','Tilt your pelvis','Roll back to neutral','Breathe in, belly rises, let it drop','Breathe out slowly','Knees back together','Knees down','Knee in, and squeeze','Leg back, let it go',
  'Keep breathing','Bum stays soft','Belly relaxed','Thighs loose','Session complete. Great work.','Sound is working. You will hear the coach and the countdown.'].forEach(add);
 for(let i=1;i<=30;i++)add(String(i));
+// every quoted phrase in the coach's step map (V) and on-screen cues (CUES) in app.js
+{const a=require('fs').readFileSync(require('path').join(__dirname,'..','src','app.js'),'utf8');
+ for(const key of ['const V={','const CUES={']){const i=a.indexOf(key);if(i<0)continue;const j=a.indexOf('};',i);(a.slice(i,j).match(/'([^']{2,})'/g)||[]).forEach(q=>add(q.slice(1,-1)))}}
+['Halfway there. Great work.','Last one. Make it count.','Nice. Keep breathing.','Great hold.'].forEach(add);
 for(const id in EX){add(INTRO(id));add('Nice work. Rest and breathe. Next up, '+EX[id].n)}
 const h=t=>{let x=0x811c9dc5;for(let i=0;i<t.length;i++){x^=t.charCodeAt(i);x=Math.imul(x,0x01000193)>>>0}return x.toString(16).padStart(8,'0')};
 process.stdout.write(JSON.stringify([...L].map(t=>({t,h:h(t)}))));
