@@ -28,7 +28,7 @@ const hex=(on,lab)=>`<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3l
 const dayDates=()=>[...new Set(S.sessions.filter(s=>s.kind==='day').map(s=>s.d))].sort();
 const progDays=()=>dayDates().length;
 function todayInfo(){const done=dayDates().includes(dk(new Date())),n=progDays(),day=Math.min(28,done?n:n+1),week=Math.min(4,Math.ceil(day/7)),track=S.ob.track==='relax'?'relax':'strength';
- const full=DAYPLAN[track][week-1],m=(S.prof||{}).mins;return{day,week,done,pos:PORDER[week-1],list:m==='3'?full.slice(0,3):full}}
+ const full=track==='relax'?DAYPLAN.relax[week-1]:PLAN30[day-1].list,m=(S.prof||{}).mins;return{day,week,done,pos:PORDER[week-1],list:m==='3'?full.slice(0,3):full}}
 const lvl=()=>lvlOf(S.xp);
 const stepsOf=id=>EX[id].steps(lvl());
 const secOfL=id=>stepsOf(id).reduce((a,s)=>a+s.d,0);
@@ -193,7 +193,7 @@ const VIEWS=['today','progress','learn','me'];let cur='today',PENDING=null;
 function go(v){if(!VIEWS.includes(v))v='today';cur=v;VIEWS.forEach(x=>$('#v-'+x).classList.toggle('on',x===v));$$('.tabs button').forEach(b=>b.dataset.v===v?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current'));
  if(location.hash.slice(1)!==v)try{history.replaceState(null,'','#'+v)}catch(e){}render();window.scrollTo(0,0)}
 function render(){$('#topLv').textContent='Lv '+lvl();const st=streak().n;$('#topSt').textContent=st+' day'+(st===1?'':'s');acct();
- if(cur==='today'){$('#v-today').innerHTML=today();$('#goDay').onclick=()=>{const T=todayInfo();startSession(T.list,'day')};$('#testB').onclick=selfTest;{const hp=todayInfo().pos;heroF=Fig(hp==='lying'?'gbridge':hp)}}
+ if(cur==='today'){$('#v-today').innerHTML=today();$('#goDay').onclick=()=>{const T=todayInfo();W.planNext=T.day;startSession(T.list,'day')};$('#testB').onclick=selfTest;{const hp=todayInfo().pos;heroF=Fig(hp==='lying'?'gbridge':hp)}}
  if(cur==='progress'){$('#v-progress').innerHTML=progress();$('#testB2').onclick=selfTest;chart()}
  if(cur==='learn'){$('#v-learn').innerHTML=learn();$('#retake').onclick=()=>{OB={step:1,ans:{},checks:[false,false,false],track:'strength',prof:Object.assign({},S.prof||{})};ob()}}
  if(cur==='me'){$('#v-me').innerHTML=me();bindMe()}}
