@@ -44,6 +44,8 @@ const POS={
   how:'Hands under shoulders, knees under hips, back flat. Lift your knees into a plank when the coach says.'},
  gbridge:{n:'Lying down',sprite:'gbridge-sprite.webp',frames:4,fw:718,fh:355,c:[360,195],pts:[[400,255],[396,238],[390,212]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Lie on your back, knees bent, feet flat and hip-width apart, arms by your sides.'},
+ sts:{n:'Seated',sprite:'sts-sprite.webp',frames:4,fw:438,fh:439,zh:.84,cy:.53,c:[205,220],pts:[[164,263],[195,245],[234,208]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+  how:'Sit near the front of a sturdy chair, feet flat, arms crossed over your chest.'},
  squat:{n:'Standing',sprite:'squat-sprite.webp',zh:.96,cy:.5,frames:4,fw:437,fh:438,c:[200,215],pts:[[186,205],[181,222],[175,240]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Stand tall, feet hip-width apart, arms reaching forward at shoulder height for balance.'},
  tilt:{n:'Lying down',sprite:'tilt-sprite.webp',frames:4,fw:720,fh:405,c:[360,220],pts:[[392,272],[392,270],[392,268]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
