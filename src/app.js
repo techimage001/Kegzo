@@ -125,7 +125,7 @@ $('#ob').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
  if(b.dataset.q){OB.prof[b.dataset.q]=b.dataset.val;OB.step++;ob();return}if(b.dataset.a){OB.ans[QS[OB.step-6][1]]=b.dataset.a==='yes';OB.step++;ob();return}
  if(b.dataset.ck){OB.checks[+b.dataset.ck]=!OB.checks[+b.dataset.ck];ob();return}
  const a=b.dataset.ob;if(a==='next'&&OB.replay&&OB.step===0){OB.replay=0;$('#ob').classList.remove('on');return}if(a==='next'){OB.step++;ob()}else if(a==='back'){OB.step=Math.max(0,OB.step-1);ob()}
- else if(a==='finish'){const first=!S.ob.done;S.ob={done:true,track:OB.track,flags:Object.keys(OB.ans).filter(k=>OB.ans[k])};S.prof=Object.assign({},OB.prof);if(first)S.xp+=20;newBadges();save();$('#ob').classList.remove('on');ping('onboarded');toast(first?'Day 1 unlocked. +20 XP':'Track updated');render();if(PENDING){const id=PENDING;PENDING=null;startSession([id],'single')}}});
+ else if(a==='finish'){const first=!S.ob.done;S.ob={done:true,track:OB.track,flags:Object.keys(OB.ans).filter(k=>OB.ans[k])};S.prof=Object.assign({},OB.prof);if(first)S.xp+=20;newBadges();save();$('#ob').classList.remove('on');ping('onboarded');toast(first?'Day 1 unlocked. +20 XP':'Track updated');render();if(PENDING){const id=PENDING;PENDING=null;if(/^day-/.test(id)){const P=PLAN30[(+id.slice(4))-1];W.planNext=P.day;startSession(P.list,'day')}else startSession([id],'single')}}});
 
 /* ================= VIEWS ================= */
 function today(){const T=todayInfo(),l=lvl(),lo=xpFor(l),hi=xpFor(l+1),pc=l>=50?100:Math.round((S.xp-lo)/(hi-lo)*100),st=streak();
@@ -253,8 +253,8 @@ function enterStep(){const s=STEPS[W.si];W.from=W.L;W.liftFrom=W.lift;W.st=0;con
  if(s.k==='squeeze'||s.k==='up'||s.k==='kneein'){buzz([50]);SFX.up()}else if(s.k==='drop'){buzz([25,40,25]);SFX.down()}else if(s.k==='bridge'||s.k==='plankup'||s.k==='kneesopen'||s.k==='tilt'){buzz([40]);SFX.up()}else if(s.k==='inhale'){buzz([25,40,25]);SFX.down()}else if(s.k==='lower'||s.k==='kneel'||s.k==='kneesclose'||s.k==='untilt'||s.k==='legback'||s.k==='relax'||s.k==='down'){SFX.down()}
  if(W.cheer&&(s.k==='rest'||s.k==='relax'||s.k==='exhale')){say(W.cheer);W.cheer=''}else if(V[s.k])say(V[s.k])}
 const easeF=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
-function startSession(list,kind){unlockAudio();try{history.pushState({kz:'pl'},'')}catch(e){}W.list=list;W.kind=kind;W.basePos=kind==='day'?todayInfo().pos:(EX[list[0]].pos||PORDER[Math.max(0,Math.min(3,(EX[list[0]].wk||1)-1))]);
- W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').textContent=kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise';
+function startSession(list,kind){unlockAudio();try{history.pushState({kz:'pl'},'')}catch(e){}W.list=list;W.kind=kind;W.plan=W.planNext||0;W.planNext=0;W.basePos=W.plan?PORDER[PLAN30[W.plan-1].week-1]:kind==='day'?todayInfo().pos:(EX[list[0]].pos||PORDER[Math.max(0,Math.min(3,(EX[list[0]].wk||1)-1))]);
+ W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').textContent=W.plan?`Day ${W.plan} of 30`:kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise';
  $('#bars').innerHTML=list.map(id=>`<i class="${EX[id].rel?'c':''}"><b></b></i>`).join('');$('#pl').classList.add('on');document.body.classList.add('inpl');$('#pl').scrollTop=0;document.body.style.overflow='hidden';
  if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');vprep([...list.map(id=>INTRO(id)),...list.map(id=>'Nice work. Rest and breathe. Next up, '+EX[id].n),'Squeeze','Hold','Relax','1','2','3','4','5','6','7','8','9','10','Session complete. Great work.']);loadEx(0)}
 function nextEx(){if(W.i>=W.list.length-1){finish();return}W.ph='rest';W.t=0;$('#stage').classList.add('rest');$$('#bars i')[W.i].firstChild.style.width='100%';$('#phase').textContent='Rest';$('#phase').style.color='var(--cool)';$('#cue').textContent='Breathe easy. Next up: '+EX[W.list[W.i+1]].n;say('Nice work. Rest and breathe. Next up, '+EX[W.list[W.i+1]].n)}
@@ -266,7 +266,7 @@ function tick(dt){const tot=CUM[CUM.length-1];
   if(W.st>=s.d){if(s.k==='squeeze'||s.k==='up'||s.k==='kneein')W.sq++;if(s.r){W.rep++;updReps();if((S.prof||{}).style!=='calm'){const tot=STEPS.filter(x=>x.r).length;if(tot>=4&&W.rep===Math.floor(tot/2))W.cheer='Halfway there. Great work.';else if(tot>=3&&W.rep===tot-1)W.cheer='Last one. Make it count.'}}W.si++;if(W.si>=STEPS.length)nextEx();else enterStep()}}
  else if(W.ph==='rest'){const pr=Math.ceil(REST-W.t);W.t+=dt;const nr=Math.ceil(REST-W.t);if(nr<pr&&nr>=1&&nr<=5)cnt(nr);ring(REST-W.t,REST,'Rest','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*3);mvDraw(W.L,0);if(W.t>=REST)loadEx(W.i+1)}}
 function closePl(){$('#pl').classList.remove('on');document.body.classList.remove('inpl');document.body.style.overflow='';vstop();try{W.lock&&W.lock.release()}catch(e){}W.ph='off'}
-function finish(){const min=Math.max(.5,Math.round((performance.now()-W.started)/6000)/10),today_=dk(new Date()),firstDay=W.kind==='day'&&!dayDates().includes(today_);
+function finish(){if(W.plan){S.planDone=S.planDone||[];if(!S.planDone.includes(W.plan))S.planDone.push(W.plan)}const min=Math.max(.5,Math.round((performance.now()-W.started)/6000)/10),today_=dk(new Date()),firstDay=W.kind==='day'&&!dayDates().includes(today_);
  const before=lvl(),xp=W.sq*2+(W.kind==='day'?30:10)+(firstDay?20:0);S.sessions.push({d:today_,kind:W.kind,ids:W.list,min,sq:W.sq,xp});S.xp+=xp;const nb=newBadges();save();closePl();ping('session_done');
  const after=lvl();$('#fMin').textContent=Math.max(1,Math.round(min));$('#fSq').textContent=W.sq;$('#fXp').textContent='+'+xp;
  $('#finT').textContent=W.kind==='day'?`Day ${todayInfo().day} complete`:'Exercise complete';
@@ -294,9 +294,10 @@ function frame(ts){const dt=Math.min(.1,(ts-(last||ts))/1000);last=ts;const lf=.
 /* ================= BOOT ================= */
 mvInit();mvDraw(0,0);$('#voiceB').setAttribute('aria-pressed',voiceOn());
 checkVerified();
-const h=location.hash.slice(1),exH=h.startsWith('ex-')?Object.keys(EXMETA).find(k=>'ex-'+EXMETA[k].slug===h):null;
+const h=location.hash.slice(1),dayH=(h.match(/^day-(\d{1,2})$/)||[])[1]|0,exH=h.startsWith('ex-')?Object.keys(EXMETA).find(k=>'ex-'+EXMETA[k].slug===h):null;
 go(VIEWS.includes(h)?h:'today');
-if(!S.ob.done){S.seenW=1;save();if(exH)PENDING=exH;ob()}else if(exH)startSession([exH],'single');
+const startDay=n=>{const P=PLAN30[Math.min(30,Math.max(1,n))-1];W.planNext=P.day;startSession(P.list,'day')};
+if(!S.ob.done){S.seenW=1;save();if(exH)PENDING=exH;if(dayH)PENDING='day-'+dayH;ob()}else if(exH)startSession([exH],'single');else if(dayH)startDay(dayH);
 requestAnimationFrame(frame);ping('app_open');
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('/sw.js').catch(()=>{});
 window.addEventListener('hashchange',()=>{const x=location.hash.slice(1);if(VIEWS.includes(x)&&x!==cur)go(x)});
