@@ -13,16 +13,16 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml"><link rel="icon" href="/assets/icons/icon-96.png" sizes="96x96" type="image/png"><link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<link rel="preload" href="/assets/fonts/outfit-700.woff2?v=26" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/inter-400.woff2?v=26" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/outfit-700.woff2?v=27" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/inter-400.woff2?v=27" as="font" type="font/woff2" crossorigin>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://kegzo.com/#org","name":"Kegzo","url":"https://kegzo.com/","logo":"https://kegzo.com/assets/icons/icon-512.png"},{"@type":"WebSite","@id":"https://kegzo.com/#site","name":"Kegzo","url":"https://kegzo.com/","publisher":{"@id":"https://kegzo.com/#org"},"inLanguage":"en"},{"@type":"WebApplication","name":"Kegzo Trainer","url":"https://kegzo.com/app.html","applicationCategory":"HealthApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"publisher":{"@id":"https://kegzo.com/#org"}}]}</script>
 <style>
-@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2?v=26) format('woff2')}
-@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2?v=26) format('woff2')}
-@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2?v=26) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/outfit-600.woff2?v=26) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/outfit-700.woff2?v=26) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/outfit-800.woff2?v=26) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2?v=27) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2?v=27) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2?v=27) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/outfit-600.woff2?v=27) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/outfit-700.woff2?v=27) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/outfit-800.woff2?v=27) format('woff2')}
 /* VOICE: a coach in a game; direct, plain, never explicit, never a medical promise
    IDEA: a fitness game's training screen for one muscle you cannot see from outside
    PICTURE: a glowing figure holds the position while a close-up shows the pelvic floor lifting, holding and dropping
@@ -678,8 +678,8 @@ const BEN={find:'It teaches you the exact feeling of the right muscle, so every 
 const INTRO=id=>{const e=EX[id];return e.n+'. How to do it. '+e.how.join(' ')+' Why it helps. '+BEN[id]};
 const DAYPLAN={strength:[['find','power','flicks','drop','endure'],['power','elevator','flicks','pyramid','drop'],['power','wave','elevator','endure','drop'],['walk','power','wave','pyramid','drop']],
  relax:[['find','drop','endure','drop'],['drop','elevator','drop','endure'],['drop','flicks','drop','endure'],['walk','drop','endure','drop']]};
-const BONUSDAY=['tiltk','breathk','bridgek','hbabyk','sidek','childk','bridgek','openk','stsk','breathk','dsquatk','openk','stsk','childk','squatk','knackk','liftk','plankk','squatk','knackk','hbabyk','lungek','kneek','plankk','liftk','lungek','dsquatk','kneek','bridgek','squatk'];
-const PLAN30=BONUSDAY.map((b,i)=>{const d=i+1,wk=Math.min(4,Math.ceil(d/7));return{day:d,week:wk,bonus:b,list:d>28?['power','wave',b,'lungek','drop']:[...DAYPLAN.strength[wk-1],b]}});
+const BONUSDAY=['tiltk','breathk','bridgek','hbabyk','sidek','childk','bridgek','openk','stsk','breathk','dsquatk','openk','stsk','childk','squatk','knackk','liftk','plankk','squatk','knackk','hbabyk','lungek','kneek','plankk','liftk','lungek','bridgek','squatk'];
+const PLAN30=BONUSDAY.map((b,i)=>{const d=i+1,wk=Math.min(4,Math.ceil(d/7));return{day:d,week:wk,bonus:b,list:d>26?['power','wave',b,'lungek','kneek','drop']:[...DAYPLAN.strength[wk-1],b]}});
 
 /* ================= INSIDE VIEW (close-up of the pelvic floor) ================= */
 function mvInit(){$('#mv').innerHTML=`<svg viewBox="0 0 300 300" aria-hidden="true">
@@ -952,7 +952,7 @@ function enterStep(){const s=STEPS[W.si];W.from=W.L;W.liftFrom=W.lift;W.st=0;con
  if(W.cheer&&(s.k==='rest'||s.k==='relax'||s.k==='exhale')){say(W.cheer);W.cheer=''}else if(V[s.k])say(V[s.k])}
 const easeF=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
 function startSession(list,kind){unlockAudio();try{history.pushState({kz:'pl'},'')}catch(e){}W.list=list;W.kind=kind;W.plan=W.planNext||0;W.planNext=0;W.basePos=W.plan?PORDER[PLAN30[W.plan-1].week-1]:kind==='day'?todayInfo().pos:(EX[list[0]].pos||PORDER[Math.max(0,Math.min(3,(EX[list[0]].wk||1)-1))]);
- W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').textContent=W.plan?`Day ${W.plan} of 30`:kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise';
+ W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').textContent=W.plan?`Day ${W.plan} of 28`:kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise';
  $('#bars').innerHTML=list.map(id=>`<i class="${EX[id].rel?'c':''}"><b></b></i>`).join('');$('#pl').classList.add('on');document.body.classList.add('inpl');$('#pl').scrollTop=0;document.body.style.overflow='hidden';
  if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');vprep([...list.map(id=>INTRO(id)),...list.map(id=>'Nice work. Rest and breathe. Next up, '+EX[id].n),'Squeeze','Hold','Relax','1','2','3','4','5','6','7','8','9','10','Session complete. Great work.']);loadEx(0)}
 function nextEx(){if(W.i>=W.list.length-1){finish();return}W.ph='rest';W.t=0;$('#stage').classList.add('rest');$$('#bars i')[W.i].firstChild.style.width='100%';$('#phase').textContent='Rest';$('#phase').style.color='var(--cool)';$('#cue').textContent='Breathe easy. Next up: '+EX[W.list[W.i+1]].n;say('Nice work. Rest and breathe. Next up, '+EX[W.list[W.i+1]].n)}
@@ -992,9 +992,9 @@ function frame(ts){const dt=Math.min(.1,(ts-(last||ts))/1000);last=ts;const lf=.
 /* ================= BOOT ================= */
 mvInit();mvDraw(0,0);$('#voiceB').setAttribute('aria-pressed',voiceOn());
 checkVerified();
-const h=location.hash.slice(1),dayH=(h.match(/^day-(\d{1,2})$/)||[])[1]|0,exH=h.startsWith('ex-')?Object.keys(EXMETA).find(k=>'ex-'+EXMETA[k].slug===h):null;
+const h=location.hash.slice(1),dayH=Math.min(28,(h.match(/^day-(\d{1,2})$/)||[])[1]|0),exH=h.startsWith('ex-')?Object.keys(EXMETA).find(k=>'ex-'+EXMETA[k].slug===h):null;
 go(VIEWS.includes(h)?h:'today');
-const startDay=n=>{const P=PLAN30[Math.min(30,Math.max(1,n))-1];W.planNext=P.day;startSession(P.list,'day')};
+const startDay=n=>{const P=PLAN30[Math.min(28,Math.max(1,n))-1];W.planNext=P.day;startSession(P.list,'day')};
 if(!S.ob.done){S.seenW=1;save();if(exH)PENDING=exH;if(dayH)PENDING='day-'+dayH;ob()}else if(exH)startSession([exH],'single');else if(dayH)startDay(dayH);
 requestAnimationFrame(frame);ping('app_open');
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('/sw.js').catch(()=>{});

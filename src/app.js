@@ -254,7 +254,7 @@ function enterStep(){const s=STEPS[W.si];W.from=W.L;W.liftFrom=W.lift;W.st=0;con
  if(W.cheer&&(s.k==='rest'||s.k==='relax'||s.k==='exhale')){say(W.cheer);W.cheer=''}else if(V[s.k])say(V[s.k])}
 const easeF=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
 function startSession(list,kind){unlockAudio();try{history.pushState({kz:'pl'},'')}catch(e){}W.list=list;W.kind=kind;W.plan=W.planNext||0;W.planNext=0;W.basePos=W.plan?PORDER[PLAN30[W.plan-1].week-1]:kind==='day'?todayInfo().pos:(EX[list[0]].pos||PORDER[Math.max(0,Math.min(3,(EX[list[0]].wk||1)-1))]);
- W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').textContent=W.plan?`Day ${W.plan} of 30`:kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise';
+ W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').textContent=W.plan?`Day ${W.plan} of 28`:kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise';
  $('#bars').innerHTML=list.map(id=>`<i class="${EX[id].rel?'c':''}"><b></b></i>`).join('');$('#pl').classList.add('on');document.body.classList.add('inpl');$('#pl').scrollTop=0;document.body.style.overflow='hidden';
  if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');vprep([...list.map(id=>INTRO(id)),...list.map(id=>'Nice work. Rest and breathe. Next up, '+EX[id].n),'Squeeze','Hold','Relax','1','2','3','4','5','6','7','8','9','10','Session complete. Great work.']);loadEx(0)}
 function nextEx(){if(W.i>=W.list.length-1){finish();return}W.ph='rest';W.t=0;$('#stage').classList.add('rest');$$('#bars i')[W.i].firstChild.style.width='100%';$('#phase').textContent='Rest';$('#phase').style.color='var(--cool)';$('#cue').textContent='Breathe easy. Next up: '+EX[W.list[W.i+1]].n;say('Nice work. Rest and breathe. Next up, '+EX[W.list[W.i+1]].n)}
@@ -294,9 +294,9 @@ function frame(ts){const dt=Math.min(.1,(ts-(last||ts))/1000);last=ts;const lf=.
 /* ================= BOOT ================= */
 mvInit();mvDraw(0,0);$('#voiceB').setAttribute('aria-pressed',voiceOn());
 checkVerified();
-const h=location.hash.slice(1),dayH=(h.match(/^day-(\d{1,2})$/)||[])[1]|0,exH=h.startsWith('ex-')?Object.keys(EXMETA).find(k=>'ex-'+EXMETA[k].slug===h):null;
+const h=location.hash.slice(1),dayH=Math.min(28,(h.match(/^day-(\d{1,2})$/)||[])[1]|0),exH=h.startsWith('ex-')?Object.keys(EXMETA).find(k=>'ex-'+EXMETA[k].slug===h):null;
 go(VIEWS.includes(h)?h:'today');
-const startDay=n=>{const P=PLAN30[Math.min(30,Math.max(1,n))-1];W.planNext=P.day;startSession(P.list,'day')};
+const startDay=n=>{const P=PLAN30[Math.min(28,Math.max(1,n))-1];W.planNext=P.day;startSession(P.list,'day')};
 if(!S.ob.done){S.seenW=1;save();if(exH)PENDING=exH;if(dayH)PENDING='day-'+dayH;ob()}else if(exH)startSession([exH],'single');else if(dayH)startDay(dayH);
 requestAnimationFrame(frame);ping('app_open');
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('/sw.js').catch(()=>{});

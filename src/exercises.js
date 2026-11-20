@@ -207,6 +207,6 @@ const BEN={find:'It teaches you the exact feeling of the right muscle, so every 
 const INTRO=id=>{const e=EX[id];return e.n+'. How to do it. '+e.how.join(' ')+' Why it helps. '+BEN[id]};
 const DAYPLAN={strength:[['find','power','flicks','drop','endure'],['power','elevator','flicks','pyramid','drop'],['power','wave','elevator','endure','drop'],['walk','power','wave','pyramid','drop']],
  relax:[['find','drop','endure','drop'],['drop','elevator','drop','endure'],['drop','flicks','drop','endure'],['walk','drop','endure','drop']]};
-const BONUSDAY=['tiltk','breathk','bridgek','hbabyk','sidek','childk','bridgek','openk','stsk','breathk','dsquatk','openk','stsk','childk','squatk','knackk','liftk','plankk','squatk','knackk','hbabyk','lungek','kneek','plankk','liftk','lungek','dsquatk','kneek','bridgek','squatk'];
-const PLAN30=BONUSDAY.map((b,i)=>{const d=i+1,wk=Math.min(4,Math.ceil(d/7));return{day:d,week:wk,bonus:b,list:d>28?['power','wave',b,'lungek','drop']:[...DAYPLAN.strength[wk-1],b]}});
+const BONUSDAY=['tiltk','breathk','bridgek','hbabyk','sidek','childk','bridgek','openk','stsk','breathk','dsquatk','openk','stsk','childk','squatk','knackk','liftk','plankk','squatk','knackk','hbabyk','lungek','kneek','plankk','liftk','lungek','bridgek','squatk'];
+const PLAN30=BONUSDAY.map((b,i)=>{const d=i+1,wk=Math.min(4,Math.ceil(d/7));return{day:d,week:wk,bonus:b,list:d>26?['power','wave',b,'lungek','kneek','drop']:[...DAYPLAN.strength[wk-1],b]}});
 if(typeof module!=='undefined')module.exports={EX,EXMETA,DAYPLAN,ICONS,S_,times,BEN,INTRO,PLAN30};
