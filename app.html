@@ -13,16 +13,16 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml"><link rel="icon" href="/assets/icons/icon-96.png" sizes="96x96" type="image/png"><link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<link rel="preload" href="/assets/fonts/outfit-700.woff2?v=17" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/inter-400.woff2?v=17" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/outfit-700.woff2?v=18" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/inter-400.woff2?v=18" as="font" type="font/woff2" crossorigin>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://kegzo.com/#org","name":"Kegzo","url":"https://kegzo.com/","logo":"https://kegzo.com/assets/icons/icon-512.png"},{"@type":"WebSite","@id":"https://kegzo.com/#site","name":"Kegzo","url":"https://kegzo.com/","publisher":{"@id":"https://kegzo.com/#org"},"inLanguage":"en"},{"@type":"WebApplication","name":"Kegzo Trainer","url":"https://kegzo.com/app.html","applicationCategory":"HealthApplication","operatingSystem":"Any (web browser)","isAccessibleForFree":true,"publisher":{"@id":"https://kegzo.com/#org"}}]}</script>
 <style>
-@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2?v=17) format('woff2')}
-@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2?v=17) format('woff2')}
-@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2?v=17) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/outfit-600.woff2?v=17) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/outfit-700.woff2?v=17) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/outfit-800.woff2?v=17) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2?v=18) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2?v=18) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2?v=18) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/outfit-600.woff2?v=18) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/outfit-700.woff2?v=18) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/outfit-800.woff2?v=18) format('woff2')}
 /* VOICE: a coach in a game; direct, plain, never explicit, never a medical promise
    IDEA: a fitness game's training screen for one muscle you cannot see from outside
    PICTURE: a glowing figure holds the position while a close-up shows the pelvic floor lifting, holding and dropping
@@ -164,8 +164,8 @@ main.app{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
 .seg2{display:inline-grid;grid-auto-flow:column;background:var(--surf2);border-radius:999px;padding:3px}.seg2 button{padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;min-height:38px}.seg2 button[aria-pressed=true]{background:var(--surf)}
 .overlay{position:fixed;inset:0;z-index:60;background:var(--bg);overflow-y:auto;display:none;padding:max(16px,env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom))}
 .overlay.on{display:block}
-.coachv{position:relative;width:100%;max-width:420px;margin:0 auto;aspect-ratio:1;border-radius:24px;overflow:hidden;background:#1E0A33;border:1px solid var(--line)}
-.coachv video{width:100%;height:100%;object-fit:cover;display:block}
+.coachv{position:relative;width:min(62vw,270px);height:auto;margin:0 auto;border-radius:24px;overflow:hidden;background:#2A0E55;border:1px solid var(--line)}
+.coachv video{display:block;width:100%;height:auto;aspect-ratio:auto;max-height:none;object-fit:contain;object-position:50% 50%;margin:0 auto}
 .coachplay{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;border:0;background:var(--hot,#FF6B4A);color:#fff;font:600 17px/1 inherit;box-shadow:0 8px 30px rgba(0,0,0,.45);cursor:pointer;min-height:52px}
 .coachplay{white-space:nowrap}.coachplay svg{width:22px;height:22px;flex:0 0 22px}.coachplay.gone{opacity:0;pointer-events:none}
 .ccap{margin:-4px auto 0;max-width:420px;min-height:3.2em;text-align:center;font-size:17px;line-height:1.45;color:#fff;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
@@ -768,7 +768,7 @@ const QS=[['Do you feel pain or aching in your pelvis, groin, lower back or when
 let OB={step:0,ans:{},checks:[false,false,false],track:'strength'};
 const obFig=Fig('bridge');
 function ob(){const o=$('#ob');o.classList.add('on');const s=OB.step,dots=n=>`<div class="dots">${Array.from({length:7},(_,i)=>`<i class="${i===n?'on':''}"></i>`).join('')}</div>`;let h='';
- if(s===0)h=`<div class="coachv"><video id="coachV" src="/assets/video/coach-welcome.mp4?v=17" poster="/assets/img/coach-poster.webp?v=17" playsinline preload="auto"></video><button class="coachplay" id="coachP" type="button" aria-label="Play the welcome from your coach with sound"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Meet your coach</span></button></div><p class="ccap" id="coachCap" aria-live="polite">Tap Meet your coach to hear him, or read below.</p>
+ if(s===0)h=`<div class="coachv"><video id="coachV" src="/assets/video/coach-welcome.mp4?v=18" poster="/assets/img/coach-poster.webp?v=18" playsinline preload="auto"></video><button class="coachplay" id="coachP" type="button" aria-label="Play the welcome from your coach with sound"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Meet your coach</span></button></div><p class="ccap" id="coachCap" aria-live="polite">Tap Meet your coach to hear him, or read below.</p>
  <h1>Welcome to Kegzo</h1><p class="lead2">Your free pelvic floor coach. A few minutes a day, with a voice that talks you through every step.</p>
  <div class="ben"><div><b>Better control</b><span>Train the muscles that support your bladder</span></div><div><b>Stronger core</b><span>Your pelvic floor is the base of your core</span></div><div><b>More confidence</b><span>Feel stronger and more in control</span></div><div><b>Learn to relax</b><span>Letting go matters as much as squeezing</span></div></div>
  <h2 class="h3">How to use Kegzo</h2><ol class="steps3"><li><b>1</b><span>Press <strong>Start</strong> once a day</span></li><li><b>2</b><span>Follow the coach's voice and the video</span></li><li><b>3</b><span>Watch your progress grow</span></li></ol>

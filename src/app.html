@@ -46,8 +46,8 @@ main.app{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
 .seg2{display:inline-grid;grid-auto-flow:column;background:var(--surf2);border-radius:999px;padding:3px}.seg2 button{padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;min-height:38px}.seg2 button[aria-pressed=true]{background:var(--surf)}
 .overlay{position:fixed;inset:0;z-index:60;background:var(--bg);overflow-y:auto;display:none;padding:max(16px,env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom))}
 .overlay.on{display:block}
-.coachv{position:relative;width:100%;max-width:420px;margin:0 auto;aspect-ratio:1;border-radius:24px;overflow:hidden;background:#1E0A33;border:1px solid var(--line)}
-.coachv video{width:100%;height:100%;object-fit:cover;display:block}
+.coachv{position:relative;width:min(62vw,270px);height:auto;margin:0 auto;border-radius:24px;overflow:hidden;background:#2A0E55;border:1px solid var(--line)}
+.coachv video{display:block;width:100%;height:auto;aspect-ratio:auto;max-height:none;object-fit:contain;object-position:50% 50%;margin:0 auto}
 .coachplay{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;border:0;background:var(--hot,#FF6B4A);color:#fff;font:600 17px/1 inherit;box-shadow:0 8px 30px rgba(0,0,0,.45);cursor:pointer;min-height:52px}
 .coachplay{white-space:nowrap}.coachplay svg{width:22px;height:22px;flex:0 0 22px}.coachplay.gone{opacity:0;pointer-events:none}
 .ccap{margin:-4px auto 0;max-width:420px;min-height:3.2em;text-align:center;font-size:17px;line-height:1.45;color:#fff;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
