@@ -1,9 +1,9 @@
-@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2?v=4) format('woff2')}
-@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2?v=4) format('woff2')}
-@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2?v=4) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/outfit-600.woff2?v=4) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/outfit-700.woff2?v=4) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/outfit-800.woff2?v=4) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2?v=5) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2?v=5) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2?v=5) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/outfit-600.woff2?v=5) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/outfit-700.woff2?v=5) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/outfit-800.woff2?v=5) format('woff2')}
 :root{color-scheme:dark;--bg:#14112A;--surf:#1F1A3D;--surf2:#2A2450;--ink:#F4F1FF;--mut:#B6AFD8;--line:#383163;--hot:#FF6B4A;--hotInk:#2A0E07;--cool:#5BD6C9;--coolSoft:#1D3B47;--hotSoft:#46283A}
 *{box-sizing:border-box;min-width:0}html{-webkit-text-size-adjust:100%;scroll-padding-top:76px}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:clip}
@@ -30,7 +30,7 @@ h1{font-size:clamp(32px,7vw,52px);margin:.3em 0 .35em}h2{font-size:clamp(23px,4.
 .pulse{position:absolute;left:33%;top:56%;width:20%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(61,220,132,.8),rgba(61,220,132,0) 68%);mix-blend-mode:screen;animation:pul 4s ease-in-out infinite}
 @keyframes pul{0%,100%{opacity:.25;transform:translate(-50%,-50%) scale(.75)}45%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}}
 .cards3{display:grid;gap:12px}.c{background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:18px}.c p{margin:.4em 0 0;color:var(--mut);font-size:16px}
-.weeks4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.wkc{background:var(--surf);border:1px solid var(--line);border-radius:18px;overflow:hidden;font-size:15px}.wkc img{background:#100C28}.wkc b,.wkc span{display:block;padding:0 14px}.wkc b{padding-top:12px}.wkc span{color:var(--mut);padding-bottom:14px;font-size:14px}
+.weeks4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.wkc{background:var(--surf);border:1px solid var(--line);border-radius:18px;overflow:hidden;font-size:15px}.wkc img{background:#100C28}.wkc>b,.wkc>span:not(.vbox){display:block;padding:0 14px}.wkc>b{padding-top:12px}.wkc>span:not(.vbox){color:var(--mut);padding-bottom:14px;font-size:14px}a.wkc{display:block;color:var(--ink);text-decoration:none}a.wkc .vbox{width:100%}
 .exgrid{display:grid;gap:10px}.exc{display:grid;grid-template-columns:46px 1fr;gap:12px;align-items:center;padding:12px 14px;border-radius:16px;background:var(--surf);border:1px solid var(--line);color:var(--ink);text-decoration:none}
 .exc b{display:block}.exc small{color:var(--mut);font-size:14px;line-height:1.4;display:block}
 .ico{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:var(--hotSoft);color:var(--hot)}.ico.c{background:var(--coolSoft);color:var(--cool)}.ico svg{width:26px;height:26px}
