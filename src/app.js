@@ -4,11 +4,11 @@ const dk=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+Strin
 const addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
 const wkOf=d=>{const x=new Date(d);x.setHours(12);return dk(addD(x,-((x.getDay()+6)%7)))};
 const dOf=s=>new Date(s+'T12:00');
-const fresh=()=>({v:1,created:dk(new Date()),ob:{done:false,track:'strength',flags:[]},sessions:[],tests:[],xp:0,badges:[],settings:{voice:true,vib:true,discreet:false},gate:{dismissed:false,email:'',state:''}});
+const fresh=()=>({v:1,created:dk(new Date()),ob:{done:false,track:'strength',flags:[]},sessions:[],tests:[],xp:0,badges:[],settings:{voice:true,snd:true,vib:true,discreet:false},gate:{dismissed:false,email:'',state:''}});
 let mem=null;
 function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);return Object.assign(fresh(),o,{settings:Object.assign(fresh().settings,o.settings||{}),gate:Object.assign(fresh().gate,o.gate||{})})}}catch(e){}return mem||fresh()}
 function save(){mem=S;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-let S=load();
+let S=load();S.settings=Object.assign({voice:true,snd:true,vib:true,discreet:false},S.settings||{});
 function ping(e){try{const b=JSON.stringify({e});if(navigator.sendBeacon)navigator.sendBeacon('/api/hit.php',new Blob([b],{type:'application/json'}));else fetch('/api/hit.php',{method:'POST',body:b,keepalive:true}).catch(()=>{})}catch(_){}}
 
 /* ================= GAME ================= */
@@ -158,7 +158,7 @@ function learn(){const G=[['kegel-exercises-for-men','Kegel exercises for men','
 function me(){const s=S.settings,sw=(k,t,d)=>`<div class="switch"><div><b>${t}</b><p class="tiny mut">${d}</p></div><button class="tg" role="switch" aria-checked="${!!s[k]}" data-set="${k}" aria-label="${t}"></button></div>`;
  return`<h1>Me</h1><div class="grid two" style="margin-top:16px">
  <div class="card"><h3>Training</h3><div class="switch"><div><b>Track</b><p class="tiny mut">${S.ob.track==='relax'?'Relax: letting go first':'Strength: lift and release'}</p></div><div class="seg2" id="trk"><button data-t="strength" aria-pressed="${S.ob.track!=='relax'}">Strength</button><button data-t="relax" aria-pressed="${S.ob.track==='relax'}">Relax</button></div></div>
-  ${sw('voice','Voice coach','Speaks each step out loud')}${sw('vib','Vibration cues','Buzzes on each squeeze and drop (Android)')}${sw('discreet','Discreet mode','Silent, no voice, vibration only')}</div>
+  ${sw('voice','Voice coach','Speaks each step out loud')}${sw('snd','Sound cues','A rising beep to squeeze, a falling beep to let go')}${sw('vib','Vibration cues','Buzzes on each squeeze and drop (Android)')}${sw('discreet','Discreet mode','Silent, no voice, vibration only')}</div>
  <div class="card grid"><h3>Account</h3>${S.gate.email?`<p class="small">${S.gate.state==='verified'?'Signed in as':'Waiting for you to confirm'} <b>${esc(S.gate.email)}</b>.</p>`:`<p class="small mut">Sign up to keep your progress across devices. <b>100% free, no payment or card details.</b></p>`}<button class="btn ${S.gate.email?'ghost':'hot'}" id="meG">${S.gate.email?'Manage':'Sign up or sign in'}</button>
   <h3 style="margin-top:6px">Your data</h3><p class="small mut">Your training is stored in this browser on this device. Nothing about your sessions is sent anywhere. Only your email is stored on our server if you sign up.</p>
   <div class="row"><button class="btn ghost danger" id="delB">Delete everything</button></div><p class="tiny mut" id="delM"></p></div>
@@ -198,7 +198,17 @@ let STEPS=[],CUM=[];
 const WORD={squeeze:'Squeeze',hold:'Hold',relax:'Relax',rest:'Rest',drop:'Drop',out:'Return',up:'Up a floor',down:'Down a floor',bridge:'Lift hips',lower:'Lower hips'};
 const CUES={squeeze:'Draw up and in',hold:['Keep breathing','Bum stays soft','Belly relaxed','Thighs loose'],relax:'Let go completely',rest:'Rest. Nothing to do',drop:'Breathe in, let it soften and drop',out:'Breathe out, back to neutral',up:'Lift a little more',down:'Lower slowly, stay in control',bridge:'Press through your heels, hips up',lower:'Lower slowly and let everything go'};
 function voiceOn(){return S.settings.voice&&!S.settings.discreet}
-function say(t){if(!voiceOn()||!('speechSynthesis' in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);const v=speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
+let AC=null,AU=false,UTT=null,VOICE=null;
+function sndOn(){return S.settings.snd!==false&&!S.settings.discreet}
+function pickVoice(){try{const vs=speechSynthesis.getVoices();VOICE=vs.find(v=>/en-GB/i.test(v.lang)&&/natural|google|daniel|serena|libby|ryan/i.test(v.name))||vs.find(v=>/en-GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null}catch(e){}}
+if('speechSynthesis' in window){pickVoice();try{speechSynthesis.addEventListener('voiceschanged',pickVoice)}catch(e){}}
+function unlockAudio(){try{if(navigator.audioSession)navigator.audioSession.type='playback'}catch(e){}
+ try{if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(C)AC=new C()}if(AC){if(AC.state!=='running')AC.resume();const b=AC.createBuffer(1,1,22050),src=AC.createBufferSource();src.buffer=b;src.connect(AC.destination);src.start(0)}}catch(e){}
+ if(!AU&&'speechSynthesis' in window){try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);pickVoice()}catch(e){}}AU=true}
+['pointerdown','touchend','keydown','click'].forEach(ev=>document.addEventListener(ev,unlockAudio,{passive:true,capture:true}));
+function tone(f1,f2,d,vol){if(!sndOn()||!AC)return;try{if(AC.state!=='running')AC.resume();const t=AC.currentTime,o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||.35,t+.02);g.gain.exponentialRampToValueAtTime(0.0001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+.05)}catch(e){}}
+const SFX={up:()=>tone(520,880,.22),down:()=>tone(620,330,.28,.3),tick:()=>tone(900,900,.08,.25),done:()=>{tone(660,660,.15);setTimeout(()=>tone(880,880,.15),160);setTimeout(()=>tone(1320,1320,.35),320)}};
+function say(t){if(!voiceOn()||!('speechSynthesis' in window))return;try{const go=()=>{UTT=new SpeechSynthesisUtterance(t);if(VOICE){UTT.voice=VOICE;UTT.lang=VOICE.lang}else UTT.lang='en-GB';UTT.rate=1;UTT.volume=1;speechSynthesis.speak(UTT)};if(speechSynthesis.speaking||speechSynthesis.pending){speechSynthesis.cancel();setTimeout(go,90)}else go();speechSynthesis.resume()}catch(e){}}
 function buzz(p){if(p&&S.settings.vib&&navigator.vibrate)try{navigator.vibrate(p)}catch(e){}}
 const RC=276.5;function ring(left,tot,lab,col){$('#ringT').textContent=Math.max(0,Math.ceil(left));$('#ringL').textContent=lab;const p=$('#ringP');p.setAttribute('stroke',col);p.setAttribute('stroke-dashoffset',RC*(1-Math.max(0,left)/tot))}
 function howHTML(id,i){const e=EX[id],m=EXMETA[id],p=POS[W.pos];return`<div><p class="tiny mut" style="font-weight:600">${String(i+1).padStart(2,'0')} · ${e.type} · ${m.sets}</p><h2>${e.n}</h2></div><ol>${e.how.map(s=>`<li>${s}</li>`).join('')}</ol>
@@ -214,15 +224,15 @@ function loadEx(i){W.i=i;W.ph='ready';W.t=0;W.si=0;W.st=0;W.rep=0;W.lift=0;W.fro
 function enterStep(){const s=STEPS[W.si];W.from=W.L;W.liftFrom=W.lift;W.st=0;const ph=$('#phase');ph.textContent=WORD[s.k];
  ph.style.color=s.to<0||s.k==='drop'?'#6FB7FF':(s.k==='squeeze'||s.k==='up'||s.k==='hold')?'#3DDC84':'var(--ink)';
  const c=CUES[s.k];$('#cue').textContent=Array.isArray(c)?c[W.cueI++%c.length]:c;
- if(s.k==='squeeze'||s.k==='up'){buzz([50]);if(s.d>=1)say(WORD[s.k])}else if(s.k==='drop'){buzz([25,40,25]);say('Drop')}else if(s.k==='bridge'){buzz([40]);say('Lift your hips')}else if(s.k==='lower'){say('Lower')}else if(s.k==='relax'&&s.d>=1.5){say('Relax')}else if(s.k==='hold'&&s.d>=3){say('Hold')}}
+ if(s.k==='squeeze'||s.k==='up'){buzz([50]);SFX.up();if(s.d>=1)say(WORD[s.k])}else if(s.k==='drop'){buzz([25,40,25]);SFX.down();say('Drop')}else if(s.k==='bridge'){buzz([40]);SFX.up();say('Lift your hips')}else if(s.k==='lower'){SFX.down();say('Lower')}else if(s.k==='relax'){SFX.down();if(s.d>=1.5)say('Relax')}else if(s.k==='hold'&&s.d>=3){say('Hold')}}
 const easeF=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
-function startSession(list,kind){W.list=list;W.kind=kind;W.basePos=kind==='day'?todayInfo().pos:(EX[list[0]].pos||PORDER[Math.max(0,Math.min(3,(EX[list[0]].wk||1)-1))]);
+function startSession(list,kind){unlockAudio();W.list=list;W.kind=kind;W.basePos=kind==='day'?todayInfo().pos:(EX[list[0]].pos||PORDER[Math.max(0,Math.min(3,(EX[list[0]].wk||1)-1))]);
  W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').textContent=kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise';
  $('#bars').innerHTML=list.map(id=>`<i class="${EX[id].rel?'c':''}"><b></b></i>`).join('');$('#pl').classList.add('on');$('#pl').scrollTop=0;document.body.style.overflow='hidden';
  if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');loadEx(0)}
 function nextEx(){if(W.i>=W.list.length-1){finish();return}W.ph='rest';W.t=0;$('#stage').classList.add('rest');$$('#bars i')[W.i].firstChild.style.width='100%';$('#phase').textContent='Rest';$('#phase').style.color='var(--cool)';$('#cue').textContent='Breathe easy. Next up: '+EX[W.list[W.i+1]].n;say('Rest')}
 function tick(dt){const tot=CUM[CUM.length-1];
- if(W.ph==='ready'){W.t+=dt;ring(READY-W.t,READY,'Get ready','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*4);W.lift+=(0-W.lift)*Math.min(1,dt*4);mvDraw(W.L,0);if(W.t>=READY){W.ph='work';W.si=0;enterStep()}}
+ if(W.ph==='ready'){const pv=Math.ceil(READY-W.t);W.t+=dt;const nv=Math.ceil(READY-W.t);if(nv<pv&&nv>=1&&nv<=3)SFX.tick();ring(READY-W.t,READY,'Get ready','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*4);W.lift+=(0-W.lift)*Math.min(1,dt*4);mvDraw(W.L,0);if(W.t>=READY){W.ph='work';W.si=0;enterStep()}}
  else if(W.ph==='work'){const s=STEPS[W.si];W.st+=dt;const ramp=s.k==='hold'||s.k==='rest'?.3:s.d*.8;W.L=W.from+(s.to-W.from)*easeF(Math.min(1,W.st/ramp));if(s.lift!=null)W.lift=W.liftFrom+(s.lift-W.liftFrom)*easeF(Math.min(1,W.st/s.d));
   const e=CUM[W.si]+W.st;ring(tot-e,tot,'Seconds',EX[W.list[W.i]].rel?'#6FB7FF':'#FF6B4A');mvDraw(W.L,Math.min(1,W.st/s.d));$$('#bars i')[W.i].firstChild.style.width=Math.min(100,e/tot*100)+'%';
   if(W.st>=s.d){if(s.k==='squeeze'||s.k==='up')W.sq++;if(s.r){W.rep++;updReps()}W.si++;if(W.si>=STEPS.length)nextEx();else enterStep()}}
@@ -233,7 +243,7 @@ function finish(){const min=Math.max(.5,Math.round((performance.now()-W.started)
  const after=lvl();$('#fMin').textContent=Math.max(1,Math.round(min));$('#fSq').textContent=W.sq;$('#fXp').textContent='+'+xp;
  $('#finT').textContent=W.kind==='day'?`Day ${todayInfo().day} complete`:'Exercise complete';
  $('#finExtra').innerHTML=(after>before?`<div class="note">${NOTE}<p><b>Level ${after}: ${title(after)}.</b> Your holds just got a little longer.</p></div>`:'')+(nb.length?`<div class="note">${NOTE}<p>New badge${nb.length>1?'s':''}: <b>${nb.map(esc).join(', ')}</b></p></div>`:'')+`<p class="mut small">Streak: <b>${streak().n} day${streak().n===1?'':'s'}</b>. Most programmes take around 3 months of steady practice, so consistency beats intensity.</p>`;
- $('#fin').classList.add('on');say('Session complete. Great work.');finF=Fig(W.pos)}
+ $('#fin').classList.add('on');SFX.done();say('Session complete. Great work.');finF=Fig(W.pos)}
 $('#finB').onclick=()=>{$('#fin').classList.remove('on');go('today');maybeGate()};
 $('#playB').onclick=()=>{W.paused=!W.paused;$('#playB').textContent=W.paused?'Resume':'Pause';if(W.paused){try{speechSynthesis.cancel()}catch(e){}$('#phase').textContent='Paused';$('#phase').style.color='var(--ink)'}else if(W.ph==='work')enterStep()};
 $('#nextB').onclick=()=>{if(W.i<W.list.length-1)loadEx(W.i+1);else finish()};
