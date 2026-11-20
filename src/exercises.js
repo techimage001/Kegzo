@@ -67,7 +67,7 @@ const ICONS={tilt:'<path d="M3 18h18M5 15c3-4 6-5 9-3l5-4"/><circle cx="5" cy="1
 const icon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg>`;
 const secOf=id=>EX[id].steps().reduce((a,s)=>a+s.d,0);
 const repsOf=id=>EX[id].steps().filter(s=>s.r).length;
-const READY=6,REST=12;
+const READY=8,REST=12;
 
 
 /* page + programme metadata (used by the app and the page generator) */

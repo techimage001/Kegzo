@@ -4,11 +4,11 @@ const dk=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+Strin
 const addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
 const wkOf=d=>{const x=new Date(d);x.setHours(12);return dk(addD(x,-((x.getDay()+6)%7)))};
 const dOf=s=>new Date(s+'T12:00');
-const fresh=()=>({v:1,created:dk(new Date()),ob:{done:false,track:'strength',flags:[]},sessions:[],tests:[],xp:0,badges:[],settings:{voice:true,snd:true,vib:true,discreet:false},gate:{dismissed:false,email:'',state:''}});
+const fresh=()=>({v:1,created:dk(new Date()),ob:{done:false,track:'strength',flags:[]},sessions:[],tests:[],xp:0,badges:[],settings:{voice:true,snd:true,count:true,vib:true,discreet:false},gate:{dismissed:false,email:'',state:''}});
 let mem=null;
 function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);return Object.assign(fresh(),o,{settings:Object.assign(fresh().settings,o.settings||{}),gate:Object.assign(fresh().gate,o.gate||{})})}}catch(e){}return mem||fresh()}
 function save(){mem=S;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-let S=load();S.settings=Object.assign({voice:true,snd:true,vib:true,discreet:false},S.settings||{});
+let S=load();S.settings=Object.assign({voice:true,snd:true,count:true,vib:true,discreet:false},S.settings||{});
 function ping(e){try{const b=JSON.stringify({e});if(navigator.sendBeacon)navigator.sendBeacon('/api/hit.php',new Blob([b],{type:'application/json'}));else fetch('/api/hit.php',{method:'POST',body:b,keepalive:true}).catch(()=>{})}catch(_){}}
 
 /* ================= GAME ================= */
@@ -158,7 +158,7 @@ function learn(){const G=[['kegel-exercises-for-men','Kegel exercises for men','
 function me(){const s=S.settings,sw=(k,t,d)=>`<div class="switch"><div><b>${t}</b><p class="tiny mut">${d}</p></div><button class="tg" role="switch" aria-checked="${!!s[k]}" data-set="${k}" aria-label="${t}"></button></div>`;
  return`<h1>Me</h1><div class="grid two" style="margin-top:16px">
  <div class="card"><h3>Training</h3><div class="switch"><div><b>Track</b><p class="tiny mut">${S.ob.track==='relax'?'Relax: letting go first':'Strength: lift and release'}</p></div><div class="seg2" id="trk"><button data-t="strength" aria-pressed="${S.ob.track!=='relax'}">Strength</button><button data-t="relax" aria-pressed="${S.ob.track==='relax'}">Relax</button></div></div>
-  ${sw('voice','Voice coach','Speaks each step out loud')}${sw('snd','Sound cues','A rising beep to squeeze, a falling beep to let go')}${sw('vib','Vibration cues','Buzzes on each squeeze and drop (Android)')}${sw('discreet','Discreet mode','Silent, no voice, vibration only')}</div>
+  ${sw('voice','Voice coach','Speaks each step out loud')}${sw('snd','Sound cues','A rising beep to squeeze, a falling beep to let go')}${sw('count','Count out loud','The coach counts down every hold and rest, so you never need to look')}<button class="btn ghost" id="testSnd" type="button" style="margin-top:10px">Test sound</button><p class="tiny mut" id="sndNote">On iPhone, turn the volume up and check the silent switch on the side is off.</p>${sw('vib','Vibration cues','Buzzes on each squeeze and drop (Android)')}${sw('discreet','Discreet mode','Silent, no voice, vibration only')}</div>
  <div class="card grid"><h3>Account</h3>${S.gate.email?`<p class="small">${S.gate.state==='verified'?'Signed in as':'Waiting for you to confirm'} <b>${esc(S.gate.email)}</b>.</p>`:`<p class="small mut">Sign up to keep your progress across devices. <b>100% free, no payment or card details.</b></p>`}<button class="btn ${S.gate.email?'ghost':'hot'}" id="meG">${S.gate.email?'Manage':'Sign up or sign in'}</button>
   <h3 style="margin-top:6px">Your data</h3><p class="small mut">Your training is stored in this browser on this device. Nothing about your sessions is sent anywhere. Only your email is stored on our server if you sign up.</p>
   <div class="row"><button class="btn ghost danger" id="delB">Delete everything</button></div><p class="tiny mut" id="delM"></p></div>
@@ -184,7 +184,7 @@ function render(){$('#topLv').textContent='Lv '+lvl();const st=streak().n;$('#to
  if(cur==='learn'){$('#v-learn').innerHTML=learn();$('#retake').onclick=()=>{OB={step:1,ans:{},checks:[false,false,false],track:'strength'};ob()}}
  if(cur==='me'){$('#v-me').innerHTML=me();bindMe()}}
 function bindMe(){const v=$('#v-me');
- v.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{const k=b.dataset.set;S.settings[k]=!S.settings[k];save();render()});
+ v.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{const k=b.dataset.set;S.settings[k]=!S.settings[k];save();render()});{const tb=v.querySelector('#testSnd');if(tb)tb.onclick=()=>{unlockAudio();const was=S.settings.discreet;if(was){toast('Discreet mode is on, so sound is off');return}SFX.done();setTimeout(()=>{cnt(3);setTimeout(()=>cnt(2),900);setTimeout(()=>cnt(1),1800);setTimeout(()=>say(voiceOn()?'Sound is working. You will hear the coach and the countdown.':''),2700)},700);if(!('speechSynthesis' in window))toast('This browser has no voice. You will still hear the beeps.')}}
  v.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{S.ob.track=b.dataset.t;save();render();toast(b.dataset.t==='relax'?'Relax track on':'Strength track on')});
  $('#meG').onclick=()=>gate(false);
  let armed=false;$('#delB').onclick=()=>{if(!armed){armed=true;$('#delB').textContent='Tap again to delete';$('#delM').textContent='This removes every session, test and setting from this device.';return}
@@ -208,6 +208,8 @@ function unlockAudio(){try{if(navigator.audioSession)navigator.audioSession.type
 ['pointerdown','touchend','keydown','click'].forEach(ev=>document.addEventListener(ev,unlockAudio,{passive:true,capture:true}));
 function tone(f1,f2,d,vol){if(!sndOn()||!AC)return;try{if(AC.state!=='running')AC.resume();const t=AC.currentTime,o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||.35,t+.02);g.gain.exponentialRampToValueAtTime(0.0001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+.05)}catch(e){}}
 const SFX={up:()=>tone(520,880,.22),down:()=>tone(620,330,.28,.3),tick:()=>tone(900,900,.08,.25),done:()=>{tone(660,660,.15);setTimeout(()=>tone(880,880,.15),160);setTimeout(()=>tone(1320,1320,.35),320)}};
+function countOn(){return S.settings.count!==false&&!S.settings.discreet}
+function cnt(n){if(!countOn())return;n<=3?tone(1180,1180,.09,.3):tone(880,880,.06,.18);if(voiceOn())say(String(n))}
 function say(t){if(!voiceOn()||!('speechSynthesis' in window))return;try{const go=()=>{UTT=new SpeechSynthesisUtterance(t);if(VOICE){UTT.voice=VOICE;UTT.lang=VOICE.lang}else UTT.lang='en-GB';UTT.rate=1;UTT.volume=1;speechSynthesis.speak(UTT)};if(speechSynthesis.speaking||speechSynthesis.pending){speechSynthesis.cancel();setTimeout(go,90)}else go();speechSynthesis.resume()}catch(e){}}
 function buzz(p){if(p&&S.settings.vib&&navigator.vibrate)try{navigator.vibrate(p)}catch(e){}}
 const RC=276.5;function ring(left,tot,lab,col){$('#ringT').textContent=Math.max(0,Math.ceil(left));$('#ringL').textContent=lab;const p=$('#ringP');p.setAttribute('stroke',col);p.setAttribute('stroke-dashoffset',RC*(1-Math.max(0,left)/tot))}
@@ -234,12 +236,12 @@ function startSession(list,kind){unlockAudio();W.list=list;W.kind=kind;W.basePos
  if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');loadEx(0)}
 function nextEx(){if(W.i>=W.list.length-1){finish();return}W.ph='rest';W.t=0;$('#stage').classList.add('rest');$$('#bars i')[W.i].firstChild.style.width='100%';$('#phase').textContent='Rest';$('#phase').style.color='var(--cool)';$('#cue').textContent='Breathe easy. Next up: '+EX[W.list[W.i+1]].n;say('Nice work. Rest and breathe. Next up, '+EX[W.list[W.i+1]].n)}
 function tick(dt){const tot=CUM[CUM.length-1];
- if(W.ph==='ready'){const pv=Math.ceil(READY-W.t);W.t+=dt;const nv=Math.ceil(READY-W.t);if(nv<pv&&nv>=1&&nv<=3)SFX.tick();ring(READY-W.t,READY,'Get ready','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*4);W.lift+=(0-W.lift)*Math.min(1,dt*4);mvDraw(W.L,0);if(W.t>=READY){W.ph='work';W.si=0;enterStep()}}
+ if(W.ph==='ready'){const pv=Math.ceil(READY-W.t);W.t+=dt;const nv=Math.ceil(READY-W.t);if(nv<pv&&nv>=1&&nv<=3){countOn()?cnt(nv):SFX.tick()}ring(READY-W.t,READY,'Get ready','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*4);W.lift+=(0-W.lift)*Math.min(1,dt*4);mvDraw(W.L,0);if(W.t>=READY){W.ph='work';W.si=0;enterStep()}}
  else if(W.ph==='work'){const s=STEPS[W.si];W.st+=dt;const ramp=s.k==='hold'||s.k==='rest'?.3:s.d*.8;W.L=W.from+(s.to-W.from)*easeF(Math.min(1,W.st/ramp));if(s.lift!=null)W.lift=W.liftFrom+(s.lift-W.liftFrom)*easeF(Math.min(1,W.st/s.d));
   const e=CUM[W.si]+W.st;ring(tot-e,tot,'Seconds',EX[W.list[W.i]].rel?'#6FB7FF':'#FF6B4A');mvDraw(W.L,Math.min(1,W.st/s.d));$$('#bars i')[W.i].firstChild.style.width=Math.min(100,e/tot*100)+'%';
-  if(s.k==='hold'){const left=Math.ceil(s.d-W.st);if(s.d>=8&&W.mid===0&&W.st>=s.d*.4){W.mid=1;say($('#cue').textContent)}if(s.d>=5&&left<=3&&left>=1&&W.mid!==10+left){W.mid=10+left;say(String(left))}}
+  {const left=Math.ceil(s.d-W.st);if(countOn()&&s.d>=3){if(left>=1&&left<Math.ceil(s.d)&&W.mid!==100+left){W.mid=100+left;cnt(left)}}else if(s.k==='hold'){if(s.d>=8&&W.mid===0&&W.st>=s.d*.4){W.mid=1;say($('#cue').textContent)}if(s.d>=5&&left<=3&&left>=1&&W.mid!==10+left){W.mid=10+left;say(String(left))}}}
   if(W.st>=s.d){if(s.k==='squeeze'||s.k==='up'||s.k==='kneein')W.sq++;if(s.r){W.rep++;updReps()}W.si++;if(W.si>=STEPS.length)nextEx();else enterStep()}}
- else if(W.ph==='rest'){W.t+=dt;ring(REST-W.t,REST,'Rest','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*3);mvDraw(W.L,0);if(W.t>=REST)loadEx(W.i+1)}}
+ else if(W.ph==='rest'){const pr=Math.ceil(REST-W.t);W.t+=dt;const nr=Math.ceil(REST-W.t);if(nr<pr&&nr>=1&&nr<=5)cnt(nr);ring(REST-W.t,REST,'Rest','#6FB7FF');W.L+=(0-W.L)*Math.min(1,dt*3);mvDraw(W.L,0);if(W.t>=REST)loadEx(W.i+1)}}
 function closePl(){$('#pl').classList.remove('on');document.body.style.overflow='';try{speechSynthesis.cancel()}catch(e){}try{W.lock&&W.lock.release()}catch(e){}W.ph='off'}
 function finish(){const min=Math.max(.5,Math.round((performance.now()-W.started)/6000)/10),today_=dk(new Date()),firstDay=W.kind==='day'&&!dayDates().includes(today_);
  const before=lvl(),xp=W.sq*2+(W.kind==='day'?30:10)+(firstDay?20:0);S.sessions.push({d:today_,kind:W.kind,ids:W.list,min,sq:W.sq,xp});S.xp+=xp;const nb=newBadges();save();closePl();ping('session_done');
