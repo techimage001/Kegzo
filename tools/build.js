@@ -5,7 +5,7 @@ const fs=require('fs'),path=require('path');
 const ROOT=path.resolve(__dirname,'..'),SRC=path.join(ROOT,'src');
 const {EX,EXMETA,DAYPLAN,ICONS}=require(path.join(SRC,'exercises.js'));
 const {GUIDES,STUDY}=require(path.join(SRC,'guides.js'));
-const SITE='https://kegzo.com',V='1',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
+const SITE='https://kegzo.com',V='2',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
 const POSN={bridge:'Lying down',lying:'Lying down',seated:'Seated',standing:'Standing',walking:'Walking'},PORDER=['lying','seated','standing','walking'];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const strip=h=>String(h).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
@@ -76,11 +76,11 @@ const faqHTML=faq=>`<section class="faq"><h2>Frequently asked questions</h2>${fa
  const body=`<section class="hero"><div class="htxt"><p class="eyebrow">Kegel exercises for men</p><h1>Kegel training, built like a game</h1>
 <p class="lead answer">Kegzo is a 28-day kegel programme for men with no subscription and no paywall. A live animated coach shows you when to squeeze, hold and let go, you level up as you train, and a weekly max-hold test shows your real progress. Sessions take about 7 minutes and need no equipment.</p>
 <p class="ctar"><a class="btn hot" href="/app.html">Start Day 1</a><a class="btn ghost" href="/exercises/">See the exercises</a></p><p class="tiny mut">Currently free. No subscription. Start straight away on any phone.</p></div>
-<div class="hfig"><video class="hvid" src="/assets/video/bridge.mp4?v=${V}" poster="/assets/img/pos-bridge.webp" autoplay muted loop playsinline preload="metadata" aria-label="Glowing hologram figure lifting into a bridge and lowering, looping"></video></div></section>
+<div class="hfig"><span class="vbox"><video class="hvid" src="/assets/video/bridge.mp4?v=${V}" poster="/assets/img/pos-bridge.webp" autoplay muted loop playsinline preload="metadata" aria-label="Glowing hologram figure lifting into a bridge and lowering, looping"></video></span></div></section>
 <section id="how"><h2>How does Kegzo work?</h2><p class="answer">You answer four quick safety questions, learn to find the right muscle, then follow one short guided session a day. The coach counts every squeeze, hold and release with you, and the programme gets harder each week as you move from lying down to walking.</p>
 <div class="cards3"><div class="c"><b>1. Safety check</b><p>Four questions decide your starting track. If your pelvic floor sounds tense, you start on the Relax track instead of squeezing harder.</p></div><div class="c"><b>2. Find the muscle</b><p>A guided check makes sure you are training the pelvic floor, not your bum, belly or thighs.</p></div><div class="c"><b>3. Train and level up</b><p>Daily sessions with a live animated coach, XP, streaks with a weekly rest-day shield, and a boss challenge every week.</p></div></div></section>
 <section id="programme"><h2>What is in the 28-day programme?</h2><p class="answer">Each week adds a harder position and new exercises. Week 1 is lying down, week 2 seated, week 3 standing and week 4 walking. Every session mixes strength holds, quick flicks, control work and reverse kegels for a full release.</p>
-<div class="weeks4">${PORDER.map((p,i)=>`<div class="wkc">${i===0?`<video class="wvid" src="/assets/video/bridge.mp4?v=${V}" poster="/assets/img/pos-bridge.webp" autoplay muted loop playsinline preload="metadata" aria-label="Hologram figure lying down and lifting into a bridge"></video>`:`<img src="/assets/img/pos-${p}.webp" width="1448" height="1086" alt="Hologram figure ${POSN[p].toLowerCase()}" loading="lazy">`}<b>Week ${i+1}: ${POSN[p]}</b><span>${DAYPLAN.strength[i].map(id=>EX[id].n).filter((v,j,a)=>a.indexOf(v)===j).join(', ')}</span></div>`).join('')}</div></section>
+<div class="weeks4">${PORDER.map((p,i)=>`<div class="wkc">${i===0?`<span class="vbox"><video class="wvid" src="/assets/video/bridge.mp4?v=${V}" poster="/assets/img/pos-bridge.webp" autoplay muted loop playsinline preload="metadata" aria-label="Hologram figure lying down and lifting into a bridge"></video></span>`:`<img src="/assets/img/pos-${p}.webp" width="1448" height="1086" alt="Hologram figure ${POSN[p].toLowerCase()}" loading="lazy">`}<b>Week ${i+1}: ${POSN[p]}</b><span>${DAYPLAN.strength[i].map(id=>EX[id].n).filter((v,j,a)=>a.indexOf(v)===j).join(', ')}</span></div>`).join('')}</div></section>
 <section><h2>Which kegel exercises are included?</h2><p class="answer">Ten exercises cover every part of pelvic floor training: finding the muscle, strength, speed, stamina, control and release, plus a bonus bridge with a kegel hold.</p>
 <div class="exgrid">${Object.keys(EX).map(id=>`<a class="exc" href="/exercises/${EXMETA[id].slug}.html"><span class="ico ${EX[id].rel?'c':''}">${icon(EX[id].ic)}</span><span><b>${EX[id].n}</b><small>${EXMETA[id].sets}</small></span></a>`).join('')}</div></section>
 <section><h2>Why train your pelvic floor?</h2><p class="answer">Your pelvic floor is a group of muscles like any other: it can be trained for strength, speed, stamina, control and the ability to relax. Kegzo gives that training a clear structure, a coach to follow and numbers that show your progress.</p>
@@ -99,7 +99,7 @@ ${faqHTML(HF)}${cta('Start Day 1 now')}`;
   const rel=ids.filter(x=>x!==id).slice(0,4);
   const body=`<article class="art"><p class="eyebrow">${e.type} · ${esc(m.sets)}</p><h1>${e.n}: how to do it</h1>
 <p class="lead answer">${m.why}</p>
-<figure class="exfig">${pos==='bridge'?`<video class="xvid" src="/assets/video/bridge.mp4?v=${V}" poster="/assets/img/pos-bridge.webp" autoplay muted loop playsinline preload="metadata" aria-label="Hologram figure doing a bridge, looping"></video>`:`<img src="/assets/img/pos-${pos}.webp" width="1448" height="1086" alt="Hologram figure ${POSN[pos].toLowerCase()}, the position for ${e.n.toLowerCase()}" loading="lazy">`}<figcaption>${POSN[pos]}: ${esc(m.sets)}</figcaption></figure>
+<figure class="exfig">${pos==='bridge'?`<span class="vbox"><video class="xvid" src="/assets/video/bridge.mp4?v=${V}" poster="/assets/img/pos-bridge.webp" autoplay muted loop playsinline preload="metadata" aria-label="Hologram figure doing a bridge, looping"></video></span>`:`<img src="/assets/img/pos-${pos}.webp" width="1448" height="1086" alt="Hologram figure ${POSN[pos].toLowerCase()}, the position for ${e.n.toLowerCase()}" loading="lazy">`}<figcaption>${POSN[pos]}: ${esc(m.sets)}</figcaption></figure>
 ${cta('Try '+e.n+' with the coach','/app.html#ex-'+m.slug)}
 <h2>How do you do ${e.n.toLowerCase()}?</h2><ol>${e.how.map(s=>`<li>${s}</li>`).join('')}</ol>
 <h2>What should you feel?</h2><p>${e.feel}</p>
@@ -179,7 +179,7 @@ h1{font-size:clamp(32px,7vw,52px);margin:.3em 0 .35em}h2{font-size:clamp(23px,4.
 .ctar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:22px 0}
 .hero{display:grid;gap:10px;align-items:center;padding:6px 0 10px}
 .hfig{position:relative;border-radius:24px;overflow:hidden;background:#100C28;border:1px solid var(--line)}
-video{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;background:#12012B}.hfig video{aspect-ratio:4/3}.wkc video{aspect-ratio:4/3}.exfig video{aspect-ratio:4/3}
+.vbox{display:block;position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:#12012B}@supports not (aspect-ratio:1){.vbox{height:0;padding-top:75%}}.vbox video{position:absolute;top:0;left:0;width:100%;height:100%;max-height:none;object-fit:cover;object-position:50% 58%;display:block}
 .pulse{position:absolute;left:33%;top:56%;width:20%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(61,220,132,.8),rgba(61,220,132,0) 68%);mix-blend-mode:screen;animation:pul 4s ease-in-out infinite}
 @keyframes pul{0%,100%{opacity:.25;transform:translate(-50%,-50%) scale(.75)}45%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}}
 .cards3{display:grid;gap:12px}.c{background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:18px}.c p{margin:.4em 0 0;color:var(--mut);font-size:16px}
