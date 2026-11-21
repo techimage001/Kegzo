@@ -10,7 +10,8 @@ if (KZ_READY && strlen($t) === 48) {
     /* tell the owner about each newly confirmed sign-up */
     if ($ok && $lead && $lead['state'] !== 'verified' && defined('CONTACT_TO')) {
       $n = (int)$db->query("SELECT COUNT(*) FROM leads WHERE state = 'verified'")->fetchColumn();
-      kz_mail(CONTACT_TO, 'New Kegzo sign-up: ' . $lead['email'], "Someone just joined Kegzo.\n\nEmail: " . $lead['email'] . "\nConfirmed: " . gmdate('D j M Y, H:i') . " (UTC)\nTotal confirmed members: $n\n\nSee everyone in your admin page:\n" . SITE_URL . "/api/admin.php\n");
+      $txt = "A Kegzo sign-up just confirmed their email.\n\nEmail: " . $lead['email'] . "\nConfirmed: " . gmdate('D j M Y, H:i') . " (UTC)\nTotal confirmed members: $n\n\nSee all subscribers: " . SITE_URL . "/api/admin.php\n";
+      kz_mail(CONTACT_TO, 'Confirmed: ' . $lead['email'] . ' joined Kegzo', $txt, '', kz_email_html('New member confirmed ✅', "Email: " . $lead['email'] . "\nConfirmed: " . gmdate('D j M Y, H:i') . " (UTC)\nTotal confirmed members: $n", 'View all subscribers', SITE_URL . '/api/admin.php'));
     }
   } catch (Throwable $e) {}
 }

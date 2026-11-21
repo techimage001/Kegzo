@@ -42,7 +42,7 @@ function kz_rate(string $bucket, int $max, int $win): bool {
 }
 function kz_clean_header(string $s): string { return trim(str_replace(["\r", "\n", '%0a', '%0d'], '', $s)); }
 /* SMTP over SSL (like the numerology app). Used when SMTP_HOST/SMTP_USER/SMTP_PASS are set in secrets.php; otherwise falls back to PHP mail(). */
-function kz_smtp(string $to, string $subject, string $text, string $replyTo = ''): bool {
+function kz_smtp(string $to, string $subject, string $text, string $replyTo = '', string $html = ''): bool {
   $host = SMTP_HOST; $port = defined('SMTP_PORT') ? (int)SMTP_PORT : 465;
   $ctx = stream_context_create(['ssl' => ['verify_peer' => !defined('SMTP_INSECURE'), 'verify_peer_name' => !defined('SMTP_INSECURE'), 'allow_self_signed' => defined('SMTP_INSECURE')]]);
   $fp = @stream_socket_client('ssl://' . $host . ':' . $port, $en, $es, 15, STREAM_CLIENT_CONNECT, $ctx);
@@ -56,18 +56,36 @@ function kz_smtp(string $to, string $subject, string $text, string $replyTo = ''
   if ($ok) {
     $h = 'Date: ' . date('r') . "\r\nFrom: " . kz_clean_header(MAIL_FROM_NAME) . ' <' . $from . ">\r\nTo: <" . $to . ">\r\nSubject: =?UTF-8?B?" . base64_encode($subject) . "?=\r\nMessage-ID: <" . bin2hex(random_bytes(12)) . '@kegzo.com>' . "\r\n";
     if ($replyTo && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) $h .= 'Reply-To: ' . kz_clean_header($replyTo) . "\r\n";
-    $h .= "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n";
-    $body = preg_replace('/^\./m', '..', str_replace(["\r\n", "\r"], "\n", $text)); $body = str_replace("\n", "\r\n", $body);
+    $norm = fn($t) => str_replace("\n", "\r\n", str_replace(["\r\n", "\r"], "\n", $t));
+    if ($html !== '') { $b = 'kz' . bin2hex(random_bytes(8));
+      $h .= "MIME-Version: 1.0\r\nContent-Type: multipart/alternative; boundary=\"$b\"\r\n";
+      $body = "--$b\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n" . chunk_split(base64_encode($norm($text))) . "--$b\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n" . chunk_split(base64_encode($html)) . "--$b--";
+    } else {
+      $h .= "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n";
+      $body = preg_replace('/^\./m', '..', $norm($text));
+    }
     $ok = $cmd($h . "\r\n" . $body . "\r\n.", [250]);
   }
   @fwrite($fp, "QUIT\r\n"); fclose($fp); return $ok;
 }
-function kz_mail(string $to, string $subject, string $text, string $replyTo = ''): bool {
+function kz_mail(string $to, string $subject, string $text, string $replyTo = '', string $html = ''): bool {
   if (!KZ_READY) return false;
-  if (defined('SMTP_HOST') && defined('SMTP_USER') && defined('SMTP_PASS')) return kz_smtp($to, $subject, $text, $replyTo);
+  if (defined('SMTP_HOST') && defined('SMTP_USER') && defined('SMTP_PASS')) return kz_smtp($to, $subject, $text, $replyTo, $html);
   $h = 'From: ' . kz_clean_header(MAIL_FROM_NAME) . ' <' . kz_clean_header(MAIL_FROM) . ">\r\n";
   if ($replyTo && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) $h .= 'Reply-To: ' . kz_clean_header($replyTo) . "\r\n";
   $h .= "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\n";
   return @mail(kz_clean_header($to), '=?UTF-8?B?' . base64_encode($subject) . '?=', $text, $h, '-f' . kz_clean_header(MAIL_FROM));
+}
+/* Branded HTML email (dark Kegzo look, works in Gmail/Outlook/Apple Mail). */
+function kz_email_html(string $title, string $intro, string $btnText = '', string $btnUrl = '', string $outro = ''): string {
+  $e = fn($x) => htmlspecialchars($x, ENT_QUOTES, 'UTF-8');
+  $btn = $btnUrl ? '<tr><td style="padding:8px 32px 8px"><a href="' . $e($btnUrl) . '" style="display:inline-block;background:#FF6B4A;color:#2A0E07;font-weight:700;font-size:17px;text-decoration:none;padding:15px 30px;border-radius:999px">' . $e($btnText) . '</a></td></tr><tr><td style="padding:14px 32px 0;font-size:13px;line-height:1.5;color:#9C94C4">Button not working? Copy this link into your browser:<br><a href="' . $e($btnUrl) . '" style="color:#5BD6C9;word-break:break-all">' . $e($btnUrl) . '</a></td></tr>' : '';
+  return '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark light"></head><body style="margin:0;padding:0;background:#0E0B20"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0E0B20;padding:24px 12px"><tr><td align="center"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#1B1638;border-radius:20px;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#F4F1FF">'
+   . '<tr><td style="padding:28px 32px 6px"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="background:#FF6B4A;border-radius:10px;width:36px;height:36px;text-align:center;font-size:20px;line-height:36px;color:#2A0E07;font-weight:800">K</td><td style="padding-left:10px;font-size:22px;font-weight:800;color:#FFFFFF">Kegzo</td></tr></table></td></tr>'
+   . '<tr><td style="padding:18px 32px 6px;font-size:24px;font-weight:800;line-height:1.25;color:#FFFFFF">' . $e($title) . '</td></tr>'
+   . '<tr><td style="padding:6px 32px 18px;font-size:16px;line-height:1.6;color:#D6D0F2">' . nl2br($e($intro)) . '</td></tr>' . $btn
+   . ($outro ? '<tr><td style="padding:22px 32px 0;font-size:14px;line-height:1.6;color:#9C94C4">' . nl2br($e($outro)) . '</td></tr>' : '')
+   . '<tr><td style="padding:26px 32px 28px;font-size:12px;line-height:1.5;color:#7A72A8;border-top:1px solid #2E2756">Kegzo · Pelvic floor training, built like a game<br><a href="' . $e(SITE_URL) . '" style="color:#7A72A8">' . $e(preg_replace('#^https?://#', '', SITE_URL)) . '</a> · General fitness information, not medical advice.</td></tr>'
+   . '</table></td></tr></table></body></html>';
 }
 const KZ_DISPOSABLE = ['mailinator.com','guerrillamail.com','10minutemail.com','tempmail.com','temp-mail.org','yopmail.com','trashmail.com','sharklasers.com','getnada.com','dispostable.com','maildrop.cc','throwawaymail.com'];

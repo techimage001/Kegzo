@@ -18,6 +18,13 @@ try {
   else $db->prepare("INSERT INTO leads(email, state, token, src, created) VALUES(?, 'pending', ?, ?, ?)")->execute([$email, $token, substr((string)($_POST['src'] ?? ''), 0, 20), gmdate('c')]);
   $link = SITE_URL . '/api/verify.php?t=' . $token;
   $body = "Hi,\n\nTap the link below to confirm your email and switch on progress saving in Kegzo:\n\n$link\n\nIf you didn't ask for this, you can ignore this email.\n\nKegzo\n" . SITE_URL . "\n";
-  kz_mail($email, 'Confirm your email for Kegzo', $body);
+  $html = kz_email_html('Confirm your email', "You're one tap away from saving your Kegzo progress. Confirm your email and your level, streak and charts will follow you to any device.", 'Confirm my email', $link, "Didn't ask for this? You can safely ignore this email.");
+  kz_mail($email, 'Confirm your email for Kegzo', $body, '', $html);
+  /* tell the owner about every new sign-up */
+  if (!$row && defined('CONTACT_TO')) {
+    $tot = (int)$db->query('SELECT COUNT(*) FROM leads')->fetchColumn();
+    $txt = "New Kegzo sign-up (waiting for them to confirm).\n\nEmail: $email\nWhen: " . gmdate('D j M Y, H:i') . " (UTC)\nTotal sign-ups: $tot\n\nSee all subscribers: " . SITE_URL . "/api/admin.php\n";
+    kz_mail(CONTACT_TO, 'New Kegzo sign-up: ' . $email, $txt, '', kz_email_html('New sign-up 🎉', "Email: $email\nWhen: " . gmdate('D j M Y, H:i') . " (UTC)\nStatus: waiting for them to confirm\nTotal sign-ups: $tot", 'View all subscribers', SITE_URL . '/api/admin.php'));
+  }
   kz_json(['ok' => true, 'state' => 'pending']);
 } catch (Throwable $e) { kz_json(['ok' => false, 'error' => 'Something went wrong. Please try again.'], 500); }
