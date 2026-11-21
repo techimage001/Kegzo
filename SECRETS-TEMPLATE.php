@@ -8,4 +8,9 @@ define('MAIL_FROM_NAME', 'Kegzo');
 define('CONTACT_TO', 'you@example.com');          /* where contact-form messages are sent; never shown on the site */
 define('ADMIN_PASSWORD', 'choose-a-long-password'); /* for /api/admin.php */
 define('HASH_SALT', 'type-any-long-random-text-here');
+/* Recommended: send through Hostinger SMTP (better inbox delivery than PHP mail) */
+define('SMTP_HOST', 'smtp.hostinger.com');
+define('SMTP_PORT', 465);
+define('SMTP_USER', 'info@kegzo.com');
+define('SMTP_PASS', 'the-mailbox-password');
 /* Optional: define('DB_PATH', __DIR__ . '/kegzo.sqlite'); */

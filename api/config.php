@@ -34,8 +34,30 @@ function kz_rate(string $bucket, int $max, int $win): bool {
   $db->prepare('INSERT INTO rate(k, ts) VALUES(?, ?)')->execute([$k, $now]); return true;
 }
 function kz_clean_header(string $s): string { return trim(str_replace(["\r", "\n", '%0a', '%0d'], '', $s)); }
+/* SMTP over SSL (like the numerology app). Used when SMTP_HOST/SMTP_USER/SMTP_PASS are set in secrets.php; otherwise falls back to PHP mail(). */
+function kz_smtp(string $to, string $subject, string $text, string $replyTo = ''): bool {
+  $host = SMTP_HOST; $port = defined('SMTP_PORT') ? (int)SMTP_PORT : 465;
+  $ctx = stream_context_create(['ssl' => ['verify_peer' => !defined('SMTP_INSECURE'), 'verify_peer_name' => !defined('SMTP_INSECURE'), 'allow_self_signed' => defined('SMTP_INSECURE')]]);
+  $fp = @stream_socket_client('ssl://' . $host . ':' . $port, $en, $es, 15, STREAM_CLIENT_CONNECT, $ctx);
+  if (!$fp) return false;
+  stream_set_timeout($fp, 15);
+  $read = function () use ($fp) { $d = ''; while (($l = fgets($fp, 515)) !== false) { $d .= $l; if (strlen($l) < 4 || $l[3] === ' ') break; } return $d; };
+  $cmd = function (string $c, array $ok) use ($fp, $read) { if ($c !== '') fwrite($fp, $c . "\r\n"); $r = $read(); return in_array((int)substr($r, 0, 3), $ok, true); };
+  $from = kz_clean_header(MAIL_FROM); $to = kz_clean_header($to);
+  $ok = $cmd('', [220]) && $cmd('EHLO kegzo.com', [250]) && $cmd('AUTH LOGIN', [334]) && $cmd(base64_encode(SMTP_USER), [334]) && $cmd(base64_encode(SMTP_PASS), [235])
+     && $cmd('MAIL FROM:<' . $from . '>', [250]) && $cmd('RCPT TO:<' . $to . '>', [250, 251]) && $cmd('DATA', [354]);
+  if ($ok) {
+    $h = 'Date: ' . date('r') . "\r\nFrom: " . kz_clean_header(MAIL_FROM_NAME) . ' <' . $from . ">\r\nTo: <" . $to . ">\r\nSubject: =?UTF-8?B?" . base64_encode($subject) . "?=\r\nMessage-ID: <" . bin2hex(random_bytes(12)) . '@kegzo.com>' . "\r\n";
+    if ($replyTo && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) $h .= 'Reply-To: ' . kz_clean_header($replyTo) . "\r\n";
+    $h .= "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n";
+    $body = preg_replace('/^\./m', '..', str_replace(["\r\n", "\r"], "\n", $text)); $body = str_replace("\n", "\r\n", $body);
+    $ok = $cmd($h . "\r\n" . $body . "\r\n.", [250]);
+  }
+  @fwrite($fp, "QUIT\r\n"); fclose($fp); return $ok;
+}
 function kz_mail(string $to, string $subject, string $text, string $replyTo = ''): bool {
   if (!KZ_READY) return false;
+  if (defined('SMTP_HOST') && defined('SMTP_USER') && defined('SMTP_PASS')) return kz_smtp($to, $subject, $text, $replyTo);
   $h = 'From: ' . kz_clean_header(MAIL_FROM_NAME) . ' <' . kz_clean_header(MAIL_FROM) . ">\r\n";
   if ($replyTo && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) $h .= 'Reply-To: ' . kz_clean_header($replyTo) . "\r\n";
   $h .= "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\n";
