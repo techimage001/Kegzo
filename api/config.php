@@ -5,7 +5,14 @@
 declare(strict_types=1);
 const KZ_PRIVATE_DIR = __DIR__ . '/../../kegzo_private';
 $kzSecrets = KZ_PRIVATE_DIR . '/secrets.php';
-if (is_file($kzSecrets)) { require $kzSecrets; }
+if (is_file($kzSecrets)) {
+  $kzCfg = require $kzSecrets;
+  /* also accepts the numerology-app style: return ['mail_from' => '...', 'smtp_pass' => '...', ...] */
+  if (is_array($kzCfg)) {
+    $kzMap = ['site_url'=>'SITE_URL','mail_from'=>'MAIL_FROM','from_email'=>'MAIL_FROM','mail_from_name'=>'MAIL_FROM_NAME','from_name'=>'MAIL_FROM_NAME','contact_to'=>'CONTACT_TO','notify_email'=>'CONTACT_TO','admin_password'=>'ADMIN_PASSWORD','hash_salt'=>'HASH_SALT','site_salt'=>'HASH_SALT','smtp_host'=>'SMTP_HOST','smtp_port'=>'SMTP_PORT','smtp_user'=>'SMTP_USER','smtp_pass'=>'SMTP_PASS','db_path'=>'DB_PATH'];
+    foreach ($kzCfg as $k => $v) { $c = $kzMap[strtolower((string)$k)] ?? null; if ($c && !defined($c) && $v !== '' && $v !== null) define($c, $v); }
+  }
+}
 define('KZ_READY', defined('MAIL_FROM') && defined('CONTACT_TO'));
 if (!defined('SITE_URL')) define('SITE_URL', 'https://kegzo.com');
 if (!defined('DB_PATH')) define('DB_PATH', KZ_PRIVATE_DIR . '/kegzo.sqlite');
