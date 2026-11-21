@@ -5,7 +5,7 @@ const fs=require('fs'),path=require('path');
 const ROOT=path.resolve(__dirname,'..'),SRC=path.join(ROOT,'src');
 const {PLAN30,EX,EXMETA,DAYPLAN,ICONS}=require(path.join(SRC,'exercises.js'));
 const {GUIDES,STUDY}=require(path.join(SRC,'guides.js'));
-const SITE='https://kegzo.com',V='29',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
+const SITE='https://kegzo.com',V='30',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
 const POSN={hbaby:'Lying down',dsquat:'Deep squat',child:'Kneeling',side:'Side-lying',cough:'Standing',boxlift:'Standing',lunge:'Standing',sts:'Seated',squat:'Standing',gbridge:'Lying down',tilt:'Lying down',breath:'Lying down',seatopen:'Seated',fours:'On all fours',climber:'Plank',bridge:'Lying down',lying:'Lying down',seated:'Seated',standing:'Standing',walking:'Walking'},PORDER=['lying','seated','standing','walking'],VID={hbaby:'hbaby',dsquat:'dsquat',child:'child',side:'side',cough:'cough',boxlift:'boxlift',lunge:'lunge',sts:'sts',squat:'squat',lying:'lying',seated:'seated',standing:'standing',walking:'walking',gbridge:'gbridge',tilt:'tilt',breath:'breath',seatopen:'seatopen',bridge:'bridge',fours:'fours',climber:'climber'};
 const BONUS=()=>Object.keys(EX).filter(id=>!EX[id].wk&&VID[EX[id].pos]);
 const bcard=id=>{const e=EX[id],m=EXMETA[id];return `<a class="wkc bc" href="/exercises/${m.slug}.html"><span class="vbox fit"><video src="/assets/video/${VID[e.pos]}.mp4?v=${V}" poster="/assets/img/pos-${e.pos}.webp" autoplay muted loop playsinline preload="metadata" aria-label="Hologram figure doing ${e.n.toLowerCase()}, looping"></video></span><b>${e.n}</b><span>${m.short}</span></a>`};
@@ -103,15 +103,16 @@ ${faqHTML(HF)}${cta('Start Day 1 now')}`;
 w('welcome.html',`<!DOCTYPE html><html lang="en"><head>${head({title:'Welcome to Kegzo | Meet Your Coach',desc:'Meet your Kegzo coach. Train your pelvic floor a few minutes a day, with a coach who guides every move.',url:'/welcome.html',robots:'noindex,follow'})}<link rel="stylesheet" href="/assets/site.css?v=${V}"></head><body class="wel">
 <main class="welw"><a class="brand welb" href="/">${MARK}Kegzo</a>
 <div class="welglow" aria-hidden="true"></div>
-<div class="welv"><video id="wV" src="/assets/video/coach-welcome.mp4?v=${V}" poster="/assets/img/coach-poster.webp?v=${V}" playsinline preload="auto" aria-label="Your Kegzo coach welcoming you"></video><button class="welp" id="wP" type="button"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Tap to meet your coach</span></button></div>
+<div class="welv"><video id="wV" src="/assets/video/coach-welcome.mp4?v=${V}" poster="/assets/img/coach-poster.webp?v=${V}" playsinline preload="auto" aria-label="Your Kegzo coach welcoming you"></video></div>
+<button class="welp" id="wP" type="button"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Tap to meet your coach</span></button>
 <p class="welc" id="wC" aria-live="polite">Hey, I'm your Kegzo coach. Tap play to hear me.</p>
 <div class="wela"><a class="btn hot" id="wGo" href="/">Continue to Kegzo</a><a class="welskip" href="/" id="wSkip">Skip</a></div>
 <p class="weld">General fitness information, not medical advice. We are not doctors.</p></main>
 <script>{const v=document.getElementById('wV'),b=document.getElementById('wP'),c=document.getElementById('wC'),C=[[0,"Hey, I'm your Kegzo coach. Welcome aboard!"],[3.45,"Most men never train their pelvic floor, the hidden muscle that matters most."],[8.37,"A few minutes a day can mean fewer after-pee dribbles, a stronger core, and more stamina and confidence where it counts."],[15.31,"No gym, no equipment, just 28 days of daily training."],[19.4,"I'll guide every move and count with you, and you can track your progress."],[23.44,"Tap Continue to Kegzo below to get started."]];
 const seen=()=>{try{localStorage.setItem('kegzo.welcomed','1')}catch(e){}};document.getElementById('wGo').addEventListener('click',seen);document.getElementById('wSkip').addEventListener('click',seen);
-const go=()=>{v.muted=false;v.currentTime=0;v.play().then(()=>b.classList.add('gone')).catch(()=>{})};b.onclick=go;v.onclick=()=>{if(v.paused)go();else{v.pause();b.classList.remove('gone')}};
+const PL='<path d="M8 5v14l11-7z"/>',PA='<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>',set=(i,t)=>{b.querySelector('svg').innerHTML=i;b.querySelector('span').textContent=t};const tog=()=>{if(v.paused){v.muted=false;if(v.ended)v.currentTime=0;v.play().catch(()=>{})}else v.pause()};b.onclick=tog;v.onclick=tog;v.onplay=()=>set(PA,'Pause');v.onpause=()=>{if(!v.ended)set(PL,'Resume')};
 v.ontimeupdate=()=>{let t='';C.forEach(x=>{if(v.currentTime>=x[0])t=x[1]});if(t)c.textContent=t};
-v.onended=()=>{seen();b.classList.remove('gone');b.querySelector('span').textContent='Watch again';const g=document.getElementById('wGo');g.classList.add('kzgo');g.focus({preventScroll:true})}}</script></body></html>`);
+v.onended=()=>{seen();set(PL,'Watch again');const g=document.getElementById('wGo');g.classList.add('kzgo');g.focus({preventScroll:true})}}</script></body></html>`);
 w('index.html',page({url:'/',title:'Kegzo: Kegel Exercises for Men, Built Like a Game',desc:'A 28-day kegel programme for men with a live animated coach, levels, streaks and real progress tests. Currently free. Start on any phone, no download.',body,schema:[faqSchema(HF),{'@type':'WebApplication',name:'Kegzo Trainer',url:SITE+'/app.html',applicationCategory:'HealthApplication',operatingSystem:'Any (web browser)',isAccessibleForFree:true}]}));pages.push(['/','1.0'])}
 
 /* ---------- exercises ---------- */
@@ -209,8 +210,8 @@ h1{font-size:clamp(32px,7vw,52px);margin:.3em 0 .35em}h2{font-size:clamp(23px,4.
 .welglow{position:absolute;top:70px;left:50%;width:min(80vw,360px);height:min(80vw,360px);transform:translateX(-50%);background:radial-gradient(circle,rgba(61,220,132,.22),rgba(140,70,255,.18) 45%,transparent 70%);filter:blur(24px);pointer-events:none}
 .welv{position:relative;width:min(62vw,280px);border-radius:26px;overflow:hidden;background:#2A0E55;border:1px solid rgba(255,255,255,.12);box-shadow:0 0 0 1px rgba(255,255,255,.04),0 20px 60px rgba(90,40,200,.45),0 0 80px rgba(61,220,132,.15)}
 .welv video{display:block;width:100%;height:auto;aspect-ratio:auto;object-fit:contain}
-.welp{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;white-space:nowrap;padding:14px 20px;border-radius:999px;border:0;background:#FF6B4A;color:#fff;font:600 16px/1 inherit;cursor:pointer;min-height:52px;box-shadow:0 0 30px rgba(255,107,74,.55)}
-.welp svg{width:20px;height:20px}.welp.gone{opacity:0;pointer-events:none}
+.welp{display:flex;align-items:center;justify-content:center;gap:10px;white-space:nowrap;margin:-4px auto 0;padding:12px 22px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;font-family:inherit;font-weight:600;font-size:16px;line-height:1;cursor:pointer;min-height:48px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}.welp:hover{background:rgba(255,255,255,.16)}
+.welp svg{width:20px;height:20px}
 .welc{min-height:3.4em;font-size:18px;line-height:1.45;color:#fff;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px 16px;width:100%;backdrop-filter:blur(8px)}
 .btn.kzgo{animation:kzpulse 1.6s ease-out infinite}@keyframes kzpulse{0%{box-shadow:0 0 0 0 rgba(255,107,74,.7)}70%{box-shadow:0 0 0 18px rgba(255,107,74,0)}100%{box-shadow:0 0 0 0 rgba(255,107,74,0)}}@media (prefers-reduced-motion:reduce){.btn.kzgo{animation:none;outline:3px solid #fff;outline-offset:3px}}
 .wela{display:grid;gap:10px;width:100%}.wela .btn{width:100%;justify-content:center;min-height:54px;font-size:17px}.welskip{color:var(--mut,#B6AFD8);padding:8px}
