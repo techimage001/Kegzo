@@ -278,7 +278,7 @@ function finish(){if(W.plan){S.planDone=S.planDone||[];if(!S.planDone.includes(W
  $('#fin').classList.add('on');SFX.done();say('Session complete. Great work.');finF=Fig(W.pos)}
 $('#finB').onclick=()=>{$('#fin').classList.remove('on');go('today');maybeGate()};
 $('#skipB').onclick=()=>{if(W.ph==='ready'){vstop();W.t=Math.max(W.t,(W.rdy||READY)-3.05);$('#skipB').style.display='none'}};
-$('#playB').onclick=()=>{if(W.ph==='await'){beginEx();return}W.paused=!W.paused;$('#playB').textContent=W.paused?'Continue':'Pause';if(W.paused){vstop();$('#phase').textContent='Paused';$('#phase').style.color='var(--ink)'}else if(W.ph==='work')enterStep()};
+$('#playB').onclick=()=>{if(W.ph==='await'){beginEx();return}W.paused=!W.paused;$('#playB').textContent=W.paused?'Continue':'Pause';if(W.paused){vstop();$('#phase').textContent='Paused';$('#phase').style.color='var(--ink)'}else{unlockAudio();if(W.ph==='work')enterStep();else if(W.ph==='ready'){const id_=W.list[W.i];$('#phase').textContent='Get ready';if(W.rdy>READY&&$('#skipB').style.display!=='none'){W.t=0;say(INTRO(id_))}else{W.t=Math.max(0,(W.rdy||READY)-3.05);say(EX[id_].n)}}}};
 $('#stopB').onclick=()=>{vstop();if(history.state&&history.state.kz==='pl'){history.back()}else{closePl();render()}toast('Session stopped. Finish a session to earn XP')};
 $('#nextB').onclick=()=>{if(W.i<W.list.length-1)loadEx(W.i+1);else finish()};
 $('#prevB').onclick=()=>loadEx(Math.max(0,W.ph==='ready'&&W.t<2?W.i-1:W.i));
