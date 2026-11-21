@@ -71,3 +71,10 @@
 .kz-blog .post-refs li{margin:.35em 0}
 .kz-blog .post-refs a{color:var(--cool);word-break:break-word}
 .kz-blog .ref-host{color:var(--mut);font-size:13px;margin-left:4px}
+.kz-blog .post-byline{color:var(--mut);font-size:14px;display:flex;flex-wrap:wrap;gap:4px 14px;margin:-10px 0 20px}
+.kz-blog .post-byline a{color:var(--ink);text-underline-offset:3px}
+.kz-blog .author-box{margin:30px 0 0;padding:18px 20px;background:var(--surf);border:1px solid var(--line);border-left:4px solid var(--hot);border-radius:18px}
+.kz-blog .author-box p{margin:0 0 6px;color:var(--mut);line-height:1.6}
+.kz-blog .author-box .author-name{color:var(--ink);font-weight:700;font-size:17px}
+.kz-blog .author-box .author-name span{color:var(--mut);font-weight:400;font-size:14px;margin-left:6px}
+.kz-blog .author-box a{color:var(--cool)}

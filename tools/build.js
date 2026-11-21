@@ -5,7 +5,7 @@ const fs=require('fs'),path=require('path');
 const ROOT=path.resolve(__dirname,'..'),SRC=path.join(ROOT,'src');
 const {PLAN30,EX,EXMETA,DAYPLAN,ICONS}=require(path.join(SRC,'exercises.js'));
 const {GUIDES,STUDY}=require(path.join(SRC,'guides.js'));
-const SITE='https://kegzo.com',V='51',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
+const SITE='https://kegzo.com',V='52',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
 const POSN={hbaby:'Lying down',dsquat:'Deep squat',child:'Kneeling',side:'Side-lying',cough:'Standing',boxlift:'Standing',lunge:'Standing',sts:'Seated',squat:'Standing',gbridge:'Lying down',tilt:'Lying down',breath:'Lying down',seatopen:'Seated',fours:'On all fours',climber:'Plank',bridge:'Lying down',lying:'Lying down',seated:'Seated',standing:'Standing',walking:'Walking'},PORDER=['lying','seated','standing','walking'],VID={hbaby:'hbaby',dsquat:'dsquat',child:'child',side:'side',cough:'cough',boxlift:'boxlift',lunge:'lunge',sts:'sts',squat:'squat',lying:'lying',seated:'seated',standing:'standing',walking:'walking',gbridge:'gbridge',tilt:'tilt',breath:'breath',seatopen:'seatopen',bridge:'bridge',fours:'fours',climber:'climber'};
 const BONUS=()=>Object.keys(EX).filter(id=>!EX[id].wk&&VID[EX[id].pos]);
 const bcard=id=>{const e=EX[id],m=EXMETA[id];return `<a class="wkc bc" href="/exercises/${m.slug}.html"><span class="vbox fit"><video src="/assets/video/${VID[e.pos]}.mp4?v=${V}" poster="/assets/img/pos-${e.pos}.webp" autoplay muted loop playsinline preload="metadata" aria-label="Hologram figure doing ${e.n.toLowerCase()}, looping"></video></span><b>${e.n}</b><span>${m.short}</span></a>`};
