@@ -16,5 +16,4 @@ if (KZ_READY && strlen($t) === 48) {
     }
   } catch (Throwable $e) {}
 }
-$em = ($ok && !empty($lead['email'])) ? rtrim(strtr(base64_encode($lead['email']), '+/', '-_'), '=') : '';
-header('Location: ' . ($ok ? '/app.html#verified' . ($em ? '=' . $em : '') : '/app.html#today'), true, 302); exit;
+header('Location: ' . ($ok ? '/app.html#verified=' . $t : '/app.html#today'), true, 302); exit;
