@@ -76,6 +76,7 @@ return [
     'authority_mode' => '1',   /* health topic: cite NHS-type sources, standalone paragraphs for AI answers */
     'references_box' => true,
     'pexels_fallback_query' => 'man exercising at home',
+    'title_sep' => ' | ',   /* Kegzo pages never use em dashes */
     'indexnow_key' => '60ccb4a970104b1b83b9eb9cc6826746',   /* same key as tools/build.js; file is in the site root */
 
     'homepage_anchor'  => '28-day kegel training plan for men',

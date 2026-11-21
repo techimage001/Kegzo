@@ -154,7 +154,7 @@ w('guides/start.html',page({url:'/guides/',title:'Kegel Guides for Men: Plain-En
 /* /guides/ is the blog. The Bulk Content Optimiser writes /guides/index.html (git-ignored);
    until it has, index.php serves the static start page so /guides/ never 403s. */
 w('guides/index.php',`<?php\n/* Serves the writer's listing when it exists, otherwise the static guides page. */\n$f = __DIR__ . '/index.html';\nif (!is_file($f)) { $f = __DIR__ . '/start.html'; }\nheader('Content-Type: text/html; charset=utf-8');\nreadfile($f);\n`);
-w('guides/.htaccess','DirectoryIndex index.php index.html\n');
+w('guides/.htaccess','DirectoryIndex index.php index.html\nRewriteEngine On\nRewriteRule ^start\\.html$ - [F,L]\n');
 /* chrome for the blog engine: same head assets, header, footer and bottom bar as every page */
 {const HEADX=head({title:'',desc:'',url:'/'}).split('\n').filter(l=>/rel="(icon|apple-touch-icon|manifest|preload)"|apple-mobile|mobile-web-app/.test(l)).join('\n')+`\n<link rel="stylesheet" href="/assets/site.css?v=${V}">\n<link rel="stylesheet" href="/guides/blog.css?v=${V}">`;
  const START=`<section class="wrap kz-start"><h2>Start here</h2><div class="links">${GUIDES.map(g=>`<a class="lk" href="/guides/${g.slug}.html"><span>${esc(g.h1)}<small>${esc(g.desc)}</small></span></a>`).join('')}</div><h2 class="kz-latest">Latest guides</h2></section>`;
