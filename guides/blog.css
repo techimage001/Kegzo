@@ -1,0 +1,67 @@
+/* Kegzo Guides: styles for articles and listings written by the Bulk Content Optimiser.
+   Uses the same colour variables as /assets/site.css so everything matches. */
+.kz-blog main{padding-bottom:40px}
+.kz-blog .post-wrap{max-width:760px}
+.kz-blog .crumbs{font-size:14px;color:var(--mut);margin:18px 0 6px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.kz-blog .crumbs a{color:var(--mut);text-decoration:none}
+.kz-blog .crumbs a:hover{color:var(--ink)}
+.kz-blog .post-cat{margin:14px 0 0}
+.kz-blog .post-cat a,.kz-blog .post-card-cat{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--hot);text-decoration:none}
+.kz-blog .post h1{font-size:clamp(30px,6.4vw,46px);line-height:1.12;margin:.25em 0 .35em}
+.kz-blog .post-meta{color:var(--mut);font-size:14px;display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+.kz-blog .dot{opacity:.6}
+.kz-blog .post-hero{margin:0 0 26px;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:var(--surf)}
+.kz-blog .post-hero img{display:block;width:100%;height:auto}
+.kz-blog .post-body{font-size:17.5px;line-height:1.75;color:var(--ink)}
+.kz-blog .post-body p{margin:0 0 1.05em}
+.kz-blog .post-body h2{font-size:clamp(23px,4.4vw,29px);line-height:1.2;margin:1.8em 0 .55em}
+.kz-blog .post-body h3{font-size:20px;margin:1.5em 0 .45em}
+.kz-blog .post-body ul,.kz-blog .post-body ol{padding-left:1.25em;margin:0 0 1.1em}
+.kz-blog .post-body li{margin:.35em 0}
+.kz-blog .post-body li::marker{color:var(--hot)}
+.kz-blog .post-body a{color:var(--cool);text-underline-offset:3px}
+.kz-blog .post-body strong{color:#fff}
+.kz-blog .post-body img{max-width:100%;height:auto;border-radius:16px}
+.kz-blog .post-body blockquote{margin:1.4em 0;padding:14px 18px;border-left:4px solid var(--hot);background:var(--surf);border-radius:0 14px 14px 0;color:var(--ink)}
+.kz-blog .post-body table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:15.5px;display:block;overflow-x:auto}
+.kz-blog .post-body th,.kz-blog .post-body td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.kz-blog .post-body th{background:var(--surf2);font-weight:700}
+.kz-blog .bco-tldr,.kz-blog .toc,.kz-blog .post-internal,.kz-blog .post-inject{background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:16px 20px;margin:0 0 1.4em}
+.kz-blog .bco-tldr{border-color:rgba(255,107,74,.45);background:linear-gradient(180deg,var(--hotSoft),var(--surf))}
+.kz-blog .toc ol,.kz-blog .toc ul{margin:.4em 0 0}
+.kz-blog .toc a{color:var(--ink);text-decoration:none}
+.kz-blog .toc a:hover{color:var(--hot)}
+.kz-blog .faq-q{font-weight:700;margin-top:1.2em}
+.kz-blog .post-cta{margin:34px 0 10px;padding:24px 22px;border-radius:24px;background:linear-gradient(135deg,#2B1E5C,#1F1A3D 60%,#46283A);border:1px solid rgba(255,107,74,.35);box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.kz-blog .post-cta h2{margin:0 0 8px;font-size:24px}
+.kz-blog .post-cta p{color:var(--mut);margin:0 0 6px;line-height:1.6}
+.kz-blog .post-cta .btn{width:auto;min-width:200px}
+.kz-blog .preview-bar{position:sticky;top:0;z-index:60;background:#FFD166;color:#2A1B00;font-weight:600;text-align:center;padding:9px 14px;font-size:14px}
+/* cards */
+.kz-blog .related{margin-top:40px}
+.kz-blog .post-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.kz-blog .post-card{display:flex;flex-direction:column;background:var(--surf);border:1px solid var(--line);border-radius:20px;overflow:hidden;text-decoration:none;color:var(--ink);transition:transform .18s,border-color .18s}
+.kz-blog .post-card:hover{transform:translateY(-2px);border-color:rgba(255,107,74,.55)}
+.kz-blog .post-card-img{display:block;aspect-ratio:1200/630;background:var(--surf2);overflow:hidden}
+.kz-blog .post-card-img img{display:block;width:100%;height:100%;object-fit:cover}
+.kz-blog .post-card-ph{display:flex;align-items:center;justify-content:center;height:100%;font-size:64px;color:var(--hot)}
+.kz-blog .post-card-body{display:flex;flex-direction:column;gap:6px;padding:14px 16px 18px}
+.kz-blog .post-card-title{font-family:Outfit,Inter,system-ui,sans-serif;font-weight:700;font-size:18px;line-height:1.3;margin:0}
+.kz-blog .post-card-title a{color:var(--ink);text-decoration:none}
+.kz-blog .post-card-ex{color:var(--mut);font-size:15px;line-height:1.55;margin:2px 0 0}
+.kz-blog .post-card-meta{color:var(--mut);font-size:13px;display:flex;gap:6px;margin:4px 0 0}
+.kz-blog .post-card-go{color:var(--hot);font-weight:700;font-size:15px;margin-top:4px}
+.kz-blog .post-card-cat{margin:0}
+/* listing */
+.kz-blog .blog-head{padding:6px 0 4px}
+.kz-blog .blog-head h1{margin:.25em 0 .3em}
+.kz-blog .lede{color:var(--mut);font-size:18px;line-height:1.6;max-width:720px;margin:0 0 16px}
+.kz-blog .cat-nav{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none}
+.kz-blog .cat-nav::-webkit-scrollbar{display:none}
+.kz-blog .cat-pill{flex:none;padding:9px 15px;border-radius:999px;background:var(--surf);border:1px solid var(--line);color:var(--ink);text-decoration:none;font-size:14px;font-weight:600;white-space:nowrap}
+.kz-blog .cat-pill[aria-current],.kz-blog .cat-pill.is-on,.kz-blog .cat-pill:hover{background:var(--hot);border-color:var(--hot);color:var(--hotInk)}
+.kz-blog .kz-start h2{margin:22px 0 12px}
+.kz-blog .kz-start .kz-latest{margin-top:34px}
+.kz-blog .blog-list{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.kz-blog .blog-list .empty{color:var(--mut);grid-column:1/-1}
+@media (min-width:900px){.kz-blog .post-body{font-size:18px}}

@@ -2,3 +2,9 @@ kegzo_private/
 *.sqlite
 *.sqlite-*
 node_modules/
+# Bulk Content Optimiser output (generated on the server, never in git)
+/guides/index.html
+/guides/*/
+/p/
+/uploads/blog/
+/sitemap-blog.xml

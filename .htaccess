@@ -1,7 +1,7 @@
 # Kegzo
 Options -Indexes
 ErrorDocument 404 /404.html
-DirectoryIndex index.html
+DirectoryIndex index.html index.php
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
@@ -9,6 +9,8 @@ RewriteEngine On
 RewriteRule ^(src|tools)(/|$) - [F,L]
 RewriteRule ^(README\.md|SECRETS-TEMPLATE\.php|package\.json)$ - [F,L]
 RewriteRule ^api/(config)\.php$ - [F,L]
+# Writer settings files are included by PHP, never opened directly
+RewriteRule ^(site-profile|bco-chrome|bco-loader)\.php$ - [F,L]
 </IfModule>
 
 <IfModule mod_headers.c>
