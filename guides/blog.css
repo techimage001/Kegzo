@@ -65,3 +65,9 @@
 .kz-blog .blog-list{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
 .kz-blog .blog-list .empty{color:var(--mut);grid-column:1/-1}
 @media (min-width:900px){.kz-blog .post-body{font-size:18px}}
+.kz-blog .post-refs{margin:30px 0 0;padding:18px 20px;background:var(--surf);border:1px solid var(--line);border-radius:18px}
+.kz-blog .post-refs h2{font-size:20px;margin:0 0 10px}
+.kz-blog .post-refs ol{margin:0;padding-left:1.3em;font-size:15px;line-height:1.6}
+.kz-blog .post-refs li{margin:.35em 0}
+.kz-blog .post-refs a{color:var(--cool);word-break:break-word}
+.kz-blog .ref-host{color:var(--mut);font-size:13px;margin-left:4px}
