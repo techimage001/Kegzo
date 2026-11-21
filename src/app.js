@@ -49,7 +49,7 @@ const NOTE=svgI('<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/
 /* ================= ACCOUNT / SOFT GATE ================= */
 function acct(){const a=$('#acct');if(S.gate.email&&S.gate.state==='verified'){a.innerHTML=`<button class="avatar" id="avB" aria-label="Account">${esc(S.gate.email[0].toUpperCase())}</button>`;$('#avB').onclick=()=>{sheet(`<h2>Account</h2><p class="mut">${esc(S.gate.email)}</p><p class="small">Progress saving is on.</p><button class="btn ghost wide" id="soB">Sign out on this device</button><button class="btn hot wide" data-close>Close</button>`);$('#soB').onclick=()=>{S.gate={dismissed:true,email:'',state:''};save();closeSheet();render()}}}
  else{a.innerHTML=`<button class="acct" id="siB">${S.gate.state==='pending'?'Check email':'Sign in'}</button>`;$('#siB').onclick=()=>gate(false)}}
-function maybeGate(){if(S.sessions.filter(s=>s.kind!=='test').length>=3&&!S.gate.email&&!S.gate.dismissed)gate(true)}
+function maybeGate(){if(S.sessions.filter(s=>s.kind!=='test').length>=1&&!S.gate.email&&!S.gate.dismissed)gate(true)}
 function gate(auto){sheet(`<h2>${auto?'Nice work. Keep your progress safe':'Sign up or sign in'}</h2>
  <p class="mut">Save your level, streak and charts so they follow you to any device. Training stays open either way.</p>
  <form id="gF" class="grid" novalidate><label class="small" for="gE">Email address</label><input class="field" id="gE" type="email" autocomplete="email" required placeholder="you@example.com" value="${esc(S.gate.email||'')}">
