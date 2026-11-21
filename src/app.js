@@ -69,7 +69,7 @@ function gate(auto){sheet(`<h2>${auto?'Nice work. Keep your progress safe':'Sign
    $('#sheet').innerHTML=j.state==='verified'?`<h2>You're signed in</h2><p class="mut">Progress saving is on for <b>${esc(v)}</b>.</p><button class="btn hot wide" data-close>Done</button>`:`<h2>Check your inbox</h2><p class="mut">We sent a one-click link to <b>${esc(v)}</b>. Tap it to confirm. If it's not there in a few minutes, check your spam folder.</p><button class="btn hot wide" data-close>Done</button>`;ping('signup')}
   catch(err){$('#gB').disabled=false;$('#gM').textContent=err.message||'Could not send. Check your connection and try again.'}})}
 /* verified link lands on /app.html#verified */
-function checkVerified(){if(location.hash==='#verified'){S.gate.state='verified';S.gate.dismissed=true;save();toast('Email confirmed. Progress saving is on');try{history.replaceState(null,'','#today')}catch(e){}}}
+function checkVerified(){const m=location.hash.match(/^#verified(?:=([A-Za-z0-9_-]+))?$/);if(m){if(m[1]){try{const e=atob(m[1].replace(/-/g,'+').replace(/_/g,'/'));if(/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e))S.gate.email=e}catch(e){}}S.gate.state='verified';S.gate.dismissed=true;save();toast(S.gate.email?'You\'re signed in as '+S.gate.email:'Email confirmed. Progress saving is on');try{history.replaceState(null,'','#today')}catch(e){}}}
 
 /* ================= SELF-TEST (weekly boss) ================= */
 function selfTest(){const T={hold:0,flicks:0,relax:0};ping('test_start');

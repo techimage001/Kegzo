@@ -6,7 +6,8 @@ if (KZ_READY && strlen($t) === 48) {
   try {
     $db = kz_db();
     $q = $db->prepare('SELECT email, state FROM leads WHERE token = ?'); $q->execute([$t]); $lead = $q->fetch();
-    $st = $db->prepare("UPDATE leads SET state = 'verified', verified = ?, token = NULL WHERE token = ?"); $st->execute([gmdate('c'), $t]); $ok = $st->rowCount() > 0;
+    /* keep the token so tapping the link again (or on another device) still signs in */
+    $st = $db->prepare("UPDATE leads SET state = 'verified', verified = COALESCE(verified, ?) WHERE token = ?"); $st->execute([gmdate('c'), $t]); $ok = $st->rowCount() > 0;
     /* tell the owner about each newly confirmed sign-up */
     if ($ok && $lead && $lead['state'] !== 'verified' && defined('CONTACT_TO')) {
       $n = (int)$db->query("SELECT COUNT(*) FROM leads WHERE state = 'verified'")->fetchColumn();
@@ -15,4 +16,5 @@ if (KZ_READY && strlen($t) === 48) {
     }
   } catch (Throwable $e) {}
 }
-header('Location: ' . ($ok ? '/app.html#verified' : '/app.html#today'), true, 302); exit;
+$em = ($ok && !empty($lead['email'])) ? rtrim(strtr(base64_encode($lead['email']), '+/', '-_'), '=') : '';
+header('Location: ' . ($ok ? '/app.html#verified' . ($em ? '=' . $em : '') : '/app.html#today'), true, 302); exit;
