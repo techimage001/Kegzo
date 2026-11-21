@@ -27,6 +27,8 @@ const hex=(on,lab)=>`<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3l
 /* programme: one programme day per calendar day with a completed daily session */
 const dayDates=()=>[...new Set(S.sessions.filter(s=>s.kind==='day').map(s=>s.d))].sort();
 const progDays=()=>dayDates().length;
+const fD=(d,l)=>d.toLocaleDateString(undefined,l?{weekday:'long',day:'numeric',month:'long'}:{weekday:'short',day:'numeric',month:'short'});
+function sched(){const dd=dayDates(),tk=dk(new Date()),dt=dd.includes(tk);return Array.from({length:28},(_,i)=>i<dd.length?{d:dOf(dd[i]),done:1}:{d:addD(dOf(tk),i-dd.length+(dt?1:0)),done:0})}
 function todayInfo(){const done=dayDates().includes(dk(new Date())),n=progDays(),day=Math.min(28,done?n:n+1),week=Math.min(4,Math.ceil(day/7)),track=S.ob.track==='relax'?'relax':'strength';
  const full=track==='relax'?DAYPLAN.relax[week-1]:PLAN30[day-1].list,m=(S.prof||{}).mins;return{day,week,done,pos:PORDER[week-1],list:m==='3'?full.slice(0,3):full}}
 const lvl=()=>lvlOf(S.xp);
@@ -134,7 +136,7 @@ function today(){const T=todayInfo(),l=lvl(),lo=xpFor(l),hi=xpFor(l+1),pc=l>=50?
  const mins=Math.round((T.list.reduce((a,id)=>a+secOfL(id)+READY,0)+REST*(T.list.length-1))/60);
  return`<div class="grid tgrid">
  <div class="grid">
-  <div class="today"><p class="tiny" style="font-weight:700">Week ${T.week} · Day ${T.day} of 28 · ${POS[T.pos].n}</p><h2>${T.done?"Today's session is done":'Your session for today'}</h2><p>${T.done?'Nice work. Come back tomorrow for the next day, or train again for extra XP.':`${T.list.length} kegel exercises, about ${mins} minutes.`}</p><button class="btn wide" id="goDay">${T.done?'Train again':'Start Day '+T.day}</button></div>
+  <div class="today"><p class="tiny" style="font-weight:700">Week ${T.week} · Day ${T.day} of 28 · ${POS[T.pos].n}</p>${(()=>{const sc=sched();return progDays()?`<p class="tiny kzdates">Started ${fD(sc[0].d)} · Finish ${fD(sc[27].d)}</p>`:`<p class="tiny kzdates">Start today · Finish ${fD(sc[27].d)}</p>`})()}<h2>${T.done?"Today's session is done":'Your session for today'}</h2><p>${T.done?'Nice work. Come back tomorrow for the next day, or train again for extra XP.':`${T.list.length} kegel exercises, about ${mins} minutes.`}</p><button class="btn wide" id="goDay">${T.done?'Train again':'Start Day '+T.day}</button></div>
   <div class="hero2"><canvas id="heroCv" aria-label="Animated preview of this week's position"></canvas><div class="lab"><span>${POS[T.pos].n}</span><span class="chip" style="background:#2A2450">Week ${T.week}</span></div></div>
   <div class="weeks">${PORDER.map((p,i)=>`<div class="wk ${i===T.week-1?'on':''}">Week ${i+1}<b>${POS[p].n.replace(' down','')}</b></div>`).join('')}</div>
   <div>${T.list.map((id,i)=>`<button class="item" data-try="${id}">${ico(EX[id].ic,EX[id].rel?'c':'')}<span><b>${String(i+1).padStart(2,'0')}  ${EX[id].n}</b><small>${EXMETA[id].sets}</small></span><em class="num">${Math.max(1,Math.round(secOfL(id)/60))} min</em></button>`).join('')}</div>
@@ -154,6 +156,7 @@ function progress(){const st=streak(),t=S.tests,last=t[t.length-1],today_=dk(new
  const diff=(x,y)=>y?`<span class="tiny mut">${x>=y?'+':'−'}${Math.abs(Math.round(x-y))} vs last week</span>`:'<span class="tiny mut">First week</span>';
  return`<div class="row between" style="margin-bottom:14px"><h1>Progress</h1><button class="btn cool sm" id="testB2">Max-hold test</button></div>
  <div class="kpis4"><div class="k"><b>${lvl()}</b><span>Level</span></div><div class="k"><b>${st.n}</b><span>Day streak</span></div><div class="k"><b>${totalSq()}</b><span>Squeezes</span></div><div class="k"><b>${bestHold()?bestHold().toFixed(1)+'s':'–'}</b><span>Best hold</span></div></div>
+ ${(()=>{const sc=sched(),td=todayInfo().day;return`<div class="card" style="margin-top:14px"><div class="sechead" style="margin-top:0"><h3>Your 28-day plan</h3><span class="tiny mut">${progDays()?`Started ${fD(sc[0].d)} · Finish ${fD(sc[27].d)}`:`Start today · Finish ${fD(sc[27].d)}`}</span></div><div class="kzcal">${sc.map((x,i)=>`<div class="${x.done?'done':''} ${i+1===td&&!todayInfo().done?'now':''}"><b>Day ${i+1}</b><span>${x.done?'✓ ':''}${fD(x.d)}</span></div>`).join('')}</div></div>`})()}
  <div class="grid two" style="margin-top:14px">
   <div class="card"><div class="sechead" style="margin-top:0"><h3>Max hold trend</h3><span class="tiny mut">${t.length} test${t.length===1?'':'s'}</span></div>${t.length>1?'<div class="chart" id="hc"><svg></svg></div>':`<div class="empty">Take the weekly max-hold test ${t.length?'once more':'twice'} to see your trend.</div>`}</div>
   <div class="card"><div class="sechead" style="margin-top:0"><h3>Consistency</h3><span class="tiny mut">Last 12 weeks</span></div><div class="heat">${heat}</div></div>
@@ -270,7 +273,8 @@ function finish(){if(W.plan){S.planDone=S.planDone||[];if(!S.planDone.includes(W
  const before=lvl(),xp=W.sq*2+(W.kind==='day'?30:10)+(firstDay?20:0);S.sessions.push({d:today_,kind:W.kind,ids:W.list,min,sq:W.sq,xp});S.xp+=xp;const nb=newBadges();save();closePl();ping('session_done');
  const after=lvl();$('#fMin').textContent=Math.max(1,Math.round(min));$('#fSq').textContent=W.sq;$('#fXp').textContent='+'+xp;
  $('#finT').textContent=W.kind==='day'?`Day ${todayInfo().day} complete`:'Exercise complete';
- $('#finExtra').innerHTML=(after>before?`<div class="note">${NOTE}<p><b>Level ${after}: ${title(after)}.</b> Your holds just got a little longer.</p></div>`:'')+(nb.length?`<div class="note">${NOTE}<p>New badge${nb.length>1?'s':''}: <b>${nb.map(esc).join(', ')}</b></p></div>`:'')+`<p class="mut small">Streak: <b>${streak().n} day${streak().n===1?'':'s'}</b>. Most programmes take around 3 months of steady practice, so consistency beats intensity.</p>`;
+ const n_=progDays(),dmsg=W.kind==='day'?(n_>=28?`<p class="kzdone">🎉 <b>28-day plan complete, ${fD(new Date(),1)}.</b> Brilliant work.</p>`:`<p class="kzdone">🎉 <b>Day ${n_} complete, ${fD(new Date(),1)}.</b> See you tomorrow, ${fD(addD(new Date(),1),1)}, for Day ${n_+1}.</p>`):'';
+ $('#finExtra').innerHTML=dmsg+(after>before?`<div class="note">${NOTE}<p><b>Level ${after}: ${title(after)}.</b> Your holds just got a little longer.</p></div>`:'')+(nb.length?`<div class="note">${NOTE}<p>New badge${nb.length>1?'s':''}: <b>${nb.map(esc).join(', ')}</b></p></div>`:'')+`<p class="mut small">Streak: <b>${streak().n} day${streak().n===1?'':'s'}</b>. Most programmes take around 3 months of steady practice, so consistency beats intensity.</p>`;
  $('#fin').classList.add('on');SFX.done();say('Session complete. Great work.');finF=Fig(W.pos)}
 $('#finB').onclick=()=>{$('#fin').classList.remove('on');go('today');maybeGate()};
 $('#skipB').onclick=()=>{if(W.ph==='ready'){vstop();W.t=Math.max(W.t,(W.rdy||READY)-3.05);$('#skipB').style.display='none'}};
