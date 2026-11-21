@@ -47,7 +47,8 @@ const svgI=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 const NOTE=svgI('<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/>');
 
 /* ================= ACCOUNT / SOFT GATE ================= */
-function acct(){const a=$('#acct');if(S.gate.email&&S.gate.state==='verified'){a.innerHTML=`<button class="avatar" id="avB" aria-label="Account">${esc(S.gate.email[0].toUpperCase())}</button>`;$('#avB').onclick=()=>{sheet(`<h2>Account</h2><p class="mut">${esc(S.gate.email)}</p><p class="small">Progress saving is on.</p><button class="btn ghost wide" id="soB">Sign out on this device</button><button class="btn hot wide" data-close>Close</button>`);$('#soB').onclick=()=>{S.gate={dismissed:true,email:'',state:''};save();closeSheet();render()}}}
+function acctSheet(){sheet(`<h2>Account</h2><p class="mut">${esc(S.gate.email)}</p><p class="small">Progress saving is on.</p><button class="btn ghost wide" id="soB">Sign out on this device</button><button class="btn hot wide" data-close>Close</button>`);$('#soB').onclick=()=>{S.gate={dismissed:true,email:'',state:''};save();closeSheet();render()}}
+function acct(){const a=$('#acct');if(S.gate.email&&S.gate.state==='verified'){a.innerHTML=`<button class="avatar" id="avB" aria-label="Account">${esc(S.gate.email[0].toUpperCase())}</button>`;$('#avB').onclick=()=>{go('me');setTimeout(()=>{const h=[...document.querySelectorAll('#v-me h3')].find(x=>x.textContent==='Account');if(h)h.scrollIntoView({behavior:'smooth',block:'center'})},60)}}
  else{a.innerHTML=`<button class="acct" id="siB">${S.gate.state==='pending'?'Check email':'Sign in'}</button>`;$('#siB').onclick=()=>gate(false)}}
 function maybeGate(){if(S.sessions.filter(s=>s.kind!=='test').length>=1&&!S.gate.email&&!S.gate.dismissed)gate(true)}
 function gate(auto){sheet(`<h2>${auto?'Nice work. Keep your progress safe':'Sign up or sign in'}</h2>
@@ -203,7 +204,7 @@ function render(){$('#topLv').textContent='Lv '+lvl();const st=streak().n;$('#to
 function bindMe(){const v=$('#v-me');
  v.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{const k=b.dataset.set;S.settings[k]=!S.settings[k];save();render()});{const tb=v.querySelector('#testSnd');if(tb)tb.onclick=()=>{unlockAudio();const was=S.settings.discreet;if(was){toast('Discreet mode is on, so sound is off');return}SFX.done();setTimeout(()=>{cnt(3);setTimeout(()=>cnt(2),900);setTimeout(()=>cnt(1),1800);setTimeout(()=>say(voiceOn()?'Sound is working. You will hear the coach and the countdown.':''),2700)},700);if(!('speechSynthesis' in window))toast('This browser has no voice. You will still hear the beeps.')}}
  v.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{S.ob.track=b.dataset.t;save();render();toast(b.dataset.t==='relax'?'Relax track on':'Strength track on')});
- $('#meG').onclick=()=>gate(false);
+ $('#meG').onclick=()=>{if(S.gate.email&&S.gate.state==='verified')acctSheet();else gate(false)};
  let armed=false;$('#delB').onclick=()=>{if(!armed){armed=true;$('#delB').textContent='Tap again to delete';$('#delM').textContent='This removes every session, test and setting from this device.';return}
   try{localStorage.removeItem(KEY)}catch(e){}S=fresh();mem=null;OB={step:0,ans:{},checks:[false,false,false],track:'strength',prof:{}};render();ob()}}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-try]');if(b){if(!S.ob.done){PENDING=b.dataset.try;OB.step=0;ob();return}startSession([b.dataset.try],'single')}});

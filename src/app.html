@@ -7,7 +7,7 @@
 /* app shell */
 .top .lv{display:flex;gap:6px}
 .acct{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);font-size:14px;font-weight:600}
-.avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--surf2);font-weight:700}
+.avatar{position:relative;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#FF8A6B,#FF6B4A);color:#2A0E07;font-weight:800;font-size:17px;border:2px solid #fff;box-shadow:0 0 0 3px rgba(255,107,74,.25),0 0 16px rgba(255,107,74,.55);cursor:pointer}.avatar::after{content:"";position:absolute;right:-2px;bottom:-2px;width:12px;height:12px;border-radius:50%;background:#3DDC84;border:2px solid #14112A}#acct .avatar{padding:0}
 #acct .btn,#acct button{white-space:nowrap;padding:8px 12px}@media (max-width:380px){#topSt{display:none}}
 .mbtn{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);cursor:pointer;margin-left:6px}.mbtn svg{width:22px;height:22px}
 .smenu{position:fixed;inset:0;z-index:80}.smenu[hidden]{display:none}.smbg{position:absolute;inset:0;background:rgba(5,3,15,.6);backdrop-filter:blur(4px)}
