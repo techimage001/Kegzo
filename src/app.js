@@ -27,7 +27,7 @@ const hex=(on,lab)=>`<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3l
 /* programme: one programme day per calendar day with a completed daily session */
 const dayDates=()=>[...new Set(S.sessions.filter(s=>s.kind==='day').map(s=>s.d))].sort();
 const progDays=()=>dayDates().length;
-const fD=(d,l)=>d.toLocaleDateString(undefined,l?{weekday:'long',day:'numeric',month:'long'}:{weekday:'short',day:'numeric',month:'short'});
+const fD=(d,l)=>d.toLocaleDateString(undefined,l?{weekday:'long',day:'numeric',month:'long',year:'numeric'}:{weekday:'short',day:'numeric',month:'short'});
 function sched(){const dd=dayDates(),tk=dk(new Date()),dt=dd.includes(tk);return Array.from({length:28},(_,i)=>i<dd.length?{d:dOf(dd[i]),done:1}:{d:addD(dOf(tk),i-dd.length+(dt?1:0)),done:0})}
 function todayInfo(){const done=dayDates().includes(dk(new Date())),n=progDays(),day=Math.min(28,done?n:n+1),week=Math.min(4,Math.ceil(day/7)),track=S.ob.track==='relax'?'relax':'strength';
  const full=track==='relax'?DAYPLAN.relax[week-1]:PLAN30[day-1].list,m=(S.prof||{}).mins;return{day,week,done,pos:PORDER[week-1],list:m==='3'?full.slice(0,3):full}}
@@ -257,7 +257,7 @@ function enterStep(){const s=STEPS[W.si];W.from=W.L;W.liftFrom=W.lift;W.st=0;con
  if(W.cheer&&(s.k==='rest'||s.k==='relax'||s.k==='exhale')){say(W.cheer);W.cheer=''}else if(V[s.k])say(V[s.k])}
 const easeF=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
 function startSession(list,kind){unlockAudio();try{history.pushState({kz:'pl'},'')}catch(e){}W.list=list;W.kind=kind;W.plan=W.planNext||0;W.planNext=0;W.basePos=W.plan?PORDER[PLAN30[W.plan-1].week-1]:kind==='day'?todayInfo().pos:(EX[list[0]].pos||PORDER[Math.max(0,Math.min(3,(EX[list[0]].wk||1)-1))]);
- W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').textContent=W.plan?`Day ${W.plan} of 28`:kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise';
+ W.paused=false;W.sq=0;W.L=0;W.started=performance.now();$('#playB').textContent='Pause';$('#plLabel').innerHTML=(W.plan?`Day ${W.plan} of 28`:kind==='day'?`Week ${todayInfo().week} · Day ${todayInfo().day}`:'Single exercise')+`<small class="kzld">${new Date().toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'})}</small>`;
  $('#bars').innerHTML=list.map(id=>`<i class="${EX[id].rel?'c':''}"><b></b></i>`).join('');$('#pl').classList.add('on');document.body.classList.add('inpl');$('#pl').scrollTop=0;document.body.style.overflow='hidden';
  if('wakeLock' in navigator)navigator.wakeLock.request('screen').then(l=>W.lock=l).catch(()=>{});ping('session_start');vprep([...list.map(id=>INTRO(id)),...list.map(id=>'Nice work. Rest and breathe. Next up, '+EX[id].n),'Squeeze','Hold','Relax','1','2','3','4','5','6','7','8','9','10','Session complete. Great work.']);loadEx(0)}
 function nextEx(){if(W.i>=W.list.length-1){finish();return}W.ph='rest';W.t=0;$('#stage').classList.add('rest');$$('#bars i')[W.i].firstChild.style.width='100%';$('#phase').textContent='Rest';$('#phase').style.color='var(--cool)';$('#cue').textContent='Breathe easy. Next up: '+EX[W.list[W.i+1]].n;say('Nice work. Rest and breathe. Next up, '+EX[W.list[W.i+1]].n)}
