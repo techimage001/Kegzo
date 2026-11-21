@@ -9,7 +9,7 @@ const fresh=()=>({v:1,created:dk(new Date()),ob:{done:false,track:'strength',fla
 let mem=null;
 function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);return Object.assign(fresh(),o,{settings:Object.assign(fresh().settings,o.settings||{}),gate:Object.assign(fresh().gate,o.gate||{})})}}catch(e){}return mem||fresh()}
 function save(){mem=S;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-let S=load();S.settings=Object.assign({voice:true,intro:true,snd:true,count:true,vib:true,discreet:false},S.settings||{});
+let S=load();if(!S.ob||!S.ob.done){S.ob=Object.assign({track:'strength',flags:[]},S.ob||{},{done:true});S.prof=S.prof||{};try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}S.settings=Object.assign({voice:true,intro:true,snd:true,count:true,vib:true,discreet:false},S.settings||{});
 function ping(e){try{const b=JSON.stringify({e});if(navigator.sendBeacon)navigator.sendBeacon('/api/hit.php',new Blob([b],{type:'application/json'}));else fetch('/api/hit.php',{method:'POST',body:b,keepalive:true}).catch(()=>{})}catch(_){}}
 
 /* ================= GAME ================= */
@@ -167,7 +167,7 @@ function progress(){const st=streak(),t=S.tests,last=t[t.length-1],today_=dk(new
 function learn(){const G=[['kegel-exercises-for-men','Kegel exercises for men','The complete beginner guide'],['how-to-find-your-pelvic-floor-muscle','How to find the right muscle','The cues that work for men'],['what-is-a-reverse-kegel','What is a reverse kegel?','Why letting go matters'],['how-long-do-kegels-take-to-work','How long do kegels take?','Realistic timelines'],['kegel-mistakes','Common kegel mistakes','And how to fix them'],['tight-pelvic-floor-men','Signs of a tight pelvic floor','When not to squeeze harder'],['kegel-positions','Lying, seated, standing, walking','Why the position changes']];
  return`<h1>Learn</h1><p class="mut" style="margin:8px 0 16px">Short, plain guides. Everything here is currently free.</p>
  <div class="grid two"><div class="links">${G.map(([s,t,d])=>`<a class="lk" href="/guides/${s}.html"><span>${t}<small>${d}</small></span><span aria-hidden="true">›</span></a>`).join('')}</div>
- <div class="grid"><div class="card grid"><h3>When to stop</h3><p class="small">Stop if anything hurts, and don't push through soreness. If you have pain, tension or symptoms that don't settle, see a GP or a pelvic floor physiotherapist.</p><div class="note">${NOTE}<p>Kegzo is an exercise app for general fitness. It is not a medical service.</p></div><button class="btn ghost" id="retake">Retake the safety check</button></div>
+ <div class="grid"><div class="card grid"><h3>When to stop</h3><p class="small">Stop if anything hurts, and don't push through soreness. If you have pain, tension or symptoms that don't settle, see a GP or a pelvic floor physiotherapist.</p><div class="note">${NOTE}<p>Kegzo is an exercise app for general fitness. It is not a medical service.</p></div></div>
  <div class="card grid"><h3>Exercise guides</h3><div class="links">${Object.keys(EX).map(id=>`<a class="lk" href="/exercises/${EXMETA[id].slug}.html"><span>${EX[id].n}<small>${EXMETA[id].sets}</small></span><span aria-hidden="true">›</span></a>`).join('')}</div></div></div></div>`}
 function me(){const s=S.settings,sw=(k,t,d)=>`<div class="switch"><div><b>${t}</b><p class="tiny mut">${d}</p></div><button class="tg" role="switch" aria-checked="${!!s[k]}" data-set="${k}" aria-label="${t}"></button></div>`;
  return`<h1>Me</h1><div class="grid two" style="margin-top:16px">
@@ -195,7 +195,7 @@ function go(v){if(!VIEWS.includes(v))v='today';cur=v;VIEWS.forEach(x=>$('#v-'+x)
 function render(){$('#topLv').textContent='Lv '+lvl();const st=streak().n;$('#topSt').textContent=st+' day'+(st===1?'':'s');acct();
  if(cur==='today'){$('#v-today').innerHTML=today();$('#goDay').onclick=()=>{const T=todayInfo();W.planNext=T.day;startSession(T.list,'day')};$('#testB').onclick=selfTest;{const hp=todayInfo().pos;heroF=Fig(hp==='lying'?'gbridge':hp)}}
  if(cur==='progress'){$('#v-progress').innerHTML=progress();$('#testB2').onclick=selfTest;chart()}
- if(cur==='learn'){$('#v-learn').innerHTML=learn();$('#retake').onclick=()=>{OB={step:1,ans:{},checks:[false,false,false],track:'strength',prof:Object.assign({},S.prof||{})};ob()}}
+ if(cur==='learn'){$('#v-learn').innerHTML=learn();}
  if(cur==='me'){$('#v-me').innerHTML=me();bindMe()}}
 function bindMe(){const v=$('#v-me');
  v.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{const k=b.dataset.set;S.settings[k]=!S.settings[k];save();render()});{const tb=v.querySelector('#testSnd');if(tb)tb.onclick=()=>{unlockAudio();const was=S.settings.discreet;if(was){toast('Discreet mode is on, so sound is off');return}SFX.done();setTimeout(()=>{cnt(3);setTimeout(()=>cnt(2),900);setTimeout(()=>cnt(1),1800);setTimeout(()=>say(voiceOn()?'Sound is working. You will hear the coach and the countdown.':''),2700)},700);if(!('speechSynthesis' in window))toast('This browser has no voice. You will still hear the beeps.')}}
