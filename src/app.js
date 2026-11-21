@@ -9,7 +9,7 @@ const fresh=()=>({v:1,created:dk(new Date()),ob:{done:false,track:'strength',fla
 let mem=null;
 function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);return Object.assign(fresh(),o,{settings:Object.assign(fresh().settings,o.settings||{}),gate:Object.assign(fresh().gate,o.gate||{})})}}catch(e){}return mem||fresh()}
 function save(){mem=S;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-let S=load();S.settings=Object.assign({voice:true,intro:true,snd:true,count:true,vib:true,discreet:false},S.settings||{});
+let S=load();if(!S.ob||!S.ob.done){S.ob=Object.assign({track:'strength',flags:[]},S.ob||{},{done:true});S.prof=S.prof||{};try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}S.settings=Object.assign({voice:true,intro:true,snd:true,count:true,vib:true,discreet:false},S.settings||{});
 function ping(e){try{const b=JSON.stringify({e});if(navigator.sendBeacon)navigator.sendBeacon('/api/hit.php',new Blob([b],{type:'application/json'}));else fetch('/api/hit.php',{method:'POST',body:b,keepalive:true}).catch(()=>{})}catch(_){}}
 
 /* ================= GAME ================= */
