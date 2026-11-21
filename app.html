@@ -13,16 +13,16 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml"><link rel="icon" href="/assets/icons/icon-96.png" sizes="96x96" type="image/png"><link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Kegzo"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="preload" href="/assets/fonts/outfit-700.woff2?v=47" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/inter-400.woff2?v=47" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/outfit-700.woff2?v=48" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/inter-400.woff2?v=48" as="font" type="font/woff2" crossorigin>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://kegzo.com/#org","name":"Kegzo","url":"https://kegzo.com/","logo":"https://kegzo.com/assets/icons/icon-512.png"},{"@type":"WebSite","@id":"https://kegzo.com/#site","name":"Kegzo","url":"https://kegzo.com/","publisher":{"@id":"https://kegzo.com/#org"},"inLanguage":"en"},{"@type":"WebApplication","name":"Kegzo Trainer","url":"https://kegzo.com/app.html","applicationCategory":"HealthApplication","operatingSystem":"Any (web browser)","publisher":{"@id":"https://kegzo.com/#org"}}]}</script>
 <style>
-@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2?v=47) format('woff2')}
-@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2?v=47) format('woff2')}
-@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2?v=47) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/outfit-600.woff2?v=47) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/outfit-700.woff2?v=47) format('woff2')}
-@font-face{font-family:Outfit;font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/outfit-800.woff2?v=47) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/inter-400.woff2?v=48) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/inter-500.woff2?v=48) format('woff2')}
+@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/inter-600.woff2?v=48) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/outfit-600.woff2?v=48) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/outfit-700.woff2?v=48) format('woff2')}
+@font-face{font-family:Outfit;font-style:normal;font-weight:800;font-display:swap;src:url(/assets/fonts/outfit-800.woff2?v=48) format('woff2')}
 /* VOICE: a coach in a game; direct, plain, never explicit, never a medical promise
    IDEA: a fitness game's training screen for one muscle you cannot see from outside
    PICTURE: a glowing figure holds the position while a close-up shows the pelvic floor lifting, holding and dropping
@@ -136,6 +136,7 @@ main{max-width:1180px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-le
 .tabs{background:rgba(20,16,49,.82)!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,.1)}
 .tabs button,.tabs .tabhome{min-height:60px}.tabs .tabhome{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:9px 0 8px;font-size:12px;font-weight:500;color:var(--mut);text-decoration:none}.tabs .tabhome svg{width:24px;height:24px}.tabs button[aria-current="page"],.tabs button.on{color:#fff}.tabs button[aria-current="page"] svg,.tabs button.on svg{filter:drop-shadow(0 0 8px rgba(255,107,74,.7))}
 body.inpl .tabs{z-index:75}body.inpl #pl,body.inpl #fin{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+@media (min-width:900px){body.inpl .tabs{position:fixed;top:68px;left:50%;right:auto;bottom:auto;transform:translateX(-50%);width:min(560px,90vw);margin:0;box-shadow:0 10px 30px rgba(0,0,0,.45)}body.inpl #pl .pl-top{margin-bottom:76px}body.inpl #pl .stage{aspect-ratio:auto!important;height:clamp(300px,calc(100vh - 452px),494px)}body.inpl .tabs button,body.inpl .tabs .tabhome{min-height:44px;padding:0;flex-direction:row;justify-content:center;gap:8px;font-size:15px}body.inpl .tabs .tabhome svg,body.inpl .tabs button svg{width:20px;height:20px}}
 #playB{min-width:132px;min-height:54px;font-size:18px}#playB.go{animation:gopulse 1.6s ease-in-out infinite}@keyframes gopulse{0%,100%{box-shadow:0 0 0 0 rgba(255,107,74,.6),0 8px 24px rgba(255,107,74,.35)}50%{box-shadow:0 0 0 12px rgba(255,107,74,0),0 8px 24px rgba(255,107,74,.35)}}
 .stopb{display:inline-flex!important;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11px;width:auto!important;padding:0 10px}.stopb svg{width:18px;height:18px}
 @media (max-width:759px){#pl .stage{aspect-ratio:auto!important;height:clamp(150px,calc(100dvh - 345px - env(safe-area-inset-bottom)),calc((100vw - 32px)*.78))}}@media (max-width:759px) and (max-height:620px){#pl .pl-top .btn{min-height:38px}#pl{padding-top:8px}}
