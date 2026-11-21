@@ -75,6 +75,7 @@ return [
     'default_status' => 'draft',
     'authority_mode' => '1',   /* health topic: cite NHS-type sources, standalone paragraphs for AI answers */
     'references_box' => true,
+    'pexels_fallback_query' => 'man exercising at home',
 
     'homepage_anchor'  => '28-day kegel training plan for men',
     'default_audience' => 'Men of all ages, worldwide (UK, US, Africa), reading on a phone, wanting simple practical advice',
