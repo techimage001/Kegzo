@@ -59,6 +59,29 @@ return [
         . '<p>Kegzo turns this into a 28-day plan. A talking coach guides every move and counts every second, a few minutes a day, no gym and no equipment.</p>'
         . '<a class="btn hot" href="/app.html">Start Day 1</a></aside>',
 
+    /* ---------- Calls to action: three designs, several wordings each ---------- */
+    'cta_image' => '/assets/img/coach-face.webp',
+    'cta_early' => [
+        ['heading' => 'Prefer to be guided?', 'text' => 'Your coach counts every squeeze and every rest for you.', 'button' => 'Try the coach', 'url' => '/app.html'],
+        ['heading' => 'Not sure you are doing it right?', 'text' => 'Follow along with a talking coach, one move at a time.', 'button' => 'Train with me', 'url' => '/app.html'],
+        ['heading' => 'Make it a habit, not a chore.', 'text' => 'A few minutes a day, with a coach keeping count.', 'button' => 'Start a session', 'url' => '/app.html'],
+        ['heading' => 'Read it, then do it.', 'text' => 'Turn this guide into a guided workout in seconds.', 'button' => 'Open Kegzo', 'url' => '/app.html'],
+    ],
+    'cta_mid' => [
+        ['heading' => 'Your 28-day plan is ready', 'text' => 'Short daily sessions that build up step by step, and you can track your progress as you go.', 'button' => 'See the 28-day plan', 'url' => '/app.html'],
+        ['heading' => 'Turn knowing into doing', 'text' => 'Pick today in the plan and your coach takes you through every hold and every rest.', 'button' => 'Pick your day', 'url' => '/app.html'],
+        ['heading' => 'Stay consistent without thinking about it', 'text' => 'Kegzo plans each day for you, so all you do is press start.', 'button' => 'Plan my week', 'url' => '/app.html'],
+        ['heading' => 'Over 25 moves, one simple plan', 'text' => 'From your first squeeze to longer holds, every exercise is guided.', 'button' => 'Browse the exercises', 'url' => '/exercises/'],
+    ],
+    'cta_end' => [
+        ['heading' => 'Train it with your coach', 'text' => 'Kegzo turns this into a 28-day plan. A talking coach guides every move and counts every second, a few minutes a day, no gym and no equipment.', 'button' => 'Start Day 1', 'url' => '/app.html'],
+        ['heading' => 'Ready when you are', 'text' => 'Press start and your coach does the counting. A few minutes today, a little stronger tomorrow.', 'button' => 'Begin today', 'url' => '/app.html'],
+        ['heading' => 'Put this guide into practice', 'text' => 'Day 1 takes a few minutes. Your coach shows each move, counts each hold and tracks your progress.', 'button' => 'Do Day 1 now', 'url' => '/app.html'],
+    ],
+
+    /* ---------- Sources the writer should prefer (health topic) ---------- */
+    'preferred_sources' => ['nhs.uk', 'nhsinform.scot', 'nice.org.uk', 'csp.org.uk (Chartered Society of Physiotherapy)', 'bladderandbowel.org (Bladder & Bowel Community)', 'menshealthforum.org.uk (Men\'s Health Forum)'],
+
     /* ---------- Starter categories, seeded once ---------- */
     'categories' => [
         ['Kegel Basics',           'kegel-basics',           'What the pelvic floor is, how kegels work and how to get started.'],
