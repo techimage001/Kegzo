@@ -1,3 +1,4 @@
 DirectoryIndex index.php index.html
 RewriteEngine On
+RewriteOptions Inherit
 RewriteRule ^start\.html$ - [F,L]
