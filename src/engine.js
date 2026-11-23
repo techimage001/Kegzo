@@ -48,6 +48,8 @@ const POS={
   how:'Lie on your back, bring your knees up wide towards your armpits and hold the outside of your feet.'},
  dsquat:{n:'Deep squat',sprite:'dsquat-sprite.webp',frames:2,fw:549,fh:308,c:[275,160],pts:[[282,188],[282,188],[282,188]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Sit into a deep, comfortable squat, feet flat and a little wider than your hips, elbows resting inside your knees.'},
+ kneel:{n:'Kneeling',sprite:'kneel-sprite.webp',frames:4,fw:357,fh:349,zh:.9,cy:.5,c:[185,172],pts:[[134,200],[154,214],[220,189]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
+  how:'Kneel upright on a soft mat, knees hip-width apart, body tall, arms reaching forward at shoulder height.'},
  child:{n:'Kneeling',sprite:'child-sprite.webp',frames:4,fw:356,fh:357,c:[178,175],pts:[[80,170],[80,168],[80,166]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
   how:'Kneel, sit back onto your heels and fold forward, forehead down, arms stretched out in front.'},
  side:{n:'Side-lying',sprite:'side-sprite.webp',frames:2,fw:438,fh:438,c:[220,250],pts:[[232,268],[232,268],[232,268]],keys:[side({p:[184,252],t:90,h:92,L:{a:[124,253],f:-90,k:1,hd:[180,255],e:-1},R:{a:[128,254],f:-90,k:1,hd:[186,256],e:-1}})],
