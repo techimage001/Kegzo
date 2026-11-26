@@ -55,5 +55,12 @@ return [
   '/guides/kegel-positions.html' => '/guides/best-position-kegels-men-7-easy/',
   '/guides/tight-pelvic-floor-men.html' => '/guides/tight-pelvic-floor-exercises-men-relax/',
   '/guides/what-is-a-reverse-kegel.html' => '/guides/reverse-kegels-men/',
+  '/guides/how-long-does-it-take-kegels-to-work/' => '/guides/how-long-does-it-take-kegels/',
+  '/guides/how-long-does-it-take-kegels-work/' => '/guides/how-long-does-it-take-kegels/',
+  '/guides/how-strengthen-pelvic-floor-muscles-men-safely/' => '/guides/how-strengthen-pelvic-floor-muscles-men/',
+  '/guides/how-to-strengthen-pelvic-floor-muscles-men/' => '/guides/how-strengthen-pelvic-floor-muscles-men/',
+  '/guides/how-strengthen-pelvic-floor-muscles-men/safely/' => '/guides/how-strengthen-pelvic-floor-muscles-men/',
+  '/guides/kegel-exercises-for-beginners-men-start-guide/' => '/guides/kegel-exercises-beginners-men-start-guide/',
+  '/guides/how-many-kegels-a-day-men-safe/' => '/guides/how-many-kegels-day-men-safe/',
 ],
 ];

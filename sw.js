@@ -1,5 +1,5 @@
-/* Kegzo service worker v57: network-first for pages, cache-first for assets */
-const C='kegzo-v57',CORE=['/app.html','/assets/img/pos-lying.webp','/assets/img/pos-seated.webp','/assets/img/pos-standing.webp','/assets/img/pos-walking.webp','/assets/fonts/inter-400.woff2?v=57','/assets/fonts/outfit-700.woff2?v=57'];
+/* Kegzo service worker v58: network-first for pages, cache-first for assets */
+const C='kegzo-v58',CORE=['/app.html','/assets/img/pos-lying.webp','/assets/img/pos-seated.webp','/assets/img/pos-standing.webp','/assets/img/pos-walking.webp','/assets/fonts/inter-400.woff2?v=58','/assets/fonts/outfit-700.woff2?v=58'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{const r=e.request,u=new URL(r.url);if(r.method!=='GET'||u.origin!==location.origin||u.pathname.startsWith('/api/')||u.pathname.startsWith('/admin/')||u.pathname.startsWith('/cron/'))return;

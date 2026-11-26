@@ -70,4 +70,16 @@ const RETIRE = {
   'kegel-cheat-sheet-simple-moves':        '/guides/kegel-instructions-beginners/',
 };
 
-if (typeof module !== 'undefined') module.exports = { MOVED, RETIRE, CORNERSTONE };
+/* v58: addresses the writer invented in a few early articles (they 404'd).
+   Each one redirects to the real article it was meant to reach. */
+const BROKEN = {
+  'how-long-does-it-take-kegels-to-work/':          '/guides/how-long-does-it-take-kegels/',
+  'how-long-does-it-take-kegels-work/':             '/guides/how-long-does-it-take-kegels/',
+  'how-strengthen-pelvic-floor-muscles-men-safely/':'/guides/how-strengthen-pelvic-floor-muscles-men/',
+  'how-to-strengthen-pelvic-floor-muscles-men/':    '/guides/how-strengthen-pelvic-floor-muscles-men/',
+  'how-strengthen-pelvic-floor-muscles-men/safely/':'/guides/how-strengthen-pelvic-floor-muscles-men/',
+  'kegel-exercises-for-beginners-men-start-guide/': '/guides/kegel-exercises-beginners-men-start-guide/',
+  'how-many-kegels-a-day-men-safe/':                '/guides/how-many-kegels-day-men-safe/',
+};
+
+if (typeof module !== 'undefined') module.exports = { MOVED, RETIRE, CORNERSTONE, BROKEN };

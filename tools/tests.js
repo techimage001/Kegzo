@@ -8,7 +8,7 @@ const BANNED=[/—/,/free forever/i,/for life/i,/no sign-?up/i,/no account neede
 const textFiles=files.filter(f=>/\.(html|js|css|php|xml|txt|webmanifest)$/.test(f)&&!/LICENSE/.test(f));
 for(const f of textFiles){const s=fs.readFileSync(f,'utf8');for(const b of BANNED)ok(!b.test(s),`${rel(f)} contains banned pattern ${b}`)}
 /* v57: writer articles live only on the server (git-ignored). Links to the keepers named in src/redirects.js are allowed; they were checked live when the map was made. */
-const {MOVED,RETIRE}=require(path.join(ROOT,'src','redirects.js'));const SERVER_ONLY=new Set([...Object.values(MOVED),...Object.values(RETIRE)].filter(u=>/^\/guides\/[^/]+\/$/.test(u)));
+const {MOVED,RETIRE,BROKEN}=require(path.join(ROOT,'src','redirects.js'));const SERVER_ONLY=new Set([...Object.values(MOVED),...Object.values(RETIRE),...Object.values(BROKEN)].filter(u=>/^\/guides\/[^/]+\/$/.test(u)));
 const titles={},descs={};
 for(const f of html){const s=fs.readFileSync(f,'utf8'),r=rel(f);
  ok(/<meta name="viewport" content="width=device-width/.test(s),r+' viewport');

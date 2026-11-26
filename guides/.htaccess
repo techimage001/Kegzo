@@ -53,3 +53,11 @@ RewriteRule ^kegel-stats-track-progress/?$ /guides/kegel-benchmarks-pelvic-floor
 RewriteRule ^kegel-scorecard-how-guide/?$ /guides/kegel-fitness-score/ [R=301,L]
 RewriteRule ^daily-kegel-checklist-pelvic-floor/?$ /guides/kegel-success-checklist-7-steps/ [R=301,L]
 RewriteRule ^kegel-cheat-sheet-simple-moves/?$ /guides/kegel-instructions-beginners/ [R=301,L]
+# v58: mistyped addresses in early articles
+RewriteRule ^how-long-does-it-take-kegels-to-work/?$ /guides/how-long-does-it-take-kegels/ [R=301,L]
+RewriteRule ^how-long-does-it-take-kegels-work/?$ /guides/how-long-does-it-take-kegels/ [R=301,L]
+RewriteRule ^how-strengthen-pelvic-floor-muscles-men-safely/?$ /guides/how-strengthen-pelvic-floor-muscles-men/ [R=301,L]
+RewriteRule ^how-to-strengthen-pelvic-floor-muscles-men/?$ /guides/how-strengthen-pelvic-floor-muscles-men/ [R=301,L]
+RewriteRule ^how-strengthen-pelvic-floor-muscles-men/safely/?$ /guides/how-strengthen-pelvic-floor-muscles-men/ [R=301,L]
+RewriteRule ^kegel-exercises-for-beginners-men-start-guide/?$ /guides/kegel-exercises-beginners-men-start-guide/ [R=301,L]
+RewriteRule ^how-many-kegels-a-day-men-safe/?$ /guides/how-many-kegels-day-men-safe/ [R=301,L]
