@@ -7,6 +7,8 @@ const rel=f=>'/'+path.relative(ROOT,f).replace(/\\/g,'/');
 const BANNED=[/—/,/free forever/i,/for life/i,/no sign-?up/i,/no account needed/i,/without an account/i,/Kegel Men\b/,/Dr\.? Kegel/,/Stamena/,/kegelmen/i,/adsbygoogle|pub-\d{10,}/,/Regori/i,/Glenrothes|Scotland/i];
 const textFiles=files.filter(f=>/\.(html|js|css|php|xml|txt|webmanifest)$/.test(f)&&!/LICENSE/.test(f));
 for(const f of textFiles){const s=fs.readFileSync(f,'utf8');for(const b of BANNED)ok(!b.test(s),`${rel(f)} contains banned pattern ${b}`)}
+/* v57: writer articles live only on the server (git-ignored). Links to the keepers named in src/redirects.js are allowed; they were checked live when the map was made. */
+const {MOVED,RETIRE}=require(path.join(ROOT,'src','redirects.js'));const SERVER_ONLY=new Set([...Object.values(MOVED),...Object.values(RETIRE)].filter(u=>/^\/guides\/[^/]+\/$/.test(u)));
 const titles={},descs={};
 for(const f of html){const s=fs.readFileSync(f,'utf8'),r=rel(f);
  ok(/<meta name="viewport" content="width=device-width/.test(s),r+' viewport');
@@ -15,7 +17,7 @@ for(const f of html){const s=fs.readFileSync(f,'utf8'),r=rel(f);
  ok(/<link rel="canonical"/.test(s),r+' canonical');
  ok(/rel="icon" href="\/favicon.ico"/.test(s),r+' favicon');
  const vers=new Set([...s.matchAll(/\?v=(\d+)/g)].map(m=>m[1]));ok(vers.size<=1,r+' mixed asset versions '+[...vers]);
- for(const m of s.matchAll(/href="(\/[^"#?]*)/g)){let u=m[1];if(u.startsWith("/api/")||u.includes("${"))continue;let p=path.join(ROOT,u);if(u.endsWith('/'))p=fs.existsSync(path.join(p,'index.html'))?path.join(p,'index.html'):path.join(p,'index.php');ok(fs.existsSync(p),`${r} broken link ${u}`)}
+ for(const m of s.matchAll(/href="(\/[^"#?]*)/g)){let u=m[1];if(u.startsWith("/api/")||u.includes("${")||SERVER_ONLY.has(u))continue;let p=path.join(ROOT,u);if(u.endsWith('/'))p=fs.existsSync(path.join(p,'index.html'))?path.join(p,'index.html'):path.join(p,'index.php');ok(fs.existsSync(p),`${r} broken link ${u}`)}
  for(const m of s.matchAll(/src="(\/[^"?]+)/g))ok(fs.existsSync(path.join(ROOT,m[1])),`${r} missing asset ${m[1]}`);
  const faqVis=(s.match(/<details>/g)||[]).length,faqLd=(s.match(/"@type":"Question"/g)||[]).length;ok(faqVis===faqLd,`${r} FAQ schema ${faqLd} vs visible ${faqVis}`);
  if(r!=='/app.html'&&r!=='/404.html'){if(r!=='/welcome.html')ok(/class="lead answer"/.test(s),r+' answer-first block');ok(/General fitness information, not medical advice/.test(s),r+' disclaimer')}

@@ -18,7 +18,7 @@ RewriteRule ^(src|tools)(/|$) - [F,L]
 RewriteRule ^(README\.md|SECRETS-TEMPLATE\.php|package\.json)$ - [F,L]
 RewriteRule ^api/(config)\.php$ - [F,L]
 # Writer settings files are included by PHP, never opened directly
-RewriteRule ^(site-profile|bco-chrome|bco-loader)\.php$ - [F,L]
+RewriteRule ^(site-profile|bco-chrome|bco-loader|guides-redirects)\.php$ - [F,L]
 </IfModule>
 
 <IfModule mod_headers.c>

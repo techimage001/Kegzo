@@ -21,8 +21,8 @@ return [
     'schema_logo' => 'https://kegzo.com/assets/icons/icon-512.png',
 
     /* ---------- Where generated content is written ---------- */
-    /* The Guides section IS the blog. The 7 original guides keep their
-       own addresses (/guides/<slug>.html); new articles go to
+    /* The Guides section IS the blog. The original cornerstone guide keeps its
+       address (/guides/kegel-exercises-for-men.html; the other six moved in v57); new articles go to
        /guides/<slug>/ and the listing to /guides/index.html. */
     'blog_path'    => '/guides',
     'blog_label'   => 'Guides',
@@ -80,7 +80,28 @@ return [
     ],
 
     /* ---------- Sources the writer should prefer (health topic) ---------- */
-    'preferred_sources' => ['nhs.uk', 'nhsinform.scot', 'nice.org.uk', 'csp.org.uk (Chartered Society of Physiotherapy)', 'bladderandbowel.org (Bladder & Bowel Community)', 'menshealthforum.org.uk (Men\'s Health Forum)'],
+    /* v57: global audience, so trusted sources from the UK, US, Canada and Australia */
+    'preferred_sources' => ['nhs.uk', 'baus.org.uk (British Association of Urological Surgeons)', 'mayoclinic.org', 'my.clevelandclinic.org', 'niddk.nih.gov', 'medlineplus.gov', 'uhn.ca (University Health Network, Toronto)', 'continence.org.au (Continence Health Australia)', 'health.gov.au', 'continence.org.nz'],
+
+    /* v57: checked source library. The writer adds 2 or 3 of these, from different
+       countries, to any article that cites no outside source. Every link was
+       confirmed to load on 26 November 2026. tags = words that make a source a good match. */
+    'source_library' => [
+        ['title' => 'Kegel exercises for men: Understand the benefits', 'org' => 'Mayo Clinic', 'country' => 'US', 'url' => 'https://www.mayoclinic.org/healthy-lifestyle/mens-health/in-depth/art-20045074', 'tags' => 'kegel men benefits how many sets reps daily routine'],
+        ['title' => 'Kegel Exercises for Men', 'org' => 'Cleveland Clinic', 'country' => 'US', 'url' => 'https://my.clevelandclinic.org/health/articles/22211-kegel-exercises-for-men', 'tags' => 'kegel men position seated lying how to find'],
+        ['title' => 'Kegel Exercises', 'org' => 'National Institute of Diabetes and Digestive and Kidney Diseases', 'country' => 'US', 'url' => 'https://www.niddk.nih.gov/health-information/urologic-diseases/kegel-exercises', 'tags' => 'reps repetitions hold seconds position bladder control'],
+        ['title' => 'Kegel exercises: self-care', 'org' => 'MedlinePlus, US National Library of Medicine', 'country' => 'US', 'url' => 'https://medlineplus.gov/ency/patientinstructions/000141.htm', 'tags' => 'technique mistakes urine stop start find muscle'],
+        ['title' => 'Pelvic floor exercises for men', 'org' => 'North Bristol NHS Trust', 'country' => 'UK', 'url' => 'https://nbt.nhs.uk/our-services/a-z-services/physiotherapy/physiotherapy-patient-information/pelvic-floor-exercises-men', 'tags' => 'slow fast holds relax release breathing find muscle'],
+        ['title' => 'Pelvic floor exercises (in men)', 'org' => 'British Association of Urological Surgeons', 'country' => 'UK', 'url' => 'https://baus.org.uk/patients/information_leaflets/32/pelvic_floor_exercises_in_men', 'tags' => 'pelvic floor men exercises bladder dribble'],
+        ['title' => 'Pelvic floor exercises in men: frequently asked questions', 'org' => 'Cambridge University Hospitals NHS', 'country' => 'UK', 'url' => 'https://www.cuh.nhs.uk/patient-information/pelvic-floor-exercises-in-men-frequently-asked-questions/', 'tags' => 'questions faq how often how long surgery'],
+        ['title' => 'Pelvic Floor Exercises: Kegels (Male)', 'org' => 'University Health Network, Toronto', 'country' => 'CA', 'url' => 'https://www.uhn.ca/PatientsFamilies/Health_Information/Health_Topics/Documents/Pelvic_Exercises_Kegel.pdf', 'tags' => 'kegel male find muscle how to surgery'],
+        ['title' => 'Pelvic floor exercises for men', 'org' => 'Continence Health Australia', 'country' => 'AU', 'url' => 'https://www.continence.org.au/living-with-incontinence/pelvic-floor-exercises/pelvic-floor-exercises-for-men/', 'tags' => 'results weeks relax tight hold strength confidence'],
+        ['title' => 'Pelvic floor muscle training for men', 'org' => 'Australian Government Department of Health', 'country' => 'AU', 'url' => 'https://www.health.gov.au/resources/publications/pelvic-floor-muscle-training-for-men', 'tags' => 'breath breathing squeeze lift lifting gym brace three months'],
+        ['title' => 'Pelvic Floor Training for Men', 'org' => 'Continence NZ', 'country' => 'NZ', 'url' => 'https://www.continence.org.nz/pages/Pelvic-Floor-Training-for-Men/42/', 'tags' => 'training programme holds fast contractions fatigue progress'],
+    ],
+
+    /* v57: duplicates the writer retires, and where each one now points (built from src/redirects.js) */
+    'redirects' => (is_file(__DIR__ . '/guides-redirects.php') ? require __DIR__ . '/guides-redirects.php' : ['retire' => [], 'moved' => []]),
 
     /* ---------- Starter categories, seeded once ---------- */
     'categories' => [
@@ -116,6 +137,6 @@ return [
     'always_link'    => [
         ['url' => '/app.html',       'title' => 'Start the 28-day kegel plan'],
         ['url' => '/exercises/',     'title' => 'All kegel exercises'],
-        ['url' => '/guides/how-to-find-your-pelvic-floor-muscle.html', 'title' => 'How to find your pelvic floor muscle'],
+        ['url' => '/guides/kegel-exercises-for-men.html', 'title' => 'Kegel exercises for men: the complete guide'],
     ],
 ];

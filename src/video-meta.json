@@ -1,0 +1,90 @@
+{
+ "boxlift": {
+  "duration": "PT6S",
+  "uploaded": "2026-11-21"
+ },
+ "breath": {
+  "duration": "PT7S",
+  "uploaded": "2026-11-21"
+ },
+ "bridge": {
+  "duration": "PT4S",
+  "uploaded": "2026-11-21"
+ },
+ "child": {
+  "duration": "PT8S",
+  "uploaded": "2026-11-21"
+ },
+ "climber": {
+  "duration": "PT4S",
+  "uploaded": "2026-11-21"
+ },
+ "coach-welcome": {
+  "duration": "PT30S",
+  "uploaded": "2026-11-21"
+ },
+ "cough": {
+  "duration": "PT5S",
+  "uploaded": "2026-11-21"
+ },
+ "dsquat": {
+  "duration": "PT6S",
+  "uploaded": "2026-11-21"
+ },
+ "fours": {
+  "duration": "PT4S",
+  "uploaded": "2026-11-21"
+ },
+ "gbridge": {
+  "duration": "PT5S",
+  "uploaded": "2026-11-21"
+ },
+ "hbaby": {
+  "duration": "PT6S",
+  "uploaded": "2026-11-21"
+ },
+ "kneel": {
+  "duration": "PT6S",
+  "uploaded": "2026-11-23"
+ },
+ "lunge": {
+  "duration": "PT5S",
+  "uploaded": "2026-11-21"
+ },
+ "lying": {
+  "duration": "PT7S",
+  "uploaded": "2026-11-21"
+ },
+ "seated": {
+  "duration": "PT6S",
+  "uploaded": "2026-11-21"
+ },
+ "seatopen": {
+  "duration": "PT4S",
+  "uploaded": "2026-11-21"
+ },
+ "side": {
+  "duration": "PT7S",
+  "uploaded": "2026-11-21"
+ },
+ "squat": {
+  "duration": "PT5S",
+  "uploaded": "2026-11-21"
+ },
+ "standing": {
+  "duration": "PT6S",
+  "uploaded": "2026-11-21"
+ },
+ "sts": {
+  "duration": "PT5S",
+  "uploaded": "2026-11-21"
+ },
+ "tilt": {
+  "duration": "PT8S",
+  "uploaded": "2026-11-21"
+ },
+ "walking": {
+  "duration": "PT5S",
+  "uploaded": "2026-11-21"
+ }
+}
