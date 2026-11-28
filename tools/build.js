@@ -6,9 +6,10 @@ const ROOT=path.resolve(__dirname,'..'),SRC=path.join(ROOT,'src');
 const {PLAN30,EX,EXMETA,DAYPLAN,ICONS}=require(path.join(SRC,'exercises.js'));
 const {GUIDES,STUDY}=require(path.join(SRC,'guides.js'));
 const {EXTRA}=require(path.join(SRC,'exercise-extra.js'));
+const {DEEP}=require(path.join(SRC,'exercise-deep.js'));
 const {MOVED,RETIRE,BROKEN}=require(path.join(SRC,'redirects.js'));
 const VMETA=JSON.parse(fs.readFileSync(path.join(SRC,'video-meta.json'),'utf8'));
-const SITE='https://kegzo.com',V='58',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
+const SITE='https://kegzo.com',V='59',INDEXNOW='60ccb4a970104b1b83b9eb9cc6826746';
 const POSN={kneel:'Kneeling',hbaby:'Lying down',dsquat:'Deep squat',child:'Kneeling',side:'Side-lying',cough:'Standing',boxlift:'Standing',lunge:'Standing',sts:'Seated',squat:'Standing',gbridge:'Lying down',tilt:'Lying down',breath:'Lying down',seatopen:'Seated',fours:'On all fours',climber:'Plank',bridge:'Lying down',lying:'Lying down',seated:'Seated',standing:'Standing',walking:'Walking'},PORDER=['lying','seated','standing','walking'],VID={kneel:'kneel',hbaby:'hbaby',dsquat:'dsquat',child:'child',side:'side',cough:'cough',boxlift:'boxlift',lunge:'lunge',sts:'sts',squat:'squat',lying:'lying',seated:'seated',standing:'standing',walking:'walking',gbridge:'gbridge',tilt:'tilt',breath:'breath',seatopen:'seatopen',bridge:'bridge',fours:'fours',climber:'climber'};
 const NUMW=['Zero','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen','Twenty','Twenty-one','Twenty-two','Twenty-three','Twenty-four','Twenty-five','Twenty-six','Twenty-seven','Twenty-eight','Twenty-nine','Thirty'];
 const CORE_N=()=>Object.keys(EX).filter(id=>EX[id].wk).length,BONUS_N=()=>Object.keys(EX).filter(id=>!EX[id].wk).length,REL_BONUS_N=()=>Object.keys(EX).filter(id=>!EX[id].wk&&EX[id].rel).length;
@@ -135,10 +136,12 @@ w('index.html',page({url:'/',title:'Kegzo: Kegel Exercises for Men, Built Like a
 {const ids=Object.keys(EX);
  for(const id of ids){const e=EX[id],m=EXMETA[id],pos=e.pos||PORDER[Math.max(0,(e.wk||1)-1)],u=`/exercises/${m.slug}.html`;
   const X=EXTRA[id];
+  const D=DEEP[id]||null, FAQ=D&&D.faq?[...m.faq,...D.faq]:m.faq;
   const weekTxt=e.wk?`It unlocks in week ${e.wk} of the programme and is first practised ${POSN[pos].toLowerCase()}.`:`It is a bonus exercise you can try any time, practised ${POSN[pos].toLowerCase()}.`;
   const rel=ids.filter(x=>x!==id).slice(0,4);
   const body=`<article class="art"><p class="eyebrow">${e.type} · ${esc(m.sets)}</p><h1>${e.n}: how to do it</h1>
 <p class="lead answer">${m.why}</p>
+${D&&D.answer?`<p class="answer">${D.answer}</p>`:''}
 <figure class="exfig">${VID[pos]?`<span class="vbox${(pos==='climber'||pos==='dsquat'||pos==='tilt'||pos==='breath'||pos==='gbridge'||pos==='lying')?' wide':(pos==='kneel'||pos==='seatopen'||pos==='hbaby'||pos==='child'||pos==='side'||pos==='cough'||pos==='boxlift'||pos==='lunge'||pos==='sts'||pos==='squat'||pos==='seated'||pos==='standing'||pos==='walking')?' sq':''}"><video class="xvid" src="/assets/video/${VID[pos]}.mp4?v=${V}" poster="/assets/img/pos-${pos}.webp" autoplay muted loop playsinline preload="metadata" aria-label="Hologram figure, ${POSN[pos].toLowerCase()}, looping"></video></span>`:`<img src="/assets/img/pos-${pos}.webp" width="1448" height="1086" alt="Hologram figure ${POSN[pos].toLowerCase()}, the position for ${e.n.toLowerCase()}" loading="lazy">`}<figcaption>${POSN[pos]}: ${esc(m.sets)}</figcaption></figure>
 ${cta('Try '+e.n+' with the coach','/app.html#ex-'+m.slug)}
 <h2>How do you do ${e.n.toLowerCase()}?</h2><ol>${e.how.map(s=>`<li>${s}</li>`).join('')}</ol>
@@ -149,11 +152,13 @@ ${X?`<h2>Who is ${e.n.toLowerCase()} for?</h2><p>${X.who}</p>
 <h2>How should you breathe?</h2><p>${X.breathe}</p>
 <h2>Common mistakes and how to fix them</h2><ul>${X.mistakes.map(([a,b])=>`<li><b>${a}</b> ${b}</li>`).join('')}</ul>
 <h2>How do you make it harder or easier?</h2><p>${X.progress}</p>`:''}
+${D&&D.sections?D.sections.map(([h,x])=>`<h2>${h}</h2>${x}`).join('\n'):''}
 <h2>When does it appear in the programme?</h2><p>${weekTxt} Sets: ${esc(m.sets)}.</p>
-${faqHTML(m.faq)}
+${faqHTML(FAQ)}
+${D&&D.guides?`<h2>Read more</h2><ul class="guidelinks">${D.guides.map(([g,t])=>`<li><a href="${g}">${t}</a></li>`).join('')}</ul>`:''}
 <h2>Related exercises</h2><div class="exgrid">${rel.map(x=>`<a class="exc" href="/exercises/${EXMETA[x].slug}.html"><span class="ico ${EX[x].rel?'c':''}">${icon(EX[x].ic)}</span><span><b>${EX[x].n}</b><small>${EXMETA[x].sets}</small></span></a>`).join('')}</div></article>`;
   const howto={'@type':'HowTo',name:'How to do '+e.n,description:m.short,step:e.how.map((s,i)=>({'@type':'HowToStep',position:i+1,text:strip(s)}))};
-  w(u.slice(1),page({url:u,title:`${e.n}: How to Do This Kegel Exercise | Kegzo`,desc:`${m.short} Step-by-step guide, what to feel, mistakes to avoid and how it fits the 28-day programme.`,body,crumb:[['Home','/'],['Exercises','/exercises/'],[e.n,u]],schema:[howto,faqSchema(m.faq),...(VID[pos]?[videoObj(VID[pos],pos,`${e.n}: how to do it`,m.short)]:[])]}));pages.push([u,'0.8'])}
+  w(u.slice(1),page({url:u,title:`${e.n}: How to Do This Kegel Exercise | Kegzo`,desc:`${m.short} Step-by-step guide, what to feel, mistakes to avoid and how it fits the 28-day programme.`,body,crumb:[['Home','/'],['Exercises','/exercises/'],[e.n,u]],schema:[howto,faqSchema(FAQ),...(VID[pos]?[videoObj(VID[pos],pos,`${e.n}: how to do it`,m.short)]:[])]}));pages.push([u,'0.8'])}
  const body=`<h1>Kegel exercises for men</h1><p class="lead answer">These ${ids.length} kegel exercises train every part of the pelvic floor. ${NUMW[CORE_N()]} core exercises cover finding the muscle, strength, speed, stamina, control and release, and unlock week by week in the Kegzo programme, from lying down to walking. ${NUMW[BONUS_N()]} bonus moves add a kegel to everyday movements or help the pelvic floor relax.</p>
 ${[1,2,3,4,0].map(wk=>{const list=ids.filter(id=>(EX[id].wk||0)===wk);return list.length?(wk===0?`<h2>Bonus moves</h2><div class="weeks4">${list.map(bcard).join('')}</div>`:`<h2>Week ${wk}: ${POSN[PORDER[wk-1]]}</h2><div class="exgrid">${list.map(id=>`<a class="exc" href="/exercises/${EXMETA[id].slug}.html"><span class="ico ${EX[id].rel?'c':''}">${icon(EX[id].ic)}</span><span><b>${EX[id].n}</b><small>${EXMETA[id].short}</small></span></a>`).join('')}</div>`):''}).join('')}${cta()}`;
  w('exercises/index.html',page({url:'/exercises/',title:`Kegel Exercises for Men: All ${ids.length} Exercises | Kegzo`,desc:'Every kegel exercise in the Kegzo programme, from finding the muscle to walking holds, with step-by-step guides.',body,crumb:[['Home','/'],['Exercises','/exercises/']],schema:[{'@type':'ItemList',name:'Kegel exercises for men',numberOfItems:ids.length,itemListElement:ids.map((id,i)=>({'@type':'ListItem',position:i+1,name:EX[id].n,url:SITE+'/exercises/'+EXMETA[id].slug+'.html'}))}]}));pages.push(['/exercises/','0.9'])}
@@ -277,6 +282,7 @@ h1{font-size:clamp(32px,7vw,52px);margin:.3em 0 .35em}h2{font-size:clamp(23px,4.
 @media (min-width:760px){.hero{grid-template-columns:1.05fr 1fr;gap:34px;padding:24px 0}.cards3{grid-template-columns:repeat(3,minmax(0,1fr))}.weeks4{grid-template-columns:repeat(4,minmax(0,1fr))}.exgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.fcols{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 @media print{.top,.foot,.ctar{display:none}}
+.art table.vs{width:100%;table-layout:fixed;border-collapse:collapse;margin:14px 0 18px;font-size:.9em;overflow-wrap:break-word}.art table.vs th,.art table.vs td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.art table.vs th:first-child,.art table.vs td:first-child{width:30%}.art table.vs thead th{color:var(--cool)}.art table.vs td:first-child{font-weight:600;color:var(--mut)}.art ul.guidelinks li{margin:6px 0}
 `);
 
 /* ---------- sitemap, robots, manifest, sw, indexnow ---------- */
