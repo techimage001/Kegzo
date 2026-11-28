@@ -132,6 +132,31 @@ return [
         . "Keep it plain, friendly and practical, like a good coach talking to a mate. Short paragraphs, no jargon.\n"
         . "Where it fits, point readers to the 28-day plan and the talking coach in the Kegzo app.",
 
+    /* ---------- Content updates (v59, from Search Console 28 Nov 2026) ----------
+       Added once by Dashboard > SEO tidy-up. Titles are never changed. */
+    'content_patches' => [
+        'reverse-kegels-men' => [
+            'answer' => 'A reverse kegel is the opposite of a kegel: as you breathe in, you let the pelvic floor gently soften and drop instead of squeezing it. Do 5 to 10 slow release breaths after every set of kegels, lying down or seated, without pushing or straining.',
+            'links'  => [['/exercises/reverse-kegel.html', 'Reverse kegel exercise: step by step'], ['/guides/kegels-vs-reverse/', 'Kegels vs reverse kegels']],
+        ],
+        'kegels-vs-reverse' => [
+            'answer' => 'Kegels squeeze and lift the pelvic floor to build strength; reverse kegels let it soften and drop on the in-breath to build relaxation and control. You need both: a few reverse kegels after each set of kegels is a simple way to train in both directions.',
+            'links'  => [['/exercises/reverse-kegel.html', 'How to do a reverse kegel'], ['/guides/reverse-kegels-men/', 'Reverse kegels for men: full guide']],
+        ],
+        'how-long-does-it-take-kegels' => [
+            'answer' => 'Many men start to notice better control after 3 to 6 weeks of daily kegels, and bigger changes usually build over around 3 months. Doing a short session every day matters more than doing long sessions now and then.',
+            'links'  => [['/app.html', 'Start the 28-day plan'], ['/guides/kegels-results-after-6-weeks/', 'Kegels results after 6 weeks']],
+        ],
+        'kegels-while-driving-safe-tips' => [
+            'answer' => 'Yes, you can do gentle kegels while driving, but only when it is safe: at a red light or in slow traffic, never while concentrating on a junction or overtaking. Keep the squeeze light, breathe normally and keep your eyes on the road.',
+            'links'  => [['/exercises/endurance-hold.html', 'Endurance hold: the best kegel for the car'], ['/exercises/quick-flicks.html', 'Quick flicks']],
+        ],
+        'quick-flicks-vs-long-holds-kegels' => [
+            'answer' => 'Neither wins on its own. Quick flicks train fast reactions for coughs, lifts and sudden moments; long holds train stamina for walking, standing and long days. A good routine uses both, with long holds first and quick flicks after.',
+            'links'  => [['/exercises/quick-flicks.html', 'Quick flicks: how to do them'], ['/exercises/endurance-hold.html', 'Endurance hold: how to do it']],
+        ],
+    ],
+
     /* ---------- Internal linking ---------- */
     'internal_links' => 'scan',
     'always_link'    => [

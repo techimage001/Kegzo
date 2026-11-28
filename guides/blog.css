@@ -106,3 +106,8 @@
 @keyframes kzctaGlow{0%,100%{box-shadow:0 10px 28px rgba(255,107,74,.35)}50%{box-shadow:0 10px 34px rgba(255,107,74,.65)}}
 @media (prefers-reduced-motion:reduce){.kz-blog .bco-cta-end .bco-cta-btn{animation:none}}
 @media (max-width:560px){.kz-blog .bco-cta-end .bco-cta-btn{width:100%}}
+/* v59: Quick answer box added by BCO content updates */
+.kz-blog .quick-answer{background:var(--coolSoft,#1D3B47);border-left:4px solid var(--cool,#5BD6C9);border-radius:12px;padding:14px 16px;margin:0 0 22px}
+.kz-blog .quick-answer p{margin:0}
+.kz-blog .quick-answer p+p{margin-top:8px}
+.kz-blog .quick-answer .quick-links{font-size:.95em}
